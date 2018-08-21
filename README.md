@@ -17,6 +17,7 @@ sensor:
     - link
     - description
     - image
+    - language
   exclusions:
     - language
 ```
