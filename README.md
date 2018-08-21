@@ -1,5 +1,5 @@
 # sensor.feedparser
-RSS feed custom component for Home Assistant
+RSS feed custom component for Home Assistant which can be used in conjunction with the custom Lovelace [list-card](https://github.com/custom-cards/list-card)
 
 To get started put `/custom_components/sensor/feedparser.py` here:
 `<config directory>/custom_components/sensor/feedparser.py`
