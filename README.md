@@ -9,7 +9,7 @@ To get started put `/custom_components/sensor/feedparser.py` here:
 ```yaml
 sensor:
   platform: feedparser
-  name: Engineering
+  name: Engineering Feed
   feed_url: 'https://www.sciencedaily.com/rss/matter_energy/engineering.xml'
   date_format: '%a, %b %d %I:%M %p'
   inclusions:
