@@ -13,7 +13,10 @@ sensor:
   feed_url: 'https://www.sciencedaily.com/rss/matter_energy/engineering.xml'
   date_format: '%a, %b %d %I:%M %p'
   inclusions:
-    -
+    - title
+    - link
+    - description
+    - image
   exclusions:
     - language
 ```
