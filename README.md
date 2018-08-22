@@ -30,7 +30,7 @@ key | description
 **platform (Required)** | The platform name
 **name (Required)** | Name your feed
 **feed_url (Required)** | The RSS feed URL
-**date_format (Optional)** | strftime date format for date strings **Default `%a, %b %d %I:%M %p`
+**date_format (Optional)** | strftime date format for date strings **Default** `%a, %b %d %I:%M %p`
 **inclusions (Optional)** | List of fields to include from populating the list
 **exclusions (Optional)** | List of fields to exclude from populating the list
 
