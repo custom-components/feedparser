@@ -1,3 +1,8 @@
+[![Version](https://img.shields.io/badge/version-0.0.1-green.svg?style=for-the-badge)](#) [![mantained](https://img.shields.io/maintenance/yes/2018.svg?style=for-the-badge)](#)
+
+[![maintainer](https://img.shields.io/badge/maintainer-Ian%20Richardson%20%40iantrich-blue.svg?style=for-the-badge)](#)
+
+
 # sensor.feedparser
 RSS feed custom component for Home Assistant which can be used in conjunction with the custom Lovelace [list-card](https://github.com/custom-cards/list-card)
 
