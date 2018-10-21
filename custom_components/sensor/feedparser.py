@@ -18,7 +18,7 @@ from homeassistant.helpers.entity import Entity
 import homeassistant.helpers.config_validation as cv
 from homeassistant.components.switch import (PLATFORM_SCHEMA)
 
-__version__ = '0.0.1'
+__version__ = '0.0.2'
 _LOGGER = logging.getLogger(__name__)
 
 CONF_NAME = 'name'
