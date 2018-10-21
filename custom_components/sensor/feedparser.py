@@ -63,6 +63,8 @@ class FeedParserSensor(Entity):
             return False
         else:
             self._state = len(parsedFeed.entries)
+            self.hass.data[self._name] = {}
+
             for entry in parsedFeed.entries:
                 title = entry['title'] if entry['title'] else entry['description']
 
