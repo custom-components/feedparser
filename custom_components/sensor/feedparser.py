@@ -9,7 +9,6 @@ Following spec from https://validator.w3.org/feed/docs/rss2.html
 
 import logging
 import voluptuous as vol
-import feedparser
 from datetime import timedelta
 from dateutil import parser
 from time import strftime
@@ -18,8 +17,10 @@ from homeassistant.helpers.entity import Entity
 import homeassistant.helpers.config_validation as cv
 from homeassistant.components.switch import (PLATFORM_SCHEMA)
 
-__version__ = '0.0.2'
+__version__ = '0.0.3'
 _LOGGER = logging.getLogger(__name__)
+
+REQUIREMENTS = ['feedparser']
 
 CONF_NAME = 'name'
 CONF_FEED_URL = 'feed_url'
@@ -57,6 +58,7 @@ class FeedParserSensor(Entity):
         self.update()
 
     def update(self):
+        import feedparser
         parsedFeed = feedparser.parse(self._feed)
 
         if not parsedFeed :
