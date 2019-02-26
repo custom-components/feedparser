@@ -54,11 +54,6 @@ Note: Will return all fields if no inclusions or exclusions are specified
 
 Due to how `custom_components` are loaded, it is normal to see a `ModuleNotFoundError` error on first boot after adding this, to resolve it, restart Home-Assistant.
 
-## Support
-Hey dude! Help me out for a couple of :beers: or a :coffee:!
-
-[![coffee](https://www.buymeacoffee.com/assets/img/custom_images/black_img.png)](https://www.buymeacoffee.com/zJtVxUAgH)
-
 [commits-shield]: https://img.shields.io/github/commit-activity/y/custom-components/sensor.feedparser.svg?style=for-the-badge
 [commits]: https://github.com/custom-components/sensor.feedparser/commits/master
 [discord]: https://discord.gg/Qa5fW2R
