@@ -59,13 +59,13 @@ Hey dude! Help me out for a couple of :beers: or a :coffee:!
 
 [![coffee](https://www.buymeacoffee.com/assets/img/custom_images/black_img.png)](https://www.buymeacoffee.com/zJtVxUAgH)
 
-[commits-shield]: https://img.shields.io/github/commit-activity/y/custom-components/sensor.feedparser.svg
+[commits-shield]: https://img.shields.io/github/commit-activity/y/custom-components/sensor.feedparser.svg?style=for-the-badge
 [commits]: https://github.com/custom-components/sensor.feedparser/commits/master
 [discord]: https://discord.gg/Qa5fW2R
-[discord-shield]: https://img.shields.io/discord/478094546522079232.svg
-[forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg
+[discord-shield]: https://img.shields.io/discord/478094546522079232.svg?style=for-the-badge
+[forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg?style=for-the-badge
 [forum]: https://community.home-assistant.io/t/custom-component-rss-feed-parser/64637
-[license-shield]: https://img.shields.io/github/license/custom-components/sensor.feedparser.svg
-[maintenance-shield]: https://img.shields.io/badge/maintainer-Ian%20Richardson%20%40iantrich-blue.svg
-[releases-shield]: https://img.shields.io/github/release/custom-components/sensor.feedparser.svg
+[license-shield]: https://img.shields.io/github/license/custom-components/sensor.feedparser.svg?style=for-the-badge
+[maintenance-shield]: https://img.shields.io/badge/maintainer-Ian%20Richardson%20%40iantrich-blue.svg?style=for-the-badge
+[releases-shield]: https://img.shields.io/github/release/custom-components/sensor.feedparser.svg?style=for-the-badge
 [releases]: https://github.com/custom-components/sensor.feedparser/releases
