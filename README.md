@@ -57,7 +57,7 @@ Due to how `custom_components` are loaded, it is normal to see a `ModuleNotFound
 [commits-shield]: https://img.shields.io/github/commit-activity/y/custom-components/sensor.feedparser.svg?style=for-the-badge
 [commits]: https://github.com/custom-components/sensor.feedparser/commits/master
 [discord]: https://discord.gg/Qa5fW2R
-[discord-shield]: https://img.shields.io/discord/478094546522079232.svg?style=for-the-badge
+[discord-shield]: https://img.shields.io/discord/330944238910963714.svg?style=for-the-badge
 [forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg?style=for-the-badge
 [forum]: https://community.home-assistant.io/t/custom-component-rss-feed-parser/64637
 [license-shield]: https://img.shields.io/github/license/custom-components/sensor.feedparser.svg?style=for-the-badge
