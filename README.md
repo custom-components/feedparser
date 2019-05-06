@@ -15,8 +15,8 @@ Hey dude! Help me out for a couple of :beers: or a :coffee:!
 
 [![coffee](https://www.buymeacoffee.com/assets/img/custom_images/black_img.png)](https://www.buymeacoffee.com/zJtVxUAgH)
 
-To get started put `/custom_components/feedparser/sensor.py` here:
-`<config directory>/custom_components/feedparser/sensor.py`
+To get started put `/custom_components/feedparser/` here:
+`<config directory>/custom_components/feedparser/`
 
 **Example configuration.yaml:**
 
