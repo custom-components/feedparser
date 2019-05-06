@@ -14,3 +14,4 @@ author:
 license: MIT
 files:
   - custom_components/feedparser/sensor.py
+  - custom_components/feedparser/manifest.json
