@@ -1,4 +1,5 @@
 [
-  "https://raw.githubusercontent.com/custom-components/sensor.feedparser/master/custom_components/feedparser/__init__.py",
-  "https://raw.githubusercontent.com/custom-components/sensor.feedparser/master/custom_components/feedparser/manifest.json"
+  "https://raw.githubusercontent.com/custom-components/feedparser/master/custom_components/feedparser/__init__.py",
+  "https://raw.githubusercontent.com/custom-components/feedparser/master/custom_components/feedparser/manifest.json",
+  "https://raw.githubusercontent.com/custom-components/feedparser/master/custom_components/feedparser/sensor.py"
 ]
