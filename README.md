@@ -8,7 +8,7 @@ To get started put `/custom_components/feedparser/` here:
 
 ```yaml
 sensor:
-- platform: adparser
+- platform: feedparser
   name: News
   limit_per_feed: 3
   feeds_url:
