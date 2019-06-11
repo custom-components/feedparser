@@ -27,7 +27,6 @@ REQUIREMENTS = ['feedparser', 'fuzzywuzzy']
 CONF_NAME = 'name'
 CONF_FEEDS_URL = 'feeds_url'
 CONF_LIMIT_PER_FEED = 'limit_per_feed'
-CONF_DELIMETER = 'delimiter'
 CONF_DATE_FORMAT = 'date_format'
 CONF_STOP_WORDS = 'stop_words'
 CONF_INCLUSIONS = 'inclusions'
@@ -41,8 +40,7 @@ ICON = 'mdi:rss'
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_NAME): cv.string,
-    vol.Required(CONF_FEEDS_URL): cv.string,
-    vol.Required(CONF_DELIMETER, default=','): cv.string,
+    vol.Required(CONF_FEEDS_URL, default=[]): vol.All(cv.ensure_list, [cv.string]),
     vol.Required(CONF_LIMIT_PER_FEED, default=3): cv.positive_int,
     vol.Required(CONF_DATE_FORMAT, default='%a, %b %d %I:%M %p'): cv.string,
     vol.Optional(CONF_STOP_WORDS, default=[]): vol.All(cv.ensure_list, [cv.string]),
@@ -58,7 +56,6 @@ class FeedParserSensor(Entity):
         self.hass = hass
         self._feeds = config[CONF_FEEDS_URL]
         self._name = config[CONF_NAME]
-        self._delimiter = config[CONF_DELIMETER]
         self._limit_per_feed = config[CONF_LIMIT_PER_FEED]
         self._date_format = config[CONF_DATE_FORMAT]
         self._stop_words = list(map(lambda x:x.lower(), config[CONF_STOP_WORDS]))
@@ -70,8 +67,6 @@ class FeedParserSensor(Entity):
 
     def update(self):
         import feedparser
-
-        feeds = self._feeds.split(self._delimiter)
 
         self.hass.data[self._name] = {}
 
