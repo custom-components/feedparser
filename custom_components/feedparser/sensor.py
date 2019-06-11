@@ -70,7 +70,7 @@ class FeedParserSensor(Entity):
 
         self.hass.data[self._name] = {}
 
-        for feed in feeds:
+        for feed in self._feeds:
             count = 0
             parsedFeed = feedparser.parse(feed)
 
