@@ -8,9 +8,8 @@ keywords:
   - feed
   - list
 author:
-  name: Ian Richardson
-  email: iantrich@gmail.com
-  homepage: https://iantrich.github.io
+  name: ad
+  homepage: https://github.com/ad/feedparser
 license: MIT
 files:
   - custom_components/feedparser/sensor.py
