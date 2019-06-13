@@ -19,7 +19,7 @@ from homeassistant.components.sensor import (PLATFORM_SCHEMA)
 
 from fuzzywuzzy import process
 
-__version__ = '0.0.3'
+__version__ = '0.0.4'
 _LOGGER = logging.getLogger(__name__)
 
 REQUIREMENTS = ['feedparser', 'fuzzywuzzy']
@@ -85,7 +85,7 @@ class FeedParserSensor(Entity):
                     
                     if len(self.hass.data[self._name]) > 0:
                         (highest_title, highest) = process.extractOne(title, [*self.hass.data[self._name].keys()])
-                        if highest > 90:
+                        if highest > 75:
                             #_LOGGER.error("%s is very similar to: %s" % (title, highest_title))
                             continue
 
