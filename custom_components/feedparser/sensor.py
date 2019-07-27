@@ -107,7 +107,7 @@ class FeedParserSensor(Entity):
                                     continue
 
                                 if key in ['published', 'updated', 'created', 'expired']:
-                                    value = parser.parse(value).replace(tzinfo=None).strftime(self._date_format)
+                                    value = parser.parse(value).strftime(self._date_format)
 
                                 self.hass.data[self._name][title][key] = value
                             count += 1
