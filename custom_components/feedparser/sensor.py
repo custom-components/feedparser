@@ -7,6 +7,7 @@ https://github.com/custom-components/sensor.feedparser
 Following spec from https://validator.w3.org/feed/docs/rss2.html
 """
 
+import feedparser
 import logging
 import voluptuous as vol
 from datetime import timedelta
@@ -16,13 +17,13 @@ from subprocess import check_output
 from homeassistant.helpers.entity import Entity
 import homeassistant.helpers.config_validation as cv
 from homeassistant.components.sensor import (PLATFORM_SCHEMA)
+from homeassistant.const import (CONF_NAME)
 
 __version__ = '0.0.6'
 _LOGGER = logging.getLogger(__name__)
 
 REQUIREMENTS = ['feedparser']
 
-CONF_NAME = 'name'
 CONF_FEED_URL = 'feed_url'
 CONF_DATE_FORMAT = 'date_format'
 CONF_INCLUSIONS = 'inclusions'
@@ -54,35 +55,31 @@ class FeedParserSensor(Entity):
         self._inclusions = config[CONF_INCLUSIONS]
         self._exclusions = config[CONF_EXCLUSIONS]
         self._state = None
-        self.hass.data[self._name] = {}
+        self._entries = []
         self.update()
 
     def update(self):
-        import feedparser
         parsedFeed = feedparser.parse(self._feed)
 
-        if not parsedFeed :
+        if not parsedFeed:
             return False
         else:
             self._state = len(parsedFeed.entries)
-            self.hass.data[self._name] = {}
-
+            self._entries = []
+            
             for entry in parsedFeed.entries:
-                title = entry['title'] if entry['title'] else entry['description']
-
-                if not title:
-                  continue
-
-                self.hass.data[self._name][title] = {}
+                entryValue = {}
 
                 for key, value in entry.items():
-                  if (self._inclusions and key not in self._inclusions) or ('parsed' in key) or (key in self._exclusions):
-                    continue
+                    if (self._inclusions and key not in self._inclusions) or ('parsed' in key) or (key in self._exclusions):
+                        continue
 
-                  if key in ['published', 'updated', 'created', 'expired']:
-                    value = parser.parse(value).strftime(self._date_format)
+                    if key in ['published', 'updated', 'created', 'expired']:
+                        value = parser.parse(value).strftime(self._date_format)
 
-                  self.hass.data[self._name][title][key] = value
+                    entryValue[key] = value
+
+                self._entries.append(entryValue)
 
     @property
     def name(self):
@@ -98,4 +95,6 @@ class FeedParserSensor(Entity):
 
     @property
     def device_state_attributes(self):
-        return self.hass.data[self._name]
+        return {
+            'entries': self._entries
+        }
