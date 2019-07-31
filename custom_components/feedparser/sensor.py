@@ -6,7 +6,7 @@ https://github.com/custom-components/sensor.feedparser
 
 Following spec from https://validator.w3.org/feed/docs/rss2.html
 """
-
+import re
 import feedparser
 import logging
 import voluptuous as vol
@@ -67,11 +67,9 @@ class FeedParserSensor(Entity):
         if not parsedFeed:
             return False
         else:
-            #self._state = len(parsedFeed.entries)
             self._state = self._show_topn if len(parsedFeed.entries) > self._show_topn else len(parsedFeed.entries)
             self._entries = []
-            
-            #for entry in parsedFeed.entries:
+
             for entry in parsedFeed.entries[:self._state]:
                 entryValue = {}
 
@@ -83,6 +81,16 @@ class FeedParserSensor(Entity):
                         value = parser.parse(value).strftime(self._date_format)
 
                     entryValue[key] = value
+
+                if 'image' in self._inclusions and 'image' not in entryValue.keys():
+                    images = []
+                    if 'summary' in entry.keys():
+                        images = re.findall(r"<img.+?src=\"(.+?)\".+?>", entry['summary'])
+
+                    if images:
+                        entryValue['image'] = images[0]
+                    else:
+                        entryValue['image'] = "https://www.home-assistant.io/images/favicon-192x192-full.png"
 
                 self._entries.append(entryValue)
 
