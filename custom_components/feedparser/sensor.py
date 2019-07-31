@@ -6,7 +6,7 @@ https://github.com/custom-components/sensor.feedparser
 
 Following spec from https://validator.w3.org/feed/docs/rss2.html
 """
-
+import re
 import feedparser
 import logging
 import voluptuous as vol
@@ -28,6 +28,7 @@ CONF_FEED_URL = 'feed_url'
 CONF_DATE_FORMAT = 'date_format'
 CONF_INCLUSIONS = 'inclusions'
 CONF_EXCLUSIONS = 'exclusions'
+CONF_SHOW_TOPN  = 'show_topn'
 
 DEFAULT_SCAN_INTERVAL = timedelta(hours=1)
 
@@ -39,6 +40,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_NAME): cv.string,
     vol.Required(CONF_FEED_URL): cv.string,
     vol.Required(CONF_DATE_FORMAT, default='%a, %b %d %I:%M %p'): cv.string,
+    vol.Optional(CONF_SHOW_TOPN, default=9999): cv.positive_int,
     vol.Optional(CONF_INCLUSIONS, default=[]): vol.All(cv.ensure_list, [cv.string]),
     vol.Optional(CONF_EXCLUSIONS, default=[]): vol.All(cv.ensure_list, [cv.string]),
 })
@@ -52,6 +54,7 @@ class FeedParserSensor(Entity):
         self._feed = config[CONF_FEED_URL]
         self._name = config[CONF_NAME]
         self._date_format = config[CONF_DATE_FORMAT]
+        self._show_topn = config[CONF_SHOW_TOPN]
         self._inclusions = config[CONF_INCLUSIONS]
         self._exclusions = config[CONF_EXCLUSIONS]
         self._state = None
@@ -64,20 +67,28 @@ class FeedParserSensor(Entity):
         if not parsedFeed:
             return False
         else:
-            self._state = len(parsedFeed.entries)
+            self._state = self._show_topn if len(parsedFeed.entries) > self._show_topn else len(parsedFeed.entries)
             self._entries = []
-            
-            for entry in parsedFeed.entries:
+
+            for entry in parsedFeed.entries[:self._state]:
                 entryValue = {}
 
                 for key, value in entry.items():
                     if (self._inclusions and key not in self._inclusions) or ('parsed' in key) or (key in self._exclusions):
                         continue
-
                     if key in ['published', 'updated', 'created', 'expired']:
                         value = parser.parse(value).strftime(self._date_format)
 
                     entryValue[key] = value
+
+                if 'image' in self._inclusions and 'image' not in entryValue.keys():
+                    images = []
+                    if 'summary' in entry.keys():
+                        images = re.findall(r"<img.+?src=\"(.+?)\".+?>", entry['summary'])
+                    if images:
+                        entryValue['image'] = images[0]
+                    else:
+                        entryValue['image'] = "https://www.home-assistant.io/images/favicon-192x192-full.png"
 
                 self._entries.append(entryValue)
 
