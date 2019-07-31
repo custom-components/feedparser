@@ -76,7 +76,6 @@ class FeedParserSensor(Entity):
                 for key, value in entry.items():
                     if (self._inclusions and key not in self._inclusions) or ('parsed' in key) or (key in self._exclusions):
                         continue
-
                     if key in ['published', 'updated', 'created', 'expired']:
                         value = parser.parse(value).strftime(self._date_format)
 
@@ -86,7 +85,6 @@ class FeedParserSensor(Entity):
                     images = []
                     if 'summary' in entry.keys():
                         images = re.findall(r"<img.+?src=\"(.+?)\".+?>", entry['summary'])
-
                     if images:
                         entryValue['image'] = images[0]
                     else:
