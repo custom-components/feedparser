@@ -47,7 +47,6 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
 
 @asyncio.coroutine
 def async_setup_platform(hass, config, async_add_devices, discovery_info=None):
-    _LOGGER.info("start async_setup_platform sensor feedparser")
     async_add_devices([FeedParserSensor(
         feed=config[CONF_FEED_URL],
         name=config[CONF_NAME],
@@ -70,7 +69,6 @@ class FeedParserSensor(Entity):
         self._entries = []
 
     def update(self):
-        _LOGGER.info("sensor feedparser update from " + self._feed)
         parsedFeed = feedparser.parse(self._feed)
 
         if not parsedFeed:
