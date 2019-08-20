@@ -6,14 +6,13 @@ https://github.com/custom-components/sensor.feedparser
 
 Following spec from https://validator.w3.org/feed/docs/rss2.html
 """
+import asyncio
 import re
 import feedparser
 import logging
 import voluptuous as vol
 from datetime import timedelta
 from dateutil import parser
-from time import strftime
-from subprocess import check_output
 from homeassistant.helpers.entity import Entity
 import homeassistant.helpers.config_validation as cv
 from homeassistant.components.sensor import (PLATFORM_SCHEMA)
@@ -45,23 +44,33 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_EXCLUSIONS, default=[]): vol.All(cv.ensure_list, [cv.string]),
 })
 
-def setup_platform(hass, config, add_devices, discovery_info=None):
-    add_devices([FeedParserSensor(hass, config)])
+
+@asyncio.coroutine
+def async_setup_platform(hass, config, async_add_devices, discovery_info=None):
+    _LOGGER.info("start async_setup_platform sensor feedparser")
+    async_add_devices([FeedParserSensor(
+        feed=config[CONF_FEED_URL],
+        name=config[CONF_NAME],
+        date_format=config[CONF_DATE_FORMAT],
+        show_topn=config[CONF_SHOW_TOPN],
+        inclusions=config[CONF_INCLUSIONS],
+        exclusions=config[CONF_EXCLUSIONS]
+        )], True)
+
 
 class FeedParserSensor(Entity):
-    def __init__(self, hass, config):
-        self.hass = hass
-        self._feed = config[CONF_FEED_URL]
-        self._name = config[CONF_NAME]
-        self._date_format = config[CONF_DATE_FORMAT]
-        self._show_topn = config[CONF_SHOW_TOPN]
-        self._inclusions = config[CONF_INCLUSIONS]
-        self._exclusions = config[CONF_EXCLUSIONS]
+    def __init__(self, feed: str, name: str, date_format: str, show_topn: str, exclusions: str, inclusions:str):
+        self._feed = feed
+        self._name = name
+        self._date_format = date_format
+        self._show_topn = show_topn
+        self._inclusions = inclusions
+        self._exclusions = exclusions
         self._state = None
         self._entries = []
-        self.update()
 
     def update(self):
+        _LOGGER.info("sensor feedparser update from " + self._feed)
         parsedFeed = feedparser.parse(self._feed)
 
         if not parsedFeed:
