@@ -26,6 +26,7 @@ sensor:
   name: Engineering Feed
   feed_url: 'https://www.sciencedaily.com/rss/matter_energy/engineering.xml'
   date_format: '%a, %b %d %I:%M %p'
+  remove_image_from_summary: true
   inclusions:
     - title
     - link
@@ -48,6 +49,7 @@ key | description
 **show_topn (Optional)** | fetch how many entres from rss source，if not set then fetch all
 **inclusions (Optional)** | List of fields to include from populating the list
 **exclusions (Optional)** | List of fields to exclude from populating the list
+**remove_image_from_summary (Optional)** | `true/false` Remove the image tag from the summary
 
 ***
 

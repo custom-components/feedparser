@@ -28,6 +28,7 @@ CONF_DATE_FORMAT = 'date_format'
 CONF_INCLUSIONS = 'inclusions'
 CONF_EXCLUSIONS = 'exclusions'
 CONF_SHOW_TOPN  = 'show_topn'
+CONF_REMOVE_IMAGE = 'remove_image_from_summary'
 
 DEFAULT_SCAN_INTERVAL = timedelta(hours=1)
 
@@ -42,6 +43,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Optional(CONF_SHOW_TOPN, default=9999): cv.positive_int,
     vol.Optional(CONF_INCLUSIONS, default=[]): vol.All(cv.ensure_list, [cv.string]),
     vol.Optional(CONF_EXCLUSIONS, default=[]): vol.All(cv.ensure_list, [cv.string]),
+    vol.Optional(CONF_REMOVE_IMAGE, default=False): cv.boolean,
 })
 
 
@@ -53,18 +55,20 @@ def async_setup_platform(hass, config, async_add_devices, discovery_info=None):
         date_format=config[CONF_DATE_FORMAT],
         show_topn=config[CONF_SHOW_TOPN],
         inclusions=config[CONF_INCLUSIONS],
-        exclusions=config[CONF_EXCLUSIONS]
+        exclusions=config[CONF_EXCLUSIONS],
+        remove_image=config[CONF_REMOVE_IMAGE]
         )], True)
 
 
 class FeedParserSensor(Entity):
-    def __init__(self, feed: str, name: str, date_format: str, show_topn: str, exclusions: str, inclusions:str):
+    def __init__(self, feed: str, name: str, date_format: str, show_topn: str, exclusions: str, inclusions:str, remove_image: bool):
         self._feed = feed
         self._name = name
         self._date_format = date_format
         self._show_topn = show_topn
         self._inclusions = inclusions
         self._exclusions = exclusions
+        self._remove_image = remove_image
         self._state = None
         self._entries = []
 
@@ -92,6 +96,8 @@ class FeedParserSensor(Entity):
                     images = []
                     if 'summary' in entry.keys():
                         images = re.findall(r"<img.+?src=\"(.+?)\".+?>", entry['summary'])
+                        if self._remove_image:
+                            entryValue['summary'] = re.sub(r"<img.+?src=\"(.+?)\".+?>", "", entry['summary'])
                     if images:
                         entryValue['image'] = images[0]
                     else:
