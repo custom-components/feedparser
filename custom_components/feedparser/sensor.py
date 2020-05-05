@@ -7,17 +7,19 @@ https://github.com/custom-components/sensor.feedparser
 Following spec from https://validator.w3.org/feed/docs/rss2.html
 """
 import asyncio
-import re
-import feedparser
 import logging
-import voluptuous as vol
+import re
 from datetime import datetime, timedelta
+
 from dateutil import parser
-from homeassistant.helpers.entity import Entity
+
+import feedparser
 import homeassistant.helpers.config_validation as cv
 import homeassistant.helpers.template as tm
-from homeassistant.components.sensor import (PLATFORM_SCHEMA)
-from homeassistant.const import (CONF_NAME)
+import voluptuous as vol
+from homeassistant.components.sensor import PLATFORM_SCHEMA
+from homeassistant.const import CONF_NAME
+from homeassistant.helpers.entity import Entity
 
 __version__ = '0.0.6'
 _LOGGER = logging.getLogger(__name__)
@@ -28,13 +30,11 @@ CONF_FEED_URL = 'feed_url'
 CONF_DATE_FORMAT = 'date_format'
 CONF_INCLUSIONS = 'inclusions'
 CONF_EXCLUSIONS = 'exclusions'
-CONF_SHOW_TOPN  = 'show_topn'
-CONF_SHOW_HOURS = 'show_hours'
-CONF_SHOW_TIME = 'show_after_time'
 CONF_REMOVE_IMAGE = 'remove_image_from_summary'
 CONF_FILTER = 'filter'
 CONF_FILTER_DEFAULT = 'topn'
 CONF_FILTER_OPTIONS = ['topn', 'hours', 'time']
+CONF_FILTER_VALUE = 'filter_value'
 
 DEFAULT_SCAN_INTERVAL = timedelta(hours=1)
 
@@ -47,9 +47,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_FEED_URL): cv.string,
     vol.Required(CONF_DATE_FORMAT, default='%a, %b %d %I:%M %p'): cv.string,
     vol.Optional(CONF_FILTER, default=CONF_FILTER_DEFAULT): vol.All(cv.string, vol.In(CONF_FILTER_OPTIONS)),
-    vol.Optional(CONF_SHOW_TOPN, default=9999): cv.positive_int,
-    vol.Optional(CONF_SHOW_HOURS, default=0): cv.positive_int,
-    vol.Optional(CONF_SHOW_TIME, default=''): cv.template,
+    vol.Optional(CONF_FILTER_VALUE, default=''): cv.template,
     vol.Optional(CONF_INCLUSIONS, default=[]): vol.All(cv.ensure_list, [cv.string]),
     vol.Optional(CONF_EXCLUSIONS, default=[]): vol.All(cv.ensure_list, [cv.string]),
     vol.Optional(CONF_REMOVE_IMAGE, default=False): cv.boolean,
@@ -70,12 +68,11 @@ class FeedParserSensor(Entity):
         self._date_format = None
         self._filter = None
         self._show_topn = 9999
-        self._show_hours = None
-        self._show_time = None
+        self._filter_value = None
         self._inclusions = None
         self._exclusions = None
         self._remove_image = None
-        self._state = None
+        self._state = 0
         self._entries = []
 
         if self._config:
@@ -84,12 +81,14 @@ class FeedParserSensor(Entity):
             self._date_format = config[CONF_DATE_FORMAT]
             if CONF_FILTER in self._config:
                 self._filter = self._config[CONF_FILTER]
-            if self._filter and self._filter == 'topn' and CONF_SHOW_TOPN in self._config:
-                self._show_topn = self._config[CONF_SHOW_TOPN]
-            if self._filter and self._filter == 'hours' and CONF_SHOW_HOURS in self._config:
-                self._show_hours = self._config[CONF_SHOW_HOURS]
-            if self._filter and self._filter == 'time' and CONF_SHOW_TIME in self._config:
-                self._show_time = self._config[CONF_SHOW_TIME]
+            if self._filter and self._filter in CONF_FILTER_OPTIONS and CONF_FILTER_VALUE in self._config:
+                self._filter_value = self._config[CONF_FILTER_VALUE]
+                
+                if self._filter == "topn":
+                    _template = self._filter_value
+                    _template.hass = self.hass
+                    self._show_topn = int(_template.async_render())
+                    
             if CONF_INCLUSIONS in self._config:
                 self._inclusions = self._config[CONF_INCLUSIONS]
             if CONF_EXCLUSIONS in self._config:
@@ -104,18 +103,24 @@ class FeedParserSensor(Entity):
         if not parsedFeed:
             return False
         else:
-            self._state = self._show_topn if len(parsedFeed.entries) > self._show_topn else len(parsedFeed.entries)
+            maxEntries = self._show_topn if len(parsedFeed.entries) > self._show_topn else len(parsedFeed.entries)
             self._entries = []
 
             date_compare = None
-            if self._filter == 'hours':
-                date_compare = datetime.now() - timedelta(hours=self._show_hours)
-            if self._filter == 'time':
-                _template = self._show_time
-                _template.hass = self.hass
-                date_compare = parser.parse(_template.async_render())
+            if self._filter not in CONF_FILTER_OPTIONS:
+                _LOGGER.warning('Invalid filter options. Using default instead.')
+            else:
+                try:
+                    _template = self._filter_value
+                    _template.hass = self.hass
+                    if self._filter == 'hours':
+                        date_compare = datetime.now() - timedelta(hours=int(_template.async_render()))
+                    elif self._filter == 'time':
+                        date_compare = parser.parse(_template.async_render())
+                except:
+                    _LOGGER.warning('Invalid filter options. Using default instead.')
 
-            for entry in parsedFeed.entries[:self._state]:
+            for entry in parsedFeed.entries[:maxEntries]:
                 entryValue = {}
 
                 for key, value in entry.items():
@@ -138,8 +143,10 @@ class FeedParserSensor(Entity):
                 if self._remove_image:
                     entryValue['summary'] = re.sub(r"<img.+?src=\"(.+?)\".+?>", "", entry['summary'])
                 
-                if date_compare is None or datetime.strptime(entryValue['published'], self._date_format) >= date_compare:
+                if date_compare is None or parser.parse(entryValue['published']) >= date_compare:
                     self._entries.append(entryValue)
+            
+            self._state = len(self._entries)
 
     @property
     def name(self):
