@@ -48,7 +48,6 @@ key | description
 **date_format (Optional)** | strftime date format for date strings **Default** `%a, %b %d %I:%M %p`
 **filter (Optional)** | `topn/hours/time` select how to filter entries. `topn` returns n number of entries. `hours` returns entries published after number of hours back. `time` allows for templating a date/time to return entries after.
 **filter_value (Optional)** | used with filter to set the value
-**show_topn (Optional)** | fetch how many entres from rss source，if not set then fetch all
 **inclusions (Optional)** | List of fields to include from populating the list
 **exclusions (Optional)** | List of fields to exclude from populating the list
 **remove_image_from_summary (Optional)** | `true/false` Remove the image tag from the summary
