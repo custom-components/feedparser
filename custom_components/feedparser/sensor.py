@@ -18,7 +18,7 @@ import homeassistant.helpers.config_validation as cv
 from homeassistant.components.sensor import (PLATFORM_SCHEMA)
 from homeassistant.const import (CONF_NAME)
 
-__version__ = '0.0.7'
+__version__ = '0.1.1'
 _LOGGER = logging.getLogger(__name__)
 
 REQUIREMENTS = ['feedparser']
