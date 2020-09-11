@@ -10,6 +10,7 @@ from homeassistant.components.sensor import SensorEntity
 import homeassistant.helpers.config_validation as cv
 from homeassistant.components.sensor import PLATFORM_SCHEMA
 from homeassistant.const import CONF_NAME
+import homeassistant.util.dt as dt
 
 __version__ = "0.1.2"
 
@@ -20,6 +21,7 @@ CONF_DATE_FORMAT = "date_format"
 CONF_INCLUSIONS = "inclusions"
 CONF_EXCLUSIONS = "exclusions"
 CONF_SHOW_TOPN = "show_topn"
+CONF_LOCAL_TIME  = 'local_time'
 
 DEFAULT_SCAN_INTERVAL = timedelta(hours=1)
 
@@ -35,6 +37,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
         vol.Optional(CONF_SHOW_TOPN, default=9999): cv.positive_int,
         vol.Optional(CONF_INCLUSIONS, default=[]): vol.All(cv.ensure_list, [cv.string]),
         vol.Optional(CONF_EXCLUSIONS, default=[]): vol.All(cv.ensure_list, [cv.string]),
+        vol.Optional(CONF_LOCAL_TIME, default=False): cv.boolean,
     }
 )
 
@@ -47,6 +50,7 @@ def async_setup_platform(hass, config, async_add_devices, discovery_info=None):
                 feed=config[CONF_FEED_URL],
                 name=config[CONF_NAME],
                 date_format=config[CONF_DATE_FORMAT],
+                local_time=config[CONF_LOCAL_TIME],
                 show_topn=config[CONF_SHOW_TOPN],
                 inclusions=config[CONF_INCLUSIONS],
                 exclusions=config[CONF_EXCLUSIONS],
@@ -63,12 +67,14 @@ class FeedParserSensor(SensorEntity):
         name: str,
         date_format: str,
         show_topn: str,
+        local_time: bool,
         exclusions: str,
         inclusions: str,
     ):
         self._feed = feed
         self._name = name
         self._date_format = date_format
+        self._local_time = local_time
         self._show_topn = show_topn
         self._inclusions = inclusions
         self._exclusions = exclusions
@@ -99,7 +105,11 @@ class FeedParserSensor(SensorEntity):
                     ):
                         continue
                     if key in ["published", "updated", "created", "expired"]:
-                        value = parser.parse(value).strftime(self._date_format)
+                        value = parser.parse(value)
+                        if self._local_time:
+                            value = dt.as_local(value)
+                        value = value.strftime(self._date_format)
+
 
                     entryValue[key] = value
 
