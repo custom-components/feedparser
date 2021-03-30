@@ -3,7 +3,6 @@
 import asyncio
 import re
 import feedparser
-import logging
 import voluptuous as vol
 from datetime import timedelta
 from dateutil import parser
