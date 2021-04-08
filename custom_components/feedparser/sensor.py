@@ -6,7 +6,7 @@ import feedparser
 import voluptuous as vol
 from datetime import timedelta
 from dateutil import parser
-from homeassistant.helpers.entity import Entity
+from homeassistant.components.sensor import SensorEntity
 import homeassistant.helpers.config_validation as cv
 from homeassistant.components.sensor import PLATFORM_SCHEMA
 from homeassistant.const import CONF_NAME
@@ -56,7 +56,7 @@ def async_setup_platform(hass, config, async_add_devices, discovery_info=None):
     )
 
 
-class FeedParserSensor(Entity):
+class FeedParserSensor(SensorEntity):
     def __init__(
         self,
         feed: str,
