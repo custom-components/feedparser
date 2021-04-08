@@ -6,7 +6,7 @@ import feedparser
 import voluptuous as vol
 from datetime import timedelta
 from dateutil import parser
-from homeassistant.helpers.entity import SensorEntity
+from homeassistant.components.sensor import SensorEntity
 import homeassistant.helpers.config_validation as cv
 from homeassistant.components.sensor import PLATFORM_SCHEMA
 from homeassistant.const import CONF_NAME
