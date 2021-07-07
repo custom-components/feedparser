@@ -1,0 +1,6 @@
+{
+  "name": "Feedparser",
+  "homeassistant": "2021.4.0",
+  "domains": ["sensor"],
+  "render_readme": true
+}
