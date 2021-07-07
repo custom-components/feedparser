@@ -4,5 +4,5 @@
   "documentation": "https://github.com/ad/feedparser/blob/master/README.md",
   "dependencies": [],
   "codeowners": ["@ad"],
-  "requirements": ["feedparser==6.0.0b3", "fuzzywuzzy"]
+  "requirements": ["feedparser==6.0.8", "fuzzywuzzy"]
 }
