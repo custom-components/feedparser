@@ -14,12 +14,13 @@ from dateutil import parser
 from time import strftime
 from subprocess import check_output
 from homeassistant.helpers.entity import Entity
+from homeassistant.components.sensor import SensorEntity
 import homeassistant.helpers.config_validation as cv
 from homeassistant.components.sensor import (PLATFORM_SCHEMA)
 
 from fuzzywuzzy import process
 
-__version__ = '0.0.6'
+__version__ = '0.0.7'
 _LOGGER = logging.getLogger(__name__)
 
 REQUIREMENTS = ['feedparser', 'fuzzywuzzy']
@@ -51,7 +52,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
 def setup_platform(hass, config, add_devices, discovery_info=None):
     add_devices([FeedParserSensor(hass, config)])
 
-class FeedParserSensor(Entity):
+class FeedParserSensor(SensorEntity):
     def __init__(self, hass, config):
         self.hass = hass
         self._feeds = config[CONF_FEEDS_URL]
