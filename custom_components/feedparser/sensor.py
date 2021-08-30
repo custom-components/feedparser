@@ -1,17 +1,21 @@
 """Feedparser sensor"""
+from __future__ import annotations
 
 import asyncio
 import re
-import feedparser
-import voluptuous as vol
 from datetime import timedelta
-from dateutil import parser
-from homeassistant.components.sensor import SensorEntity
-import homeassistant.helpers.config_validation as cv
-from homeassistant.components.sensor import PLATFORM_SCHEMA
-from homeassistant.const import CONF_NAME
 
-__version__ = "0.1.2"
+import homeassistant.helpers.config_validation as cv
+import voluptuous as vol
+from dateutil import parser
+from homeassistant.components.sensor import PLATFORM_SCHEMA, SensorEntity
+from homeassistant.const import CONF_NAME
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers.typing import ConfigType, DiscoverInfoType
+
+import feedparser
+
+__version__ = "0.1.6"
 
 REQUIREMENTS = ["feedparser"]
 
@@ -40,7 +44,12 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 
 
 @asyncio.coroutine
-def async_setup_platform(hass, config, async_add_devices, discovery_info=None):
+def async_setup_platform(
+    hass: HomeAssistant,
+    config: ConfigType,
+    async_add_devices,
+    discovery_info: DiscoverInfoType | None = None,
+) -> None:
     async_add_devices(
         [
             FeedParserSensor(
@@ -65,31 +74,32 @@ class FeedParserSensor(SensorEntity):
         show_topn: str,
         exclusions: str,
         inclusions: str,
-    ):
+    ) -> None:
         self._feed = feed
-        self._name = name
+        self._attr_name = name
+        self._attr_icon = ICON
         self._date_format = date_format
         self._show_topn = show_topn
         self._inclusions = inclusions
         self._exclusions = exclusions
-        self._state = None
+        self._attr_state = None
         self._entries = []
 
     def update(self):
-        parsedFeed = feedparser.parse(self._feed)
+        parsed_feed = feedparser.parse(self._feed)
 
-        if not parsedFeed:
+        if not parsed_feed:
             return False
         else:
-            self._state = (
+            self._attr_state = (
                 self._show_topn
-                if len(parsedFeed.entries) > self._show_topn
-                else len(parsedFeed.entries)
+                if len(parsed_feed.entries) > self._show_topn
+                else len(parsed_feed.entries)
             )
             self._entries = []
 
-            for entry in parsedFeed.entries[: self._state]:
-                entryValue = {}
+            for entry in parsed_feed.entries[: self._attr_state]:
+                entry_value = {}
 
                 for key, value in entry.items():
                     if (
@@ -101,34 +111,22 @@ class FeedParserSensor(SensorEntity):
                     if key in ["published", "updated", "created", "expired"]:
                         value = parser.parse(value).strftime(self._date_format)
 
-                    entryValue[key] = value
+                    entry_value[key] = value
 
-                if "image" in self._inclusions and "image" not in entryValue.keys():
+                if "image" in self._inclusions and "image" not in entry_value.keys():
                     images = []
                     if "summary" in entry.keys():
                         images = re.findall(
                             r"<img.+?src=\"(.+?)\".+?>", entry["summary"]
                         )
                     if images:
-                        entryValue["image"] = images[0]
+                        entry_value["image"] = images[0]
                     else:
-                        entryValue[
+                        entry_value[
                             "image"
                         ] = "https://www.home-assistant.io/images/favicon-192x192-full.png"
 
-                self._entries.append(entryValue)
-
-    @property
-    def name(self):
-        return self._name
-
-    @property
-    def state(self):
-        return self._state
-
-    @property
-    def icon(self):
-        return ICON
+                self._entries.append(entry_value)
 
     @property
     def device_state_attributes(self):
