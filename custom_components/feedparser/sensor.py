@@ -29,7 +29,6 @@ DEFAULT_SCAN_INTERVAL = timedelta(hours=1)
 
 COMPONENT_REPO = "https://github.com/custom-components/sensor.feedparser/"
 SCAN_INTERVAL = timedelta(hours=1)
-ICON = "mdi:rss"
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
@@ -77,7 +76,7 @@ class FeedParserSensor(SensorEntity):
     ) -> None:
         self._feed = feed
         self._attr_name = name
-        self._attr_icon = ICON
+        self._attr_icon = "mdi:rss"
         self._date_format = date_format
         self._show_topn = show_topn
         self._inclusions = inclusions
