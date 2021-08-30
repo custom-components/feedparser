@@ -10,8 +10,6 @@ import voluptuous as vol
 from dateutil import parser
 from homeassistant.components.sensor import PLATFORM_SCHEMA, SensorEntity
 from homeassistant.const import CONF_NAME
-from homeassistant.core import HomeAssistant
-from homeassistant.helpers.typing import ConfigType, DiscoverInfoType
 
 import feedparser
 
@@ -43,12 +41,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 
 
 @asyncio.coroutine
-def async_setup_platform(
-    hass: HomeAssistant,
-    config: ConfigType,
-    async_add_devices,
-    discovery_info: DiscoverInfoType | None = None,
-) -> None:
+def async_setup_platform(hass, config, async_add_devices, discovery_info=None):
     async_add_devices(
         [
             FeedParserSensor(
