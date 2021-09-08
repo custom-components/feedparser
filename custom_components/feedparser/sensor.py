@@ -14,7 +14,7 @@ import homeassistant.util.dt as dt
 
 import feedparser
 
-__version__ = "0.1.6"
+__version__ = "0.1.7"
 
 REQUIREMENTS = ["feedparser"]
 
