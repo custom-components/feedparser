@@ -9,11 +9,16 @@ import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from dateutil import parser
 from homeassistant.components.sensor import PLATFORM_SCHEMA, SensorEntity
-from homeassistant.const import CONF_NAME
+from homeassistant.const import CONF_NAME, CONF_SCAN_INTERVAL
+from homeassistant.core import HomeAssistant
+from homeassistant.helpers.entity_platform import AddEntitiesCallback
+from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
 import feedparser
 
 __version__ = "0.1.6"
+
+COMPONENT_REPO = "https://github.com/custom-components/sensor.feedparser/"
 
 REQUIREMENTS = ["feedparser"]
 
@@ -25,9 +30,6 @@ CONF_SHOW_TOPN = "show_topn"
 
 DEFAULT_SCAN_INTERVAL = timedelta(hours=1)
 
-COMPONENT_REPO = "https://github.com/custom-components/sensor.feedparser/"
-SCAN_INTERVAL = timedelta(hours=1)
-
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
         vol.Required(CONF_NAME): cv.string,
@@ -36,12 +38,18 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
         vol.Optional(CONF_SHOW_TOPN, default=9999): cv.positive_int,
         vol.Optional(CONF_INCLUSIONS, default=[]): vol.All(cv.ensure_list, [cv.string]),
         vol.Optional(CONF_EXCLUSIONS, default=[]): vol.All(cv.ensure_list, [cv.string]),
+        vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): cv.time_period,
     }
 )
 
 
 @asyncio.coroutine
-def async_setup_platform(hass, config, async_add_devices, discovery_info=None):
+def async_setup_platform(
+    hass: HomeAssistant,
+    config: ConfigType,
+    async_add_devices: AddEntitiesCallback,
+    discovery_info: DiscoveryInfoType | None = None,
+) -> None:
     async_add_devices(
         [
             FeedParserSensor(
@@ -51,6 +59,7 @@ def async_setup_platform(hass, config, async_add_devices, discovery_info=None):
                 show_topn=config[CONF_SHOW_TOPN],
                 inclusions=config[CONF_INCLUSIONS],
                 exclusions=config[CONF_EXCLUSIONS],
+                scan_interval=config[CONF_SCAN_INTERVAL],
             )
         ],
         True,
@@ -66,6 +75,7 @@ class FeedParserSensor(SensorEntity):
         show_topn: str,
         exclusions: str,
         inclusions: str,
+        scan_interval: int,
     ) -> None:
         self._feed = feed
         self._attr_name = name
@@ -74,8 +84,10 @@ class FeedParserSensor(SensorEntity):
         self._show_topn = show_topn
         self._inclusions = inclusions
         self._exclusions = exclusions
+        self._scan_interval = scan_interval
         self._attr_state = None
         self._entries = []
+        self._attr_extra_state_attributes = {"entries": self._entries}
 
     def update(self):
         parsed_feed = feedparser.parse(self._feed)
@@ -119,7 +131,3 @@ class FeedParserSensor(SensorEntity):
                         ] = "https://www.home-assistant.io/images/favicon-192x192-full.png"
 
                 self._entries.append(entry_value)
-
-    @property
-    def device_state_attributes(self):
-        return {"entries": self._entries}
