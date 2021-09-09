@@ -26,6 +26,8 @@ sensor:
   name: Engineering Feed
   feed_url: 'https://www.sciencedaily.com/rss/matter_energy/engineering.xml'
   date_format: '%a, %b %d %I:%M %p'
+  scan_interval:
+    hours: 3
   inclusions:
     - title
     - link
@@ -45,9 +47,11 @@ key | description
 **name (Required)** | Name your feed
 **feed_url (Required)** | The RSS feed URL
 **date_format (Optional)** | strftime date format for date strings **Default** `%a, %b %d %I:%M %p`
+**local_time (Optional)** | Whether to convert date into local time **Default** false
 **show_topn (Optional)** | fetch how many entres from rss source，if not set then fetch all
 **inclusions (Optional)** | List of fields to include from populating the list
 **exclusions (Optional)** | List of fields to exclude from populating the list
+**scan_interval (Optional)** | Update interval in hours
 
 ***
 
