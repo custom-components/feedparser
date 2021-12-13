@@ -131,5 +131,5 @@ class FeedParserSensor(SensorEntity):
                 self._entries.append(entry_value)
 
     @property
-    def device_state_attributes(self):
+    def extra_state_attributes(self):
         return {"entries": self._entries}
