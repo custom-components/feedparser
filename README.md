@@ -33,7 +33,6 @@ sensor:
     - link
     - description
     - image
-    - language
     - pubDate
   exclusions:
     - language
