@@ -25,7 +25,7 @@ sensor:
   platform: feedparser
   name: Engineering Feed
   feed_url: 'https://www.sciencedaily.com/rss/matter_energy/engineering.xml'
-  date_format: '%a, %b %d %I:%M %p'
+  date_format: '%a, %d %b %Y %H:%M:%S %Z'
   scan_interval:
     hours: 3
   inclusions:
