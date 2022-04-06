@@ -1,16 +1,16 @@
-name: sensor.feedparser
-description: 📰 RSS feed custom component for Home Assistant
+name: sensor.feedsparser
+description: 📰 RSS feeds custom component for Home Assistant
 type: component
 keywords:
   - sensor
-  - feedparser
+  - feedsparser
   - rss
   - feed
   - list
 author:
   name: ad
-  homepage: https://github.com/ad/feedparser
+  homepage: https://github.com/ad/feedsparser
 license: MIT
 files:
-  - custom_components/feedparser/sensor.py
-  - custom_components/feedparser/manifest.json
+  - custom_components/feedsparser/sensor.py
+  - custom_components/feedsparser/manifest.json
