@@ -19,7 +19,7 @@ from fuzzywuzzy import process
 
 import feedparser
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 _LOGGER = logging.getLogger(__name__)
 
 COMPONENT_REPO = 'https://github.com/ad/feedsparser'
