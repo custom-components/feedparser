@@ -1,7 +1,7 @@
 {
   "domain": "feedsparser",
   "name": "Feedsparser",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "documentation": "https://github.com/ad/feedsparser/blob/master/README.md",
   "dependencies": [],
   "codeowners": ["@ad", "@iantrich"],
