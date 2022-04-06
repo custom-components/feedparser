@@ -19,7 +19,7 @@ from fuzzywuzzy import process
 
 import feedparser
 
-__version__ = "0.1.2"
+__version__ = "0.1.3"
 _LOGGER = logging.getLogger(__name__)
 
 COMPONENT_REPO = 'https://github.com/ad/feedsparser'
@@ -98,6 +98,7 @@ class FeedsParserSensor(SensorEntity):
 
     def update(self):
         self._entries = []
+        titles = []
 
         for feed in self._feeds:
             count = 0
@@ -109,11 +110,11 @@ class FeedsParserSensor(SensorEntity):
                 for entry in parsed_feed.entries:
                     title = entry['title'] if entry['title'] else entry['description']
 
-                    if not title or title in self._entries:
+                    if not title or title in titles:
                         continue
                     
                     if len(self._entries) > 0:
-                        (highest_title, highest) = process.extractOne(title, [*self._entries.keys()])
+                        (highest_title, highest) = process.extractOne(title, titles)
                         if highest > 75:
                             #_LOGGER.error("%s is very similar to: %s" % (title, highest_title))
                             continue
@@ -129,7 +130,8 @@ class FeedsParserSensor(SensorEntity):
                                     continue
                         
                         if skip_title != True:    
-                            self._entries[title] = {}
+                            entry_value = {}
+                            titles.append(title)
 
                             for key, value in entry.items():
                                 if (self._inclusions and key not in self._inclusions) or ('parsed' in key) or (key in self._exclusions):
@@ -138,10 +140,11 @@ class FeedsParserSensor(SensorEntity):
                                 if key in ['published', 'updated', 'created', 'expired']:
                                     value = parser.parse(value).strftime(self._date_format)
 
-                                self._entries[title][key] = value
+                                entry_value[key] = value
                             count += 1
+                            entry_value['title'] = title
 
-                        self._entries.append(entry_value) 
+                            self._entries.append(entry_value) 
         self._attr_state = (
             len(self._entries)
         )
