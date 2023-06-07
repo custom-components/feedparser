@@ -1,6 +1,6 @@
 {
   "name": "Feedsparser",
-  "homeassistant": "2022.4.0",
+  "homeassistant": "2023.6.0",
   "domains": ["sensor"],
   "render_readme": true
 }
