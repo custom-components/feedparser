@@ -13,6 +13,7 @@ from homeassistant.const import CONF_NAME, CONF_SCAN_INTERVAL
 from homeassistant.core import HomeAssistant
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
+import homeassistant.util.dt as dt
 
 import feedparser
 
@@ -24,6 +25,7 @@ REQUIREMENTS = ["feedparser"]
 
 CONF_FEED_URL = "feed_url"
 CONF_DATE_FORMAT = "date_format"
+CONF_LOCAL_TIME  = "local_time"
 CONF_INCLUSIONS = "inclusions"
 CONF_EXCLUSIONS = "exclusions"
 CONF_SHOW_TOPN = "show_topn"
@@ -35,6 +37,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
         vol.Required(CONF_NAME): cv.string,
         vol.Required(CONF_FEED_URL): cv.string,
         vol.Required(CONF_DATE_FORMAT, default="%a, %b %d %I:%M %p"): cv.string,
+        vol.Optional(CONF_LOCAL_TIME, default=False): cv.boolean,
         vol.Optional(CONF_SHOW_TOPN, default=9999): cv.positive_int,
         vol.Optional(CONF_INCLUSIONS, default=[]): vol.All(cv.ensure_list, [cv.string]),
         vol.Optional(CONF_EXCLUSIONS, default=[]): vol.All(cv.ensure_list, [cv.string]),
@@ -43,8 +46,8 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 )
 
 
-@asyncio.coroutine
-def async_setup_platform(
+"""@asyncio.coroutine"""
+async def async_setup_platform(
     hass: HomeAssistant,
     config: ConfigType,
     async_add_devices: AddEntitiesCallback,
@@ -56,6 +59,7 @@ def async_setup_platform(
                 feed=config[CONF_FEED_URL],
                 name=config[CONF_NAME],
                 date_format=config[CONF_DATE_FORMAT],
+                local_time=config[CONF_LOCAL_TIME],
                 show_topn=config[CONF_SHOW_TOPN],
                 inclusions=config[CONF_INCLUSIONS],
                 exclusions=config[CONF_EXCLUSIONS],
@@ -72,6 +76,7 @@ class FeedParserSensor(SensorEntity):
         feed: str,
         name: str,
         date_format: str,
+        local_time: bool,
         show_topn: str,
         exclusions: str,
         inclusions: str,
@@ -82,6 +87,7 @@ class FeedParserSensor(SensorEntity):
         self._attr_icon = "mdi:rss"
         self._date_format = date_format
         self._show_topn = show_topn
+        self._local_time = local_time
         self._inclusions = inclusions
         self._exclusions = exclusions
         self._scan_interval = scan_interval
@@ -113,7 +119,10 @@ class FeedParserSensor(SensorEntity):
                     ):
                         continue
                     if key in ["published", "updated", "created", "expired"]:
-                        value = parser.parse(value).strftime(self._date_format)
+                        value = parser.parse(value)
+                        if self._local_time:
+                            value = dt.as_local(value)
+                        value = value.strftime(self._date_format)
 
                     entry_value[key] = value
 
