@@ -17,7 +17,7 @@ import homeassistant.util.dt as dt
 
 import feedparser
 
-__version__ = "0.1.10"
+__version__ = "0.1.11"
 
 COMPONENT_REPO = "https://github.com/custom-components/sensor.feedparser/"
 
