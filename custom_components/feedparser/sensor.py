@@ -31,6 +31,7 @@ CONF_EXCLUSIONS = "exclusions"
 CONF_SHOW_TOPN = "show_topn"
 
 DEFAULT_SCAN_INTERVAL = timedelta(hours=1)
+DEFAULT_THUMBNAIL = "https://www.home-assistant.io/images/favicon-192x192-full.png"
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
@@ -127,17 +128,22 @@ class FeedParserSensor(SensorEntity):
                     entry_value[key] = value
 
                 if "image" in self._inclusions and "image" not in entry_value.keys():
-                    images = []
-                    if "summary" in entry.keys():
-                        images = re.findall(
-                            r"<img.+?src=\"(.+?)\".+?>", entry["summary"]
-                        )
+                    if "enclosures" in entry:
+                        images = [
+                            enc
+                            for enc in entry["enclosures"]
+                            if enc.type.startswith("image/")
+                        ]
+                    else:
+                        images = []
                     if images:
-                        entry_value["image"] = images[0]
+                        entry_value["image"] = images[0][
+                            "href"
+                        ]  # pick the first image found
                     else:
                         entry_value[
                             "image"
-                        ] = "https://www.home-assistant.io/images/favicon-192x192-full.png"
+                        ] = DEFAULT_THUMBNAIL  # use default image if no image found
 
                 self._entries.append(entry_value)
 
