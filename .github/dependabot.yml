@@ -1,0 +1,19 @@
+# This is the configuration file for Dependabot. You can find configuration information below.
+# https://docs.github.com/github/administering-a-repository/configuration-options-for-dependency-updates
+# Note: Dependabot has a configurable max open PR limit of 5
+
+version: 2
+updates:
+  # Maintain dependencies for our GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependencies"
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    labels:
+      - "dependencies"
