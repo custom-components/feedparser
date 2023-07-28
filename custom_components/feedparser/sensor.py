@@ -1,31 +1,33 @@
-"""Feedparser sensor"""
+"""Feedparser sensor."""
 from __future__ import annotations
 
-import asyncio
-import re
-from datetime import timedelta
+import logging
+from datetime import datetime, timedelta
+from typing import TYPE_CHECKING
 
+import feedparser  # type: ignore[import]
 import homeassistant.helpers.config_validation as cv
 import voluptuous as vol
 from dateutil import parser
+from feedparser import FeedParserDict
 from homeassistant.components.sensor import PLATFORM_SCHEMA, SensorEntity
 from homeassistant.const import CONF_NAME, CONF_SCAN_INTERVAL
-from homeassistant.core import HomeAssistant
-from homeassistant.helpers.entity_platform import AddEntitiesCallback
-from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
-import homeassistant.util.dt as dt
+from homeassistant.util import dt
 
-import feedparser
+if TYPE_CHECKING:
+    from homeassistant.core import HomeAssistant
+    from homeassistant.helpers.entity_platform import AddEntitiesCallback
+    from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
 __version__ = "0.1.11"
 
-COMPONENT_REPO = "https://github.com/custom-components/sensor.feedparser/"
+COMPONENT_REPO = "https://github.com/custom-components/feedparser/"
 
 REQUIREMENTS = ["feedparser"]
 
 CONF_FEED_URL = "feed_url"
 CONF_DATE_FORMAT = "date_format"
-CONF_LOCAL_TIME  = "local_time"
+CONF_LOCAL_TIME = "local_time"
 CONF_INCLUSIONS = "inclusions"
 CONF_EXCLUSIONS = "exclusions"
 CONF_SHOW_TOPN = "show_topn"
@@ -43,88 +45,93 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
         vol.Optional(CONF_INCLUSIONS, default=[]): vol.All(cv.ensure_list, [cv.string]),
         vol.Optional(CONF_EXCLUSIONS, default=[]): vol.All(cv.ensure_list, [cv.string]),
         vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): cv.time_period,
-    }
+    },
 )
 
+_LOGGER = logging.getLogger(__name__)
 
-"""@asyncio.coroutine"""
+
 async def async_setup_platform(
     hass: HomeAssistant,
     config: ConfigType,
     async_add_devices: AddEntitiesCallback,
     discovery_info: DiscoveryInfoType | None = None,
 ) -> None:
+    """Set up the Feedparser sensor."""
     async_add_devices(
         [
             FeedParserSensor(
                 feed=config[CONF_FEED_URL],
                 name=config[CONF_NAME],
                 date_format=config[CONF_DATE_FORMAT],
-                local_time=config[CONF_LOCAL_TIME],
                 show_topn=config[CONF_SHOW_TOPN],
                 inclusions=config[CONF_INCLUSIONS],
                 exclusions=config[CONF_EXCLUSIONS],
                 scan_interval=config[CONF_SCAN_INTERVAL],
-            )
+                local_time=config[CONF_LOCAL_TIME],
+            ),
         ],
-        True,
+        update_before_add=True,
     )
 
 
 class FeedParserSensor(SensorEntity):
+    """Representation of a Feedparser sensor."""
+
     def __init__(
-        self,
+        self: FeedParserSensor,
         feed: str,
         name: str,
         date_format: str,
+        show_topn: int,
+        exclusions: list[str | None],
+        inclusions: list[str | None],
+        scan_interval: timedelta,
         local_time: bool,
-        show_topn: str,
-        exclusions: str,
-        inclusions: str,
-        scan_interval: int,
     ) -> None:
         self._feed = feed
         self._attr_name = name
         self._attr_icon = "mdi:rss"
         self._date_format = date_format
-        self._show_topn = show_topn
-        self._local_time = local_time
+        self._show_topn: int = show_topn
         self._inclusions = inclusions
         self._exclusions = exclusions
         self._scan_interval = scan_interval
-        self._attr_state = None
-        self._entries = []
+        self._local_time = local_time
+        self._entries: list[dict[str, str]] = []
         self._attr_extra_state_attributes = {"entries": self._entries}
 
-    def update(self):
-        parsed_feed = feedparser.parse(self._feed)
+    def update(self: FeedParserSensor) -> None:
+        """Parse the feed and update the state of the sensor."""
+        parsed_feed: FeedParserDict = feedparser.parse(self._feed)
 
         if not parsed_feed:
-            return False
-        else:
-            self._attr_state = (
-                self._show_topn
-                if len(parsed_feed.entries) > self._show_topn
-                else len(parsed_feed.entries)
-            )
-            self._entries = []
+            self._attr_native_value = None
+            return
 
-            for entry in parsed_feed.entries[: self._attr_state]:
-                entry_value = {}
+        self._attr_native_value = (
+            self._show_topn
+            if len(parsed_feed.entries) > self._show_topn
+            else len(parsed_feed.entries)
+        )
+        self._entries = []
 
-                for key, value in entry.items():
-                    if (
-                        (self._inclusions and key not in self._inclusions)
-                        or ("parsed" in key)
-                        or (key in self._exclusions)
-                    ):
-                        continue
-                    if key in ["published", "updated", "created", "expired"]:
-                        value = parser.parse(value)
-                        if self._local_time:
-                            value = dt.as_local(value)
-                        value = value.strftime(self._date_format)
+        for entry in parsed_feed.entries[: self._attr_state]:
+            entry_value = {}
 
+            for key, value in entry.items():
+                if (
+                    (self._inclusions and key not in self._inclusions)
+                    or ("parsed" in key)
+                    or (key in self._exclusions)
+                ):
+                    continue
+                if key in ["published", "updated", "created", "expired"]:
+                    time: datetime = parser.parse(value)
+                    if self._local_time:
+                        time = dt.as_local(time)
+                    entry_value[key] = time.strftime(self._date_format)
+                else:
                     entry_value[key] = value
 
                 if "image" in self._inclusions and "image" not in entry_value.keys():
@@ -145,13 +152,9 @@ class FeedParserSensor(SensorEntity):
                             "image"
                         ] = DEFAULT_THUMBNAIL  # use default image if no image found
 
-                self._entries.append(entry_value)
+            self._entries.append(entry_value)
 
     @property
-    def state(self):
-        """Return the state of the sensor."""
-        return self._attr_state
-
-    @property
-    def extra_state_attributes(self):
+    def extra_state_attributes(self: FeedParserSensor) -> dict[str, list]:
+        """Return entity specific state attributes."""
         return {"entries": self._entries}
