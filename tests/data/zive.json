@@ -1,0 +1,9 @@
+{
+    "has_images": false,
+    "sensor_config": {
+        "name": "zive",
+        "feed_url": "https://www.zive.cz/rss/sc-47/",
+        "show_topn": 1
+    },
+    "download_date": "2023-07-30T13:48:50.563494"
+}

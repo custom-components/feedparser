@@ -1,0 +1,8 @@
+{
+    "has_images": true,
+    "sensor_config": {
+        "name": "ct24",
+        "feed_url": "https://ct24.ceskatelevize.cz/rss/hlavni-zpravy"
+    },
+    "download_date": "2023-07-30T13:48:50.563494"
+}

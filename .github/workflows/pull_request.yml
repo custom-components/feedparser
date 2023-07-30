@@ -26,6 +26,12 @@ jobs:
       - name: Install Dependencies
         run: pip install .[dev]
 
+      - name: Collect Tests
+        run: pytest --collect-only tests
+
+      - name: Run Tests
+        run: pytest -sv tests/
+
       - name: Analysis (git diff)
         if: failure()
         run: git diff
