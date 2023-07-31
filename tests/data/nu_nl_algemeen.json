@@ -1,0 +1,8 @@
+{
+    "has_images": true,
+    "sensor_config": {
+        "name": "nu_nl_algemeen",
+        "feed_url": "https://www.nu.nl/rss/Algemeen"
+    },
+    "download_date": "2023-07-30T13:48:50.563494"
+}

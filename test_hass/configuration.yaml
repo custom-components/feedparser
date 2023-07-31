@@ -1,0 +1,13 @@
+
+logger:
+  default: warning
+  logs:
+    custom_components.feedparser: debug
+
+# Loads default set of integrations. Do not remove.
+default_config:
+
+http:
+  server_port: 9123
+
+sensor: !include sensors.yaml

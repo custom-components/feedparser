@@ -7,6 +7,7 @@ repos:
       - id: trailing-whitespace
       - id: end-of-file-fixer
       - id: check-yaml
+        exclude: ^test_hass/configuration.yaml$
       - id: debug-statements
   - repo: https://github.com/asottile/pyupgrade
     rev: v3.3.0
@@ -21,7 +22,13 @@ repos:
     rev: "v1.4.1"
     hooks:
       - id: mypy
-        additional_dependencies: [homeassistant-stubs, voluptuous-stubs, types-python-dateutil, types-PyYAML]
+        additional_dependencies:
+          [
+            homeassistant-stubs,
+            voluptuous-stubs,
+            types-python-dateutil,
+            types-PyYAML,
+          ]
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
     rev: v0.0.278

@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet title="XSL_formatting" type="text/xsl" href="/shared/bsp/xsl/rss/nolsol.xsl"?>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
+    <channel>
+        <title><![CDATA[BBC News - Europe]]></title>
+        <description><![CDATA[BBC News - Europe]]></description>
+        <link>https://www.bbc.co.uk/news/</link>
+        <image>
+            <url>https://news.bbcimg.co.uk/nol/shared/img/bbc_news_120x60.gif</url>
+            <title>BBC News - Europe</title>
+            <link>https://www.bbc.co.uk/news/</link>
+        </image>
+        <generator>RSS for Node</generator>
+        <lastBuildDate>Sun, 30 Jul 2023 11:42:44 GMT</lastBuildDate>
+        <copyright><![CDATA[Copyright: (C) British Broadcasting Corporation, see http://news.bbc.co.uk/2/hi/help/rss/4498287.stm for terms and conditions of reuse.]]></copyright>
+        <language><![CDATA[en-gb]]></language>
+        <ttl>15</ttl>
+        <item>
+            <title><![CDATA[Ukraine war: Putin says Russia does not reject peace talks]]></title>
+            <description><![CDATA[The Russian leader also sought to justify the arrest of critical voices, claiming they were harming the country from inside.]]></description>
+            <link>https://www.bbc.co.uk/news/world-europe-66351867?at_medium=RSS&amp;at_campaign=KARANGA</link>
+            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-66351867</guid>
+            <pubDate>Sun, 30 Jul 2023 08:41:45 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Moscow drone attack briefly shuts Vnukovo airport]]></title>
+            <description><![CDATA[Russian officials say one person has been injured after two drones crashed into offices]]></description>
+            <link>https://www.bbc.co.uk/news/world-europe-66352765?at_medium=RSS&amp;at_campaign=KARANGA</link>
+            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-66352765</guid>
+            <pubDate>Sun, 30 Jul 2023 07:18:55 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Europe fires: The Canadair water bombers battling Mediterranean blazes]]></title>
+            <description><![CDATA[The distinctive yellow planes and their pilots play a crucial role in rugged Mediterranean regions.]]></description>
+            <link>https://www.bbc.co.uk/news/world-europe-66349785?at_medium=RSS&amp;at_campaign=KARANGA</link>
+            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-66349785</guid>
+            <pubDate>Sat, 29 Jul 2023 23:36:10 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Wagner could pose as migrants to enter EU, PM Morawiecki warns]]></title>
+            <description><![CDATA[Some Russian mercenaries are near the city of Grodno, close to Poland and Lithuania, Mr Morawiecki says.]]></description>
+            <link>https://www.bbc.co.uk/news/world-europe-66347370?at_medium=RSS&amp;at_campaign=KARANGA</link>
+            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-66347370</guid>
+            <pubDate>Sat, 29 Jul 2023 13:07:03 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Dnipro: Russian missiles hit apartment block and security service building]]></title>
+            <description><![CDATA[Nine people are injured and the top floor of an apartment block is almost completely destroyed.]]></description>
+            <link>https://www.bbc.co.uk/news/world-europe-66344549?at_medium=RSS&amp;at_campaign=KARANGA</link>
+            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-66344549</guid>
+            <pubDate>Sat, 29 Jul 2023 06:23:51 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Russia's new tactic for cutting off Ukraine's grain]]></title>
+            <description><![CDATA[Russia has started targeting Ukraine's alternative routes for exporting its grain.]]></description>
+            <link>https://www.bbc.co.uk/news/world-europe-66328810?at_medium=RSS&amp;at_campaign=KARANGA</link>
+            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-66328810</guid>
+            <pubDate>Fri, 28 Jul 2023 23:46:16 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Melting Swiss glacier uncovers climber missing since 1986]]></title>
+            <description><![CDATA[The body was discovered earlier this month by hikers who spotted a boot emerging from the ice.]]></description>
+            <link>https://www.bbc.co.uk/news/world-europe-66334788?at_medium=RSS&amp;at_campaign=KARANGA</link>
+            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-66334788</guid>
+            <pubDate>Fri, 28 Jul 2023 10:54:07 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Elephant on the loose spotted outside supermarket in southern Italy]]></title>
+            <description><![CDATA[Local media reports the animal escaped from a circus but has since been returned.]]></description>
+            <link>https://www.bbc.co.uk/news/world-europe-66344561?at_medium=RSS&amp;at_campaign=KARANGA</link>
+            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-66344561</guid>
+            <pubDate>Sat, 29 Jul 2023 05:24:29 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Ancient 2,000-year-old Roman shipwreck found off coast of Italy]]></title>
+            <description><![CDATA[The cargo ship was found laden with hundreds of Roman pottery jars, most of which are intact.]]></description>
+            <link>https://www.bbc.co.uk/news/world-europe-66337902?at_medium=RSS&amp;at_campaign=KARANGA</link>
+            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-66337902</guid>
+            <pubDate>Fri, 28 Jul 2023 12:34:35 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Sweden's Quran burnings put freedom of expression law to test]]></title>
+            <description><![CDATA[The security service says Sweden's image has been harmed abroad and security at home has worsened.]]></description>
+            <link>https://www.bbc.co.uk/news/world-europe-66310285?at_medium=RSS&amp;at_campaign=KARANGA</link>
+            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-66310285</guid>
+            <pubDate>Thu, 27 Jul 2023 14:06:53 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Ukraine war: Kyiv claims success as southern fighting intensifies]]></title>
+            <description><![CDATA[Ukraine's armed forces say they are solidifying positions after an advance east of Zaporizhzhia.]]></description>
+            <link>https://www.bbc.co.uk/news/world-europe-66323354?at_medium=RSS&amp;at_campaign=KARANGA</link>
+            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-66323354</guid>
+            <pubDate>Fri, 28 Jul 2023 10:06:17 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Ministry of Defence accidentally emails ally of Russia]]></title>
+            <description><![CDATA[Defence officials say the emails did not contain information that could compromise operational security.]]></description>
+            <link>https://www.bbc.co.uk/news/uk-politics-66333488?at_medium=RSS&amp;at_campaign=KARANGA</link>
+            <guid isPermaLink="false">https://www.bbc.co.uk/news/uk-politics-66333488</guid>
+            <pubDate>Fri, 28 Jul 2023 09:55:01 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Prigozhin: Wagner boss spotted in Russia during Africa summit]]></title>
+            <description><![CDATA[Meanwhile at the summit, Vladimir Putin said Russia was ready to send free grain exports to Africa.]]></description>
+            <link>https://www.bbc.co.uk/news/world-africa-66333403?at_medium=RSS&amp;at_campaign=KARANGA</link>
+            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-africa-66333403</guid>
+            <pubDate>Fri, 28 Jul 2023 16:24:13 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Watch: Russia’s invasion of Ukraine through music by BBC Russia editor]]></title>
+            <description><![CDATA[Steve Rosenberg has written a score to chart life in Russia since its full-scale invasion of Ukraine.]]></description>
+            <link>https://www.bbc.co.uk/news/world-europe-66334494?at_medium=RSS&amp;at_campaign=KARANGA</link>
+            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-66334494</guid>
+            <pubDate>Fri, 28 Jul 2023 23:41:14 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Are arsonists behind Italy's devastating wildfires?]]></title>
+            <description><![CDATA[Residents suspect most of the blazes blighting their stunning region are intentionally lit.]]></description>
+            <link>https://www.bbc.co.uk/news/world-europe-66332399?at_medium=RSS&amp;at_campaign=KARANGA</link>
+            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-66332399</guid>
+            <pubDate>Fri, 28 Jul 2023 03:58:51 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[False claims that heatwave is bogus spread online]]></title>
+            <description><![CDATA[Weather forecasters wrongly accused of using misleading data to "drive fear".]]></description>
+            <link>https://www.bbc.co.uk/news/science-environment-66314338?at_medium=RSS&amp;at_campaign=KARANGA</link>
+            <guid isPermaLink="false">https://www.bbc.co.uk/news/science-environment-66314338</guid>
+            <pubDate>Thu, 27 Jul 2023 23:19:54 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Ukraine in maps: Tracking the war with Russia]]></title>
+            <description><![CDATA[Ukraine's counter-offensive appears to be intensifying along sections of the front line but Kyiv warns progress will remain slow.]]></description>
+            <link>https://www.bbc.co.uk/news/world-europe-60506682?at_medium=RSS&amp;at_campaign=KARANGA</link>
+            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-60506682</guid>
+            <pubDate>Fri, 28 Jul 2023 15:02:10 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Ukraine war: Western armour struggles against Russian defences]]></title>
+            <description><![CDATA[Russians use layers of mines to prevent Ukraine's advance on the southern front.]]></description>
+            <link>https://www.bbc.co.uk/news/world-europe-66306150?at_medium=RSS&amp;at_campaign=KARANGA</link>
+            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-66306150</guid>
+            <pubDate>Thu, 27 Jul 2023 08:04:52 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Greece fires in maps and satellite images show extent of damage]]></title>
+            <description><![CDATA[Maps, satellite images and before and after pictures show the extent of wildfires across Greece.]]></description>
+            <link>https://www.bbc.co.uk/news/world-europe-66295972?at_medium=RSS&amp;at_campaign=KARANGA</link>
+            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-66295972</guid>
+            <pubDate>Thu, 27 Jul 2023 09:48:39 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Russia-Africa summit: Putin seeks to extend influence]]></title>
+            <description><![CDATA[Russia's president is hosting a summit of African leaders in a bid to increase Moscow's influence.]]></description>
+            <link>https://www.bbc.co.uk/news/world-africa-66300962?at_medium=RSS&amp;at_campaign=KARANGA</link>
+            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-africa-66300962</guid>
+            <pubDate>Thu, 27 Jul 2023 02:34:14 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Paris 2024 chief wants Olympics and Paralympics to be 'new model' of 'spectacular and sustainable']]></title>
+            <description><![CDATA[Paris 2024 chief Tony Estanguet says he wants next year's event to be 'a new model' for staging the Olympics.]]></description>
+            <link>https://www.bbc.co.uk/sport/olympics/66299928?at_medium=RSS&amp;at_campaign=KARANGA</link>
+            <guid isPermaLink="false">https://www.bbc.co.uk/sport/olympics/66299928</guid>
+            <pubDate>Wed, 26 Jul 2023 05:04:00 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Sinéad O'Connor obituary: A talent beyond compare]]></title>
+            <description><![CDATA[The shaven-headed Irish singer's turbulent life often threatened to overwhelm her music.]]></description>
+            <link>https://www.bbc.co.uk/news/entertainment-arts-35031186?at_medium=RSS&amp;at_campaign=KARANGA</link>
+            <guid isPermaLink="false">https://www.bbc.co.uk/news/entertainment-arts-35031186</guid>
+            <pubDate>Wed, 26 Jul 2023 20:41:08 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Turkey mine protesters blasted with water cannon by riot police]]></title>
+            <description><![CDATA[They were protesting the felling of trees to make way for an expansion to a coal mine.]]></description>
+            <link>https://www.bbc.co.uk/news/world-europe-66351888?at_medium=RSS&amp;at_campaign=KARANGA</link>
+            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-66351888</guid>
+            <pubDate>Sun, 30 Jul 2023 05:06:57 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Italy: Drone spots suspected wildfire arsonist]]></title>
+            <description><![CDATA[A man is detained in Italy after he was seen at the scene of a wildfire in Calabria.]]></description>
+            <link>https://www.bbc.co.uk/news/world-europe-66343164?at_medium=RSS&amp;at_campaign=KARANGA</link>
+            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-66343164</guid>
+            <pubDate>Fri, 28 Jul 2023 17:21:56 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Greece wildfires trigger massive explosions at air force ammunition depot]]></title>
+            <description><![CDATA[The blasts happened at an air force depo as firefighters continue to tackle wildfires in Greece.]]></description>
+            <link>https://www.bbc.co.uk/news/world-europe-66334495?at_medium=RSS&amp;at_campaign=KARANGA</link>
+            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-66334495</guid>
+            <pubDate>Fri, 28 Jul 2023 09:29:15 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Why July is the 'world's hottest month'... in 61 seconds]]></title>
+            <description><![CDATA[With July "virtually certain" to be the warmest month on record, BBC Weather has this analysis.]]></description>
+            <link>https://www.bbc.co.uk/news/world-66332670?at_medium=RSS&amp;at_campaign=KARANGA</link>
+            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-66332670</guid>
+            <pubDate>Thu, 27 Jul 2023 18:49:19 GMT</pubDate>
+        </item>
+        <item>
+            <title><![CDATA[Rhodes fires: View from Glystra beach]]></title>
+            <description><![CDATA[The BBC's Azadeh Moshiri has been to Glystra beach near Kiotari, one of the areas worst affected by wildfires.]]></description>
+            <link>https://www.bbc.co.uk/news/world-europe-66326435?at_medium=RSS&amp;at_campaign=KARANGA</link>
+            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-66326435</guid>
+            <pubDate>Thu, 27 Jul 2023 11:21:11 GMT</pubDate>
+        </item>
+    </channel>
+</rss>

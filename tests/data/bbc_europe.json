@@ -1,0 +1,9 @@
+{
+    "has_images": false,
+    "sensor_config": {
+        "name": "bbc_europe",
+        "feed_url": "http://feeds.bbci.co.uk/news/world/europe/rss.xml",
+        "date_format": "%a, %d %b %Y %H:%M:%S %z"
+    },
+    "download_date": "2023-07-30T13:48:50.563494"
+}

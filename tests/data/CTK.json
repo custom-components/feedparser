@@ -1,0 +1,12 @@
+{
+    "has_images": true,
+    "sensor_config": {
+        "name": "CTK",
+        "feed_url": "https://www.ceskenoviny.cz/sluzby/rss/cr.php",
+        "scan_interval": {
+            "hours": 1,
+            "minutes": 30
+        }
+    },
+    "download_date": "2023-07-30T13:48:50.563494"
+}
