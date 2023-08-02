@@ -41,7 +41,7 @@ DEFAULT_TOPN = 9999
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
         vol.Required(CONF_NAME): cv.string,
-        vol.Required(CONF_FEED_URL): cv.string,
+        vol.Required(CONF_FEED_URL): cv.template,
         vol.Required(CONF_DATE_FORMAT, default=DEFAULT_DATE_FORMAT): cv.string,
         vol.Optional(CONF_LOCAL_TIME, default=False): cv.boolean,
         vol.Optional(CONF_SHOW_TOPN, default=DEFAULT_TOPN): cv.positive_int,
@@ -61,10 +61,16 @@ async def async_setup_platform(
     discovery_info: DiscoveryInfoType | None = None,
 ) -> None:
     """Set up the Feedparser sensor."""
+    feed=config[CONF_FEED_URL]
+
+    if isinstance(feed, template.Template):
+        _LOGGER.debug("Feed is template: %s", feed)
+        template.attach(hass, feed)
+
     async_add_devices(
         [
             FeedParserSensor(
-                feed=config[CONF_FEED_URL],
+                feed=feed,
                 name=config[CONF_NAME],
                 date_format=config[CONF_DATE_FORMAT],
                 show_topn=config[CONF_SHOW_TOPN],
@@ -106,7 +112,19 @@ class FeedParserSensor(SensorEntity):
 
     def update(self: FeedParserSensor) -> None:
         """Parse the feed and update the state of the sensor."""
-        parsed_feed: FeedParserDict = feedparser.parse(self._feed)
+        if isinstance(self._feed, template.Template):
+            _LOGGER.debug("Evaluating feed template: %s", self._feed)
+            tmp = self._feed.async_render(None, limited=False, parse_result=False)
+            if tmp in ['unknown','none','unavailable','null']:
+                _LOGGER.warn("Template failure: %s; template: %s", tmp, self._feed)
+                return False
+            else:
+                _LOGGER.debug("Feed URL: %s from template: %s", tmp, self._feed)
+            feed_url = tmp
+        else:
+            feed_url = self._feed
+
+        parsed_feed: FeedParserDict = feedparser.parse(feed_url)
 
         if not parsed_feed:
             self._attr_native_value = None
