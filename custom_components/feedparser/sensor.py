@@ -14,6 +14,7 @@ from feedparser import FeedParserDict
 from homeassistant.components.sensor import PLATFORM_SCHEMA, SensorEntity
 from homeassistant.const import CONF_NAME, CONF_SCAN_INTERVAL
 from homeassistant.util import dt
+from homeassistant.helpers import config_validation as cv, template
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -61,16 +62,16 @@ async def async_setup_platform(
     discovery_info: DiscoveryInfoType | None = None,
 ) -> None:
     """Set up the Feedparser sensor."""
-    feed=config[CONF_FEED_URL]
+    feed_url=config[CONF_FEED_URL]
 
-    if isinstance(feed, template.Template):
-        _LOGGER.debug("Feed is template: %s", feed)
-        template.attach(hass, feed)
+    if isinstance(feed_url, template.Template):
+        _LOGGER.debug("Feed is template: %s", feed_url)
+        template.attach(hass, feed_url)
 
     async_add_devices(
         [
             FeedParserSensor(
-                feed=feed,
+                feed=feed_url,
                 name=config[CONF_NAME],
                 date_format=config[CONF_DATE_FORMAT],
                 show_topn=config[CONF_SHOW_TOPN],
