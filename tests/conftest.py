@@ -3,7 +3,6 @@
 import pytest
 from constants import TEST_FEEDS
 from feedsource import FeedSource
-from pytest import FixtureRequest
 
 from custom_components.feedparser.sensor import FeedParserSensor
 
@@ -20,13 +19,13 @@ def pytest_generate_tests(metafunc: pytest.Metafunc) -> None:
         metafunc.parametrize("feed", feeds, ids=[f.name for f in feeds], indirect=True)
 
 
-@pytest.fixture
-def feed(request: FixtureRequest) -> FeedSource:
+@pytest.fixture()
+def feed(request: pytest.FixtureRequest) -> FeedSource:
     """Return feed file source."""
     return request.param
 
 
-@pytest.fixture
+@pytest.fixture()
 def feed_sensor(feed: FeedSource) -> FeedParserSensor:
     """Return feed sensor initialized with the local RSS feed."""
     return FeedParserSensor(**feed.sensor_config_local_feed)
