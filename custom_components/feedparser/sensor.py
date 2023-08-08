@@ -55,10 +55,10 @@ _LOGGER = logging.getLogger(__name__)
 
 
 async def async_setup_platform(
-    hass: HomeAssistant,
+    hass: HomeAssistant,  # noqa: ARG001
     config: ConfigType,
     async_add_devices: AddEntitiesCallback,
-    discovery_info: DiscoveryInfoType | None = None,
+    discovery_info: DiscoveryInfoType | None = None,  # noqa: ARG001
 ) -> None:
     """Set up the Feedparser sensor."""
     async_add_devices(
@@ -92,6 +92,7 @@ class FeedParserSensor(SensorEntity):
         scan_interval: timedelta,
         local_time: bool,
     ) -> None:
+        """Initialize the Feedparser sensor."""
         self._feed = feed
         self._attr_name = name
         self._attr_icon = "mdi:rss"
@@ -112,6 +113,7 @@ class FeedParserSensor(SensorEntity):
             self._attr_native_value = None
             return
 
+        # set the sensor value to the amount of entries
         self._attr_native_value = (
             self._show_topn
             if len(parsed_feed.entries) > self._show_topn
@@ -120,7 +122,8 @@ class FeedParserSensor(SensorEntity):
         self._entries.extend(self._generate_entries(parsed_feed))
 
     def _generate_entries(
-        self: FeedParserSensor, parsed_feed: FeedParserDict
+        self: FeedParserSensor,
+        parsed_feed: FeedParserDict,
     ) -> list[dict[str, str]]:
         return [
             self._generate_sensor_entry(feed_entry)
@@ -130,7 +133,8 @@ class FeedParserSensor(SensorEntity):
         ]
 
     def _generate_sensor_entry(
-        self: FeedParserSensor, feed_entry: FeedParserDict
+        self: FeedParserSensor,
+        feed_entry: FeedParserDict,
     ) -> dict[str, str]:
         sensor_entry = {}
         for key, value in feed_entry.items():
@@ -166,14 +170,16 @@ class FeedParserSensor(SensorEntity):
             if not parsed_time.tzname():
                 # replace tzinfo with UTC offset if tzinfo does not contain a TZ name
                 parsed_time = parsed_time.replace(
-                    tzinfo=timezone(parsed_time.utcoffset())  # type: ignore[arg-type]
+                    tzinfo=timezone(parsed_time.utcoffset()),  # type: ignore[arg-type]
                 )
         if self._local_time:
             parsed_time = dt.as_local(parsed_time)
         return parsed_time
 
     def _process_image(
-        self: FeedParserSensor, feed_entry: FeedParserDict, sensor_entry: dict[str, str]
+        self: FeedParserSensor,
+        feed_entry: FeedParserDict,
+        sensor_entry: dict[str, str],
     ) -> None:
         if "image" in self._inclusions and "image" not in sensor_entry.keys():
             if "enclosures" in feed_entry:
@@ -192,6 +198,23 @@ class FeedParserSensor(SensorEntity):
                 ] = DEFAULT_THUMBNAIL  # use default image if no image found
 
     @property
+    def feed_entries(self: FeedParserSensor) -> list[dict[str, str]]:
+        """Return feed entries."""
+        if hasattr(self, "_entries"):
+            return self._entries
+        return []
+
+    @property
+    def local_time(self: FeedParserSensor) -> bool:
+        """Return local_time."""
+        return self._local_time
+
+    @local_time.setter
+    def local_time(self: FeedParserSensor, value: bool) -> None:
+        """Set local_time."""
+        self._local_time = value
+
+    @property
     def extra_state_attributes(self: FeedParserSensor) -> dict[str, list]:
         """Return entity specific state attributes."""
-        return {"entries": self._entries}
+        return {"entries": self.feed_entries}
