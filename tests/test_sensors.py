@@ -137,3 +137,13 @@ def test_update_sensor_entries_time(
     # assert that the time of the first entry in the sensor is equal to
     # the time of the first entry in the feed
     assert first_entry_time == first_sensor_entry_time
+
+
+def test_check_duplicates(feed_sensor: FeedParserSensor) -> None:
+    """Test that the sensor stores only unique entries."""
+    feed_sensor.update()
+    assert feed_sensor.extra_state_attributes["entries"]
+    after_first_update = len(feed_sensor.feed_entries)
+    feed_sensor.update()
+    after_second_update = len(feed_sensor.feed_entries)
+    assert after_first_update == after_second_update

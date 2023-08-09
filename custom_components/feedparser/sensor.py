@@ -104,6 +104,7 @@ class FeedParserSensor(SensorEntity):
         self._local_time = local_time
         self._entries: list[dict[str, str]] = []
         self._attr_extra_state_attributes = {"entries": self._entries}
+        _attr_attribution = "Data retrieved using RSS feedparser"
 
     def update(self: FeedParserSensor) -> None:
         """Parse the feed and update the state of the sensor."""
@@ -119,6 +120,7 @@ class FeedParserSensor(SensorEntity):
             if len(parsed_feed.entries) > self._show_topn
             else len(parsed_feed.entries)
         )
+        self._entries.clear()  # clear the entries to avoid duplicates
         self._entries.extend(self._generate_entries(parsed_feed))
 
     def _generate_entries(
