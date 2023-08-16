@@ -51,7 +51,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     },
 )
 
-_LOGGER = logging.getLogger(__name__)
+_LOGGER: logging.Logger = logging.getLogger(__name__)
 
 
 async def async_setup_platform(
@@ -105,23 +105,46 @@ class FeedParserSensor(SensorEntity):
         self._entries: list[dict[str, str]] = []
         self._attr_extra_state_attributes = {"entries": self._entries}
         _attr_attribution = "Data retrieved using RSS feedparser"
+        _LOGGER.debug("Feed %s: FeedParserSensor initialized - %s", self.name, self)
+
+    def __repr__(self: FeedParserSensor) -> str:
+        """Return the representation."""
+        return (
+            f'FeedParserSensor(name="{self.name}", feed="{self._feed}", '
+            f"show_topn={self._show_topn}, inclusions={self._inclusions}, "
+            f"exclusions={self._exclusions}, scan_interval={self._scan_interval}, "
+            f'local_time={self._local_time}, date_format="{self._date_format}")'
+        )
 
     def update(self: FeedParserSensor) -> None:
         """Parse the feed and update the state of the sensor."""
+        _LOGGER.debug("Feed %s: Polling feed data from %s", self.name, self._feed)
         parsed_feed: FeedParserDict = feedparser.parse(self._feed)
 
         if not parsed_feed:
             self._attr_native_value = None
+            _LOGGER.warning("Feed %s: No data received.", self.name)
             return
 
+        _LOGGER.debug("Feed %s: Feed data fetched successfully", self.name)
         # set the sensor value to the amount of entries
         self._attr_native_value = (
             self._show_topn
             if len(parsed_feed.entries) > self._show_topn
             else len(parsed_feed.entries)
         )
+        _LOGGER.debug(
+            "Feed %s: %s entries is going to be added to the sensor",
+            self.name,
+            self.native_value,
+        )
         self._entries.clear()  # clear the entries to avoid duplicates
         self._entries.extend(self._generate_entries(parsed_feed))
+        _LOGGER.debug(
+            "Feed %s: Sensor state updated - %s entries",
+            self.name,
+            len(self.feed_entries),
+        )
 
     def _generate_entries(
         self: FeedParserSensor,
@@ -138,6 +161,7 @@ class FeedParserSensor(SensorEntity):
         self: FeedParserSensor,
         feed_entry: FeedParserDict,
     ) -> dict[str, str]:
+        _LOGGER.debug("Feed %s: Generating sensor entry for %s", self.name, feed_entry)
         sensor_entry = {}
         for key, value in feed_entry.items():
             if (
@@ -154,6 +178,7 @@ class FeedParserSensor(SensorEntity):
 
             self._process_image(feed_entry, sensor_entry)
 
+        _LOGGER.debug("Feed %s: Generated sensor entry: %s", self.name, sensor_entry)
         return sensor_entry
 
     def _parse_date(self: FeedParserSensor, date: str) -> datetime:
@@ -162,10 +187,11 @@ class FeedParserSensor(SensorEntity):
         except ValueError:
             _LOGGER.warning(
                 (
-                    "Unable to parse RFC-822 date from %s. "
+                    "Feed %s: Unable to parse RFC-822 date from %s. "
                     "This could be caused by incorrect pubDate format "
                     "in the RSS feed or due to a leapp second"
                 ),
+                self.name,
                 date,
             )
             parsed_time = parser.parse(date)
@@ -176,6 +202,7 @@ class FeedParserSensor(SensorEntity):
                 )
         if self._local_time:
             parsed_time = dt.as_local(parsed_time)
+        _LOGGER.debug("Feed %s: Parsed date: %s", self.name, parsed_time)
         return parsed_time
 
     def _process_image(
@@ -195,6 +222,11 @@ class FeedParserSensor(SensorEntity):
             if images:
                 sensor_entry["image"] = images[0]["href"]  # pick the first image found
             else:
+                _LOGGER.debug(
+                    "Feed %s: Image is in inclusions, but no image was found for %s",
+                    self.name,
+                    feed_entry,
+                )
                 sensor_entry[
                     "image"
                 ] = DEFAULT_THUMBNAIL  # use default image if no image found
