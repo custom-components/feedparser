@@ -187,6 +187,7 @@ class FeedParserSensor(SensorEntity):
                 and (processed_link := self._process_link(feed_entry))
             ):
                 sensor_entry["link"] = processed_link
+        _LOGGER.debug("Feed %s: Generated sensor entry: %s", self.name, sensor_entry)
         return sensor_entry
 
     def _parse_date(self: FeedParserSensor, date: str) -> datetime:
