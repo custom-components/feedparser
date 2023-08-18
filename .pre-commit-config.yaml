@@ -24,7 +24,7 @@ repos:
       - id: mypy
         additional_dependencies:
           [
-            homeassistant-stubs,
+            homeassistant-stubs==2023.8.1,
             voluptuous-stubs,
             types-python-dateutil,
             types-PyYAML,

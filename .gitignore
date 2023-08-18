@@ -2,3 +2,4 @@
 *.pyc
 build/
 *.egg-info/
+custom_components/hacs

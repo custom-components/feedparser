@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss xmlns:itunes="http://www.itunes.com/dtds/podcast-1.0.dtd" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" xmlns:psc="https://podlove.org/simple-chapters/" xmlns:omny="https://omny.fm/rss-extensions" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:acast="https://schema.acast.com/1.0/" xmlns:podcast="https://podcastindex.org/namespace/1.0" version="2.0">
+  <channel>
+    <omny:organizationId>56ccbbb7-0ff7-4482-9d99-a88800f49f6c</omny:organizationId>
+    <omny:networkId>9086a42f-669b-49e7-b86f-aa400012afff</omny:networkId>
+    <omny:programId>a49c87f6-d567-4189-8692-a8e2009eaf86</omny:programId>
+    <omny:playlistId>9fea2041-fccd-4fcf-8cec-a8e2009eeca2</omny:playlistId>
+    <language>nl</language>
+    <atom:link rel="self" type="application/rss+xml" href="https://www.omnycontent.com/d/playlist/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/a49c87f6-d567-4189-8692-a8e2009eaf86/9fea2041-fccd-4fcf-8cec-a8e2009eeca2/podcast.rss" />
+    <atom:link rel="first" type="application/rss+xml" href="https://www.omnycontent.com/d/playlist/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/a49c87f6-d567-4189-8692-a8e2009eaf86/9fea2041-fccd-4fcf-8cec-a8e2009eeca2/podcast.rss?page=1" />
+    <atom:link rel="last" type="application/rss+xml" href="https://www.omnycontent.com/d/playlist/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/a49c87f6-d567-4189-8692-a8e2009eaf86/9fea2041-fccd-4fcf-8cec-a8e2009eeca2/podcast.rss?page=1" />
+    <title>538 Nieuws</title>
+    <link>https://www.anp.nl/</link>
+    <description><![CDATA[<p>Het laatste 538 radionieuws bulletin.</p>]]></description>
+    <itunes:type>episodic</itunes:type>
+    <itunes:summary>Het laatste 538 radionieuws bulletin.</itunes:summary>
+    <itunes:owner>
+      <itunes:name>538 Nieuws</itunes:name>
+      <itunes:email>info@538.nl</itunes:email>
+    </itunes:owner>
+    <itunes:author>538 Nieuws</itunes:author>
+    <copyright>2023 Talpa Radio</copyright>
+    <itunes:explicit>no</itunes:explicit>
+    <itunes:category text="News"></itunes:category>
+    <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/a49c87f6-d567-4189-8692-a8e2009eaf86/image.jpg?t=1684833921&amp;size=Large" />
+    <image>
+      <url>https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/a49c87f6-d567-4189-8692-a8e2009eaf86/image.jpg?t=1684833921&amp;size=Large</url>
+      <title>538 Nieuws</title>
+      <link>https://www.anp.nl/</link>
+    </image>
+    <item>
+      <title>Het 538-nieuws van 11 uur</title>
+      <itunes:title>Het 538-nieuws van 11 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/48eb9341-4a07-4b2e-b52f-b062009098ac/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-11-uur/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">48eb9341-4a07-4b2e-b52f-b062009098ac</guid>
+      <omny:clipId>48eb9341-4a07-4b2e-b52f-b062009098ac</omny:clipId>
+      <pubDate>Fri, 18 Aug 2023 08:46:49 +0000</pubDate>
+      <itunes:duration>88</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/48eb9341-4a07-4b2e-b52f-b062009098ac/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1424238" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 10 uur</title>
+      <itunes:title>Het 538-nieuws van 10 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/28a8e434-7a8a-499f-abce-b062008058a6/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-10-uur-2/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">28a8e434-7a8a-499f-abce-b062008058a6</guid>
+      <omny:clipId>28a8e434-7a8a-499f-abce-b062008058a6</omny:clipId>
+      <pubDate>Fri, 18 Aug 2023 07:47:34 +0000</pubDate>
+      <itunes:duration>88</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/28a8e434-7a8a-499f-abce-b062008058a6/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1431344" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 10 uur</title>
+      <itunes:title>Het 538-nieuws van 10 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/f6c2b847-76b7-49bc-b7c1-b062007f6e19/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-10-uur-1/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">f6c2b847-76b7-49bc-b7c1-b062007f6e19</guid>
+      <omny:clipId>f6c2b847-76b7-49bc-b7c1-b062007f6e19</omny:clipId>
+      <pubDate>Fri, 18 Aug 2023 07:44:13 +0000</pubDate>
+      <itunes:duration>87</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/f6c2b847-76b7-49bc-b7c1-b062007f6e19/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1417969" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 09 uur</title>
+      <itunes:title>Het 538-nieuws van 09 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/f46ff43a-faa4-46b9-b36a-b062006fbee6/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-09-uur-1/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">f46ff43a-faa4-46b9-b36a-b062006fbee6</guid>
+      <omny:clipId>f46ff43a-faa4-46b9-b36a-b062006fbee6</omny:clipId>
+      <pubDate>Fri, 18 Aug 2023 06:47:07 +0000</pubDate>
+      <itunes:duration>87</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/f46ff43a-faa4-46b9-b36a-b062006fbee6/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1409610" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 08 uur</title>
+      <itunes:title>Het 538-nieuws van 08 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/f4f4c4b3-8b41-419c-90f8-b06200607646/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-08-uur/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">f4f4c4b3-8b41-419c-90f8-b06200607646</guid>
+      <omny:clipId>f4f4c4b3-8b41-419c-90f8-b06200607646</omny:clipId>
+      <pubDate>Fri, 18 Aug 2023 05:51:32 +0000</pubDate>
+      <itunes:duration>87</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/f4f4c4b3-8b41-419c-90f8-b06200607646/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1408356" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 07 uur</title>
+      <itunes:title>Het 538-nieuws van 07 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/579050bc-59d3-46e8-9833-b062004f542c/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-07-uur/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">579050bc-59d3-46e8-9833-b062004f542c</guid>
+      <omny:clipId>579050bc-59d3-46e8-9833-b062004f542c</omny:clipId>
+      <pubDate>Fri, 18 Aug 2023 04:49:06 +0000</pubDate>
+      <itunes:duration>92</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/579050bc-59d3-46e8-9833-b062004f542c/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1482752" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 06 uur</title>
+      <itunes:title>Het 538-nieuws van 06 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/20001a78-7735-4aa4-bce7-b062003e6a2d/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-06-uur-2/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">20001a78-7735-4aa4-bce7-b062003e6a2d</guid>
+      <omny:clipId>20001a78-7735-4aa4-bce7-b062003e6a2d</omny:clipId>
+      <pubDate>Fri, 18 Aug 2023 03:47:30 +0000</pubDate>
+      <itunes:duration>89</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/20001a78-7735-4aa4-bce7-b062003e6a2d/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1444718" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 04 uur</title>
+      <itunes:title>Het 538-nieuws van 04 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/cb84afe9-8781-4154-851a-b062001eaf53/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-04-uur/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">cb84afe9-8781-4154-851a-b062001eaf53</guid>
+      <omny:clipId>cb84afe9-8781-4154-851a-b062001eaf53</omny:clipId>
+      <pubDate>Fri, 18 Aug 2023 01:52:11 +0000</pubDate>
+      <itunes:duration>110</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/cb84afe9-8781-4154-851a-b062001eaf53/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1773234" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 03 uur</title>
+      <itunes:title>Het 538-nieuws van 03 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/659b4e4a-d10b-4844-b993-b062000dda4d/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-03-uur-1/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">659b4e4a-d10b-4844-b993-b062000dda4d</guid>
+      <omny:clipId>659b4e4a-d10b-4844-b993-b062000dda4d</omny:clipId>
+      <pubDate>Fri, 18 Aug 2023 00:50:47 +0000</pubDate>
+      <itunes:duration>106</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/659b4e4a-d10b-4844-b993-b062000dda4d/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1720989" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 02 uur</title>
+      <itunes:title>Het 538-nieuws van 02 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/d9bf3f76-7047-4466-895f-b061018a232f/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-02-uur-1/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">d9bf3f76-7047-4466-895f-b061018a232f</guid>
+      <omny:clipId>d9bf3f76-7047-4466-895f-b061018a232f</omny:clipId>
+      <pubDate>Thu, 17 Aug 2023 23:55:27 +0000</pubDate>
+      <itunes:duration>105</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/d9bf3f76-7047-4466-895f-b061018a232f/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1702599" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 02 uur</title>
+      <itunes:title>Het 538-nieuws van 02 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/1563bc42-e4d4-4023-b387-b06101899147/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-02-uur/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">1563bc42-e4d4-4023-b387-b06101899147</guid>
+      <omny:clipId>1563bc42-e4d4-4023-b387-b06101899147</omny:clipId>
+      <pubDate>Thu, 17 Aug 2023 23:53:18 +0000</pubDate>
+      <itunes:duration>107</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/1563bc42-e4d4-4023-b387-b06101899147/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1733528" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 01 uur</title>
+      <itunes:title>Het 538-nieuws van 01 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/a3ac2355-8b62-42c8-ab8b-b061017832c8/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-01-uur/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">a3ac2355-8b62-42c8-ab8b-b061017832c8</guid>
+      <omny:clipId>a3ac2355-8b62-42c8-ab8b-b061017832c8</omny:clipId>
+      <pubDate>Thu, 17 Aug 2023 22:50:00 +0000</pubDate>
+      <itunes:duration>109</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/a3ac2355-8b62-42c8-ab8b-b061017832c8/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1754426" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 00 uur</title>
+      <itunes:title>Het 538-nieuws van 00 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/091e36c2-a974-4e75-9546-b0610168674c/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-00-uur/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">091e36c2-a974-4e75-9546-b0610168674c</guid>
+      <omny:clipId>091e36c2-a974-4e75-9546-b0610168674c</omny:clipId>
+      <pubDate>Thu, 17 Aug 2023 21:52:44 +0000</pubDate>
+      <itunes:duration>108</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/091e36c2-a974-4e75-9546-b0610168674c/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1741469" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 23 uur</title>
+      <itunes:title>Het 538-nieuws van 23 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/4479ef54-859d-4f9c-9e26-b0610158682b/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-23-uur-2/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">4479ef54-859d-4f9c-9e26-b0610158682b</guid>
+      <omny:clipId>4479ef54-859d-4f9c-9e26-b0610158682b</omny:clipId>
+      <pubDate>Thu, 17 Aug 2023 20:54:15 +0000</pubDate>
+      <itunes:duration>101</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/4479ef54-859d-4f9c-9e26-b0610158682b/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1633218" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 23 uur</title>
+      <itunes:title>Het 538-nieuws van 23 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/7b4065e4-144b-442d-950f-b061015822f9/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-23-uur/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">7b4065e4-144b-442d-950f-b061015822f9</guid>
+      <omny:clipId>7b4065e4-144b-442d-950f-b061015822f9</omny:clipId>
+      <pubDate>Thu, 17 Aug 2023 20:53:13 +0000</pubDate>
+      <itunes:duration>101</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/7b4065e4-144b-442d-950f-b061015822f9/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1633218" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 22 uur</title>
+      <itunes:title>Het 538-nieuws van 22 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/07fe6543-b4b5-4f98-b883-b0610147cab6/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-22-uur-1/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">07fe6543-b4b5-4f98-b883-b0610147cab6</guid>
+      <omny:clipId>07fe6543-b4b5-4f98-b883-b0610147cab6</omny:clipId>
+      <pubDate>Thu, 17 Aug 2023 19:53:44 +0000</pubDate>
+      <itunes:duration>94</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/07fe6543-b4b5-4f98-b883-b0610147cab6/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1521623" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 21 uur</title>
+      <itunes:title>Het 538-nieuws van 21 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/b534679f-2e9f-42b4-b89f-b06101385c76/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-21-uur/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">b534679f-2e9f-42b4-b89f-b06101385c76</guid>
+      <omny:clipId>b534679f-2e9f-42b4-b89f-b06101385c76</omny:clipId>
+      <pubDate>Thu, 17 Aug 2023 18:57:31 +0000</pubDate>
+      <itunes:duration>94</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/b534679f-2e9f-42b4-b89f-b06101385c76/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1524966" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 21 uur</title>
+      <itunes:title>Het 538-nieuws van 21 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/6f709b32-54ec-48dd-8338-b0610136f8a6/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-21-uur-1/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">6f709b32-54ec-48dd-8338-b0610136f8a6</guid>
+      <omny:clipId>6f709b32-54ec-48dd-8338-b0610136f8a6</omny:clipId>
+      <pubDate>Thu, 17 Aug 2023 18:52:30 +0000</pubDate>
+      <itunes:duration>92</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/6f709b32-54ec-48dd-8338-b0610136f8a6/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1495291" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 20 uur</title>
+      <itunes:title>Het 538-nieuws van 20 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/647463ae-741b-4c29-80b9-b061012624a0/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-20-uur/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">647463ae-741b-4c29-80b9-b061012624a0</guid>
+      <omny:clipId>647463ae-741b-4c29-80b9-b061012624a0</omny:clipId>
+      <pubDate>Thu, 17 Aug 2023 17:51:14 +0000</pubDate>
+      <itunes:duration>91</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/647463ae-741b-4c29-80b9-b061012624a0/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1481081" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 19 uur</title>
+      <itunes:title>Het 538-nieuws van 19 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/bfc5c09c-4673-4f7e-97b1-b06101165f6e/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-19-uur-1/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">bfc5c09c-4673-4f7e-97b1-b06101165f6e</guid>
+      <omny:clipId>bfc5c09c-4673-4f7e-97b1-b06101165f6e</omny:clipId>
+      <pubDate>Thu, 17 Aug 2023 16:53:48 +0000</pubDate>
+      <itunes:duration>89</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/bfc5c09c-4673-4f7e-97b1-b06101165f6e/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1444300" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 19 uur</title>
+      <itunes:title>Het 538-nieuws van 19 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/131b9e12-5a08-431c-883a-b0610116146b/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-19-uur/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">131b9e12-5a08-431c-883a-b0610116146b</guid>
+      <omny:clipId>131b9e12-5a08-431c-883a-b0610116146b</omny:clipId>
+      <pubDate>Thu, 17 Aug 2023 16:52:46 +0000</pubDate>
+      <itunes:duration>89</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/131b9e12-5a08-431c-883a-b0610116146b/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1447644" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 18 uur</title>
+      <itunes:title>Het 538-nieuws van 18 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/d6804c91-7f48-48f1-a9b4-b06101058765/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-18-uur-1/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">d6804c91-7f48-48f1-a9b4-b06101058765</guid>
+      <omny:clipId>d6804c91-7f48-48f1-a9b4-b06101058765</omny:clipId>
+      <pubDate>Thu, 17 Aug 2023 15:52:31 +0000</pubDate>
+      <itunes:duration>89</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/d6804c91-7f48-48f1-a9b4-b06101058765/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1446808" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 17 uur</title>
+      <itunes:title>Het 538-nieuws van 17 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/426662c9-a0d8-4184-b88e-b06100f54410/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-17-uur-1/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">426662c9-a0d8-4184-b88e-b06100f54410</guid>
+      <omny:clipId>426662c9-a0d8-4184-b88e-b06100f54410</omny:clipId>
+      <pubDate>Thu, 17 Aug 2023 14:53:16 +0000</pubDate>
+      <itunes:duration>86</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/426662c9-a0d8-4184-b88e-b06100f54410/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1396653" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 16 uur</title>
+      <itunes:title>Het 538-nieuws van 16 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/65d4e71d-1447-4ac5-8838-b06100e4a7a5/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-16-uur/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">65d4e71d-1447-4ac5-8838-b06100e4a7a5</guid>
+      <omny:clipId>65d4e71d-1447-4ac5-8838-b06100e4a7a5</omny:clipId>
+      <pubDate>Thu, 17 Aug 2023 13:52:48 +0000</pubDate>
+      <itunes:duration>96</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/65d4e71d-1447-4ac5-8838-b06100e4a7a5/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1552970" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 15 uur</title>
+      <itunes:title>Het 538-nieuws van 15 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/5f11a32a-6554-4e9b-9b0e-b06100d4acc6/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-15-uur-2/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">5f11a32a-6554-4e9b-9b0e-b06100d4acc6</guid>
+      <omny:clipId>5f11a32a-6554-4e9b-9b0e-b06100d4acc6</omny:clipId>
+      <pubDate>Thu, 17 Aug 2023 12:54:40 +0000</pubDate>
+      <itunes:duration>93</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/5f11a32a-6554-4e9b-9b0e-b06100d4acc6/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1502815" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 15 uur</title>
+      <itunes:title>Het 538-nieuws van 15 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/a6dee0a6-5191-42da-a50a-b06100d45582/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-15-uur/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">a6dee0a6-5191-42da-a50a-b06100d45582</guid>
+      <omny:clipId>a6dee0a6-5191-42da-a50a-b06100d45582</omny:clipId>
+      <pubDate>Thu, 17 Aug 2023 12:53:23 +0000</pubDate>
+      <itunes:duration>93</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/a6dee0a6-5191-42da-a50a-b06100d45582/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1501143" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 14 uur</title>
+      <itunes:title>Het 538-nieuws van 14 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/226e16a0-6cd2-42da-bf29-b06100c14aad/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-14-uur/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">226e16a0-6cd2-42da-bf29-b06100c14aad</guid>
+      <omny:clipId>226e16a0-6cd2-42da-bf29-b06100c14aad</omny:clipId>
+      <pubDate>Thu, 17 Aug 2023 11:44:08 +0000</pubDate>
+      <itunes:duration>97</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/226e16a0-6cd2-42da-bf29-b06100c14aad/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1570942" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 13 uur</title>
+      <itunes:title>Het 538-nieuws van 13 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/fd38ccf6-ed96-41b3-b624-b06100b154db/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-13-uur-2/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">fd38ccf6-ed96-41b3-b624-b06100b154db</guid>
+      <omny:clipId>fd38ccf6-ed96-41b3-b624-b06100b154db</omny:clipId>
+      <pubDate>Thu, 17 Aug 2023 10:46:01 +0000</pubDate>
+      <itunes:duration>98</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/fd38ccf6-ed96-41b3-b624-b06100b154db/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1582645" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 13 uur</title>
+      <itunes:title>Het 538-nieuws van 13 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/8c7d349b-d993-440d-bc2a-b06100b1009c/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-13-uur-1/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">8c7d349b-d993-440d-bc2a-b06100b1009c</guid>
+      <omny:clipId>8c7d349b-d993-440d-bc2a-b06100b1009c</omny:clipId>
+      <pubDate>Thu, 17 Aug 2023 10:44:51 +0000</pubDate>
+      <itunes:duration>98</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/8c7d349b-d993-440d-bc2a-b06100b1009c/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1582645" type="audio/mpeg" />
+    </item>
+    <item>
+      <title>Het 538-nieuws van 12 uur</title>
+      <itunes:title>Het 538-nieuws van 12 uur</itunes:title>
+      <description><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></description>
+      <content:encoded><![CDATA[Het laatste 538 radionieuws bulletin.<p>See <a href="https://omnystudio.com/listener">omnystudio.com/listener</a> for privacy information.</p>]]></content:encoded>
+      <itunes:episodeType>full</itunes:episodeType>
+      <itunes:author>538 Nieuws</itunes:author>
+      <itunes:image href="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" />
+      <media:content url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/df65e876-7ed5-407d-8ce2-b06100a0aa9a/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" type="audio/mpeg">
+        <media:player url="https://omny.fm/shows/538-anp/het-538-nieuws-van-12-uur-1/embed" />
+      </media:content>
+      <media:content url="https://www.omnycontent.com/d/programs/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/image.jpg?t=1526551056&amp;size=Large" type="image/jpeg" />
+      <guid isPermaLink="false">df65e876-7ed5-407d-8ce2-b06100a0aa9a</guid>
+      <omny:clipId>df65e876-7ed5-407d-8ce2-b06100a0aa9a</omny:clipId>
+      <pubDate>Thu, 17 Aug 2023 09:45:19 +0000</pubDate>
+      <itunes:duration>99</itunes:duration>
+      <enclosure url="https://traffic.omny.fm/d/clips/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/25c8f040-d23c-4776-b211-a8e3009d004d/df65e876-7ed5-407d-8ce2-b06100a0aa9a/audio.mp3?utm_source=Podcast&amp;in_playlist=9fea2041-fccd-4fcf-8cec-a8e2009eeca2" length="1601035" type="audio/mpeg" />
+    </item>
+  </channel>
+</rss>

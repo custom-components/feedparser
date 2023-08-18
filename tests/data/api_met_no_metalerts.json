@@ -1,0 +1,14 @@
+{
+    "has_images": false,
+    "sensor_config": {
+        "name": "api_met_no_metalerts",
+        "feed_url": "https://api.met.no/weatherapi/metalerts/1.1/",
+        "inclusions": [
+            "title",
+            "link",
+            "published",
+            "summary"
+        ]
+    },
+    "download_date": "2023-08-18T09:22:14.164244+00:00"
+}

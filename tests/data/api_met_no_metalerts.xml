@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<rss version="2.0">
+  <channel>
+    <title>MET farevarsel</title>
+    <link>https://api.met.no</link>
+    <description>Farevarsler fra Meteorologisk institutt</description>
+    <language>no</language>
+    <copyright>Copyright The Norwegian Meteorological Institute, licensed under Norwegian license for public data (NLOD) and Creative Commons 4.0 BY</copyright>
+    <pubDate>Fri, 18 Aug 2023 09:22:00 +0000</pubDate>
+    <lastBuildDate>Fri, 18 Aug 2023 09:22:00 +0000</lastBuildDate>
+    <category>Met</category>
+    <generator>XML::LibXML::Generator 0.1</generator>
+    <docs>http://blogs.law.harvard.edu/tech/rss</docs>
+    <image>
+      <title>MET farevarsel</title>
+      <link>https://api.met.no</link>
+      <url>https://api.met.no/images/logo_2013_no.png</url>
+    </image>
+    <item>
+      <title>Kuling, gult niv&#xE5;, Loppa - Slettnes fyr, 18 August 05:00 UTC til 18 August 10:00 UTC.</title>
+      <description>Update: Fredag morgen forbig&#xE5;ende s&#xF8;rvest stiv kuling 15 m/s. </description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.230818043729845.1412</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.230818043729845.1412</guid>
+      <pubDate>Fri, 18 Aug 2023 04:37:29 +0000</pubDate>
+    </item>
+  </channel>
+</rss>

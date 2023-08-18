@@ -53,20 +53,27 @@ def test_update_sensor(feed: FeedSource) -> None:
     assert all(e["published"] for e in feed_sensor.feed_entries)
 
     # assert that all entries have non-default image
-    if feed.has_images:
-        assert all(e["image"] != DEFAULT_THUMBNAIL for e in feed_sensor.feed_entries)
-    else:
-        assert all(e["image"] == DEFAULT_THUMBNAIL for e in feed_sensor.feed_entries)
+    if feed.all_entries_have_images:
+        if feed.has_images:
+            assert all(
+                e["image"] != DEFAULT_THUMBNAIL for e in feed_sensor.feed_entries
+            )
+        else:
+            assert all(
+                e["image"] == DEFAULT_THUMBNAIL for e in feed_sensor.feed_entries
+            )
 
     # assert that all entries have a unique link
-    assert len({e["link"] for e in feed_sensor.feed_entries}) == len(
-        feed_sensor.feed_entries,
-    ), "Duplicate links found"
+    if feed.has_unique_links:
+        assert len({e["link"] for e in feed_sensor.feed_entries}) == len(
+            feed_sensor.feed_entries,
+        ), "Duplicate links found"
 
     # assert that all entries have a unique title
-    assert len({e["title"] for e in feed_sensor.feed_entries}) == len(
-        feed_sensor.feed_entries,
-    ), "Duplicate titles found"
+    if feed.has_unique_titles:
+        assert len({e["title"] for e in feed_sensor.feed_entries}) == len(
+            feed_sensor.feed_entries,
+        ), "Duplicate titles found"
 
     # assert that all entries have a unique published date
     assert len({e["published"] for e in feed_sensor.feed_entries}) == len(
@@ -74,7 +81,7 @@ def test_update_sensor(feed: FeedSource) -> None:
     ), "Duplicate published dates found"
 
     # assert that all entries have a unique image
-    if feed.has_images:
+    if feed.has_images and feed.has_unique_images:
         assert len({e["image"] for e in feed_sensor.feed_entries}) == len(
             feed_sensor.feed_entries,
         ), "Duplicate images found"
@@ -82,7 +89,7 @@ def test_update_sensor(feed: FeedSource) -> None:
 
 def test_update_sensor_with_topn(feed: FeedSource) -> None:
     """Test that the sensor stores only the topn entries."""
-    show_topn = 3
+    show_topn = 1
     feed_sensor = FeedParserSensor(
         feed=feed.path.absolute().as_uri(),
         name=feed.name,
@@ -133,6 +140,9 @@ def test_update_sensor_entries_time(
         feed_sensor.feed_entries[0]["published"],
         feed.sensor_config.date_format,
     )
+
+    if not first_sensor_entry_time.tzinfo:
+        first_sensor_entry_time = first_sensor_entry_time.replace(tzinfo=UTC)
 
     # assert that the time of the first entry in the sensor is equal to
     # the time of the first entry in the feed
