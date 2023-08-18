@@ -1,0 +1,15 @@
+{
+    "has_images": false,
+    "has_unique_links": false,
+    "sensor_config": {
+        "name": "skolmaten_se_ede_skola",
+        "feed_url": "https://skolmaten.se/ede-skola/rss/weeks/?limit=2",
+        "inclusions": [
+            "title",
+            "link",
+            "published",
+            "summary"
+        ]
+    },
+    "download_date": "2023-08-18T09:22:14.164244+00:00"
+}

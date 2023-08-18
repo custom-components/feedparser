@@ -1,0 +1,30 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <atom:link href="https://api.buienradar.nl/data/xml/1.0/rssbuienradar" rel="self" type="application/rss+xml" />
+    <title>Buienradar.nl weerbericht en actuele radar</title>
+    <link>https://www.buienradar.nl</link>
+    <description>Buienradar.nl weerbericht en actuele radar</description>
+    <language>nl-nl</language>
+    <copyright>Copyright 2005 - 2023 RTL. Alle rechten voorbehouden.</copyright>
+    <image>
+      <title>Buienradar.nl weerbericht en actuele radar</title>
+      <link>https://www.buienradar.nl/nederland/weerbericht/weerbericht</link>
+      <url>http://www.buienradar.nl/images/logo2.jpg</url>
+      <width>144</width>
+      <height>20</height>
+    </image>
+    <guid isPermanent="true">https://www.buienradar.nl/nederland/weerbericht/weerbericht</guid>
+    <item>
+      <title>Actueel weerbericht</title>
+      <pubDate>Fri, 18 Aug 2023 07:30:00 +00:00</pubDate>
+      <link>https://www.buienradar.nl</link>
+      <description><![CDATA[De dag begint in het grootste deel van het land met vrij veel bewolking. Vanmiddag komt de zon er vaker aan te pas en stijgt de temperatuur op de meeste plaatsen naar meer dan 25 graden. In het zuiden kan het kwik lokaal rond 30 graden uitkomen. Vanavond blijft het erg warm. Vanochtend is het eerst nog bewolkt en lokaal kan er wat motregen vallen. In de loop van de ochtend klaart het hier en daar wat op. De wind waait uit het oosten en is zwak tot matig.Vanmiddag komt de zon er geleidelijk meer en meer aan te pas en het blijft droog. De maximumtemperaturen lopen uiteen van rond 24 graden in de noordelijke regio's tot lokaal 30 graden in het zuiden. De oostenwind is zwak tot matig.Vanavond zijn er opklaringen en blijft het droog.&nbsp;Vannacht&nbsp;is er, hoofdzakelijk in het westen en noordwesten een enkele onweersbui actief. Het wordt een uitgesproken warme 'plaknacht' met op veel plaatsen geen lagere temperatuur dan 22 graden. De wind waait uit het oosten tot zuidoosten en is in het binnenland zwak, aan de kust matig.Morgen&nbsp;kan er 's ochtends in het westen en noordwesten een (onweers)bui vallen, in de middag is dat hoofdzakelijk in het oosten het geval. Voor de rest blijft het droog, maar het is wel vaak bewolkt. Pas in de avond klaart het van het westen uit op. De temperatuur komt in het westelijk kustgebied uit op 22 tot 23 graden, langs de oostgrens zijn nog maxima tot 30 graden mogelijk. De wind draait van zuidoost naar zuidwest tot west en is matig, aan de westkust enige tijd vrij krachtig.De dagen daarna zijn er perioden met zon en blijft het droog. De middagtemperaturen lopen op naar waarden boven 25 graden. Vanaf donderdag 24 augustus neemt de warmte af en stijgt de kans op enkele buien.&nbsp;&nbsp;]]></description>
+    </item>
+    <item>
+      <title>Actueel radarbeeld</title>
+      <pubDate>Fri, 18 Aug 2023 09:20:00 +00:00</pubDate>
+      <link>https://www.buienradar.nl</link>
+      <description><![CDATA[<p><a href='http://www.buienradar.nl' target='_blank'><img border='0' src='http://api.buienradar.nl/image/1.0/RadarMapNL?w=256&h=256' width='256' height='256'></a></p>]]></description>
+    </item>
+  </channel>
+</rss>

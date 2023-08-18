@@ -1,0 +1,11 @@
+{
+    "has_images": true,
+    "all_entries_have_images": false,
+    "has_unique_links": false,
+    "sensor_config": {
+        "name": "buienradar_nl",
+        "feed_url": "https://data.buienradar.nl/1.0/feed/xml/rssbuienradar",
+        "date_format": "%Y-%m-%d %H:%M:%S.%f"
+    },
+    "download_date": "2023-08-18T09:22:14.164244+00:00"
+}

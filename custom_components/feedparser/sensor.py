@@ -3,6 +3,7 @@ from __future__ import annotations
 
 import email.utils
 import logging
+import re
 from datetime import datetime, timedelta, timezone
 from typing import TYPE_CHECKING
 
@@ -173,11 +174,19 @@ class FeedParserSensor(SensorEntity):
             if key in ["published", "updated", "created", "expired"]:
                 parsed_date: datetime = self._parse_date(value)
                 sensor_entry[key] = parsed_date.strftime(self._date_format)
+            elif key == "image":
+                sensor_entry["image"] = value.get("href")
             else:
                 sensor_entry[key] = value
 
-            self._process_image(feed_entry, sensor_entry)
-
+            if "image" in self._inclusions and "image" not in sensor_entry:
+                sensor_entry["image"] = self._process_image(feed_entry)
+            if (
+                "link" in self._inclusions
+                and "link" not in sensor_entry
+                and (processed_link := self._process_link(feed_entry))
+            ):
+                sensor_entry["link"] = processed_link
         _LOGGER.debug("Feed %s: Generated sensor entry: %s", self.name, sensor_entry)
         return sensor_entry
 
@@ -194,42 +203,63 @@ class FeedParserSensor(SensorEntity):
                 self.name,
                 date,
             )
+            # best effort to parse the date using dateutil
             parsed_time = parser.parse(date)
-            if not parsed_time.tzname():
-                # replace tzinfo with UTC offset if tzinfo does not contain a TZ name
-                parsed_time = parsed_time.replace(
-                    tzinfo=timezone(parsed_time.utcoffset()),  # type: ignore[arg-type]
+
+        if not parsed_time.tzinfo:
+            # best effort to parse the date using dateutil
+            parsed_time = parser.parse(date)
+            if not parsed_time.tzinfo:
+                msg = (
+                    f"Feed {self.name}: Unable to parse date {date}, "
+                    "caused by an incorrect date format"
                 )
+                raise ValueError(msg)
+        if not parsed_time.tzname():
+            # replace tzinfo with UTC offset if tzinfo does not contain a TZ name
+            parsed_time = parsed_time.replace(
+                tzinfo=timezone(parsed_time.utcoffset()),  # type: ignore[arg-type]
+            )
+
         if self._local_time:
             parsed_time = dt.as_local(parsed_time)
         _LOGGER.debug("Feed %s: Parsed date: %s", self.name, parsed_time)
         return parsed_time
 
-    def _process_image(
-        self: FeedParserSensor,
-        feed_entry: FeedParserDict,
-        sensor_entry: dict[str, str],
-    ) -> None:
-        if "image" in self._inclusions and "image" not in sensor_entry.keys():
-            if "enclosures" in feed_entry:
-                images = [
-                    enc
-                    for enc in feed_entry["enclosures"]
-                    if enc.type.startswith("image/")
-                ]
-            else:
-                images = []
+    def _process_image(self: FeedParserSensor, feed_entry: FeedParserDict) -> str:
+        if "enclosures" in feed_entry and feed_entry["enclosures"]:
+            images = [
+                enc for enc in feed_entry["enclosures"] if enc.type.startswith("image/")
+            ]
             if images:
-                sensor_entry["image"] = images[0]["href"]  # pick the first image found
-            else:
-                _LOGGER.debug(
-                    "Feed %s: Image is in inclusions, but no image was found for %s",
+                # pick the first image found
+                return images[0]["href"]
+        elif "summary" in feed_entry:
+            images = re.findall(
+                r"<img.+?src=\"(.+?)\".+?>",
+                feed_entry["summary"],
+            )
+            if images:
+                # pick the first image found
+                return images[0]
+        _LOGGER.debug(
+            "Feed %s: Image is in inclusions, but no image was found for %s",
+            self.name,
+            feed_entry,
+        )
+        return DEFAULT_THUMBNAIL  # use default image if no image found
+
+    def _process_link(self: FeedParserSensor, feed_entry: FeedParserDict) -> str:
+        """Return link from feed entry."""
+        if "links" in feed_entry:
+            if len(feed_entry["links"]) > 1:
+                _LOGGER.warning(
+                    "Feed %s: More than one link found for %s. Using the first link.",
                     self.name,
                     feed_entry,
                 )
-                sensor_entry[
-                    "image"
-                ] = DEFAULT_THUMBNAIL  # use default image if no image found
+            return feed_entry["links"][0]["href"]
+        return ""
 
     @property
     def feed_entries(self: FeedParserSensor) -> list[dict[str, str]]:
