@@ -29,7 +29,7 @@ dependencies = ["python-dateutil", "feedparser==6.0.10", "homeassistant"]
 dev = [
   "black",
   "homeassistant-stubs==2023.8.1",
-  "pytest==7.4.2",
+  "pytest==7.4.3",
   "mypy",
   "ruff",
   "types-python-dateutil",
