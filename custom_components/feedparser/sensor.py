@@ -82,6 +82,10 @@ async def async_setup_platform(
 class FeedParserSensor(SensorEntity):
     """Representation of a Feedparser sensor."""
 
+    # force update the entity since the number of feed entries does not necessarily
+    # change, but we still want to update the extra_state_attributes
+    _attr_force_update = True
+
     def __init__(
         self: FeedParserSensor,
         feed: str,
@@ -105,7 +109,7 @@ class FeedParserSensor(SensorEntity):
         self._local_time = local_time
         self._entries: list[dict[str, str]] = []
         self._attr_extra_state_attributes = {"entries": self._entries}
-        _attr_attribution = "Data retrieved using RSS feedparser"
+        self._attr_attribution = "Data retrieved using RSS feedparser"
         _LOGGER.debug("Feed %s: FeedParserSensor initialized - %s", self.name, self)
 
     def __repr__(self: FeedParserSensor) -> str:
