@@ -28,7 +28,7 @@ dependencies = ["python-dateutil", "feedparser==6.0.10", "homeassistant"]
 [project.optional-dependencies]
 dev = [
   "black",
-  "homeassistant-stubs==2023.8.1",
+  "homeassistant-stubs",
   "pytest==7.4.0",
   "mypy",
   "ruff",
