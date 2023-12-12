@@ -23,7 +23,13 @@ classifiers = [
   "Programming Language :: Python :: 3.11",
 ]
 requires-python = ">=3.11.0"
-dependencies = ["python-dateutil", "feedparser==6.0.10", "homeassistant"]
+dependencies = [
+  "feedparser==6.0.10",
+  "homeassistant",
+  "python-dateutil",
+  "requests-file",
+  "requests",
+]
 
 [project.optional-dependencies]
 dev = [
@@ -34,6 +40,7 @@ dev = [
   "ruff",
   "types-python-dateutil",
   "types-PyYAML",
+  "types-requests",
   "voluptuous-stubs",
   "pyyaml",
 
@@ -97,11 +104,11 @@ select = [
 
 # Q000,ANN,PT009,D,E501,
 ignore = [
-  "D107",    # Missing docstring in __init__
-  "FBT001",  # Boolean positional arg in function definition
-  "D203",    # 1 blank line required before class docstring
-  "D213",    # Multi-line docstring summary should start at the first line
-  "FBT001"   # Boolean positional argument in function definition
+  "D107",   # Missing docstring in __init__
+  "FBT001", # Boolean positional arg in function definition
+  "D203",   # 1 blank line required before class docstring
+  "D213",   # Multi-line docstring summary should start at the first line
+  "FBT001", # Boolean positional argument in function definition
 ]
 
 # Allow autofix for all enabled rules (when `--fix`) is provided.
