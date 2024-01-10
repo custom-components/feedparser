@@ -93,3 +93,14 @@ TEST_FEEDS = [
 DEFAULT_EXCLUSIONS: list[str] = []
 DEFAULT_INCLUSIONS = ["image", "title", "link", "published"]
 DATE_FORMAT = "%a, %d %b %Y %H:%M:%S UTC%z"
+
+URLS_HEADERS_REQUIRED = [
+    {
+        "name": "elcomercio_gijon",
+        "url": "https://www.elcomercio.es/rss/2.0/?section=gijon",
+    },
+    {
+        "name": "nasdaq_options",
+        "url": "https://www.nasdaq.com/feed/rssoutbound?category=Options",
+    },
+]

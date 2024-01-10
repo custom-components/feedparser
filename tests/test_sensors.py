@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING
 
 import feedparser
 import pytest
-from constants import DATE_FORMAT
+from constants import DATE_FORMAT, URLS_HEADERS_REQUIRED
 from feedsource import FeedSource
 
 from custom_components.feedparser.sensor import (
@@ -157,3 +157,24 @@ def test_check_duplicates(feed_sensor: FeedParserSensor) -> None:
     feed_sensor.update()
     after_second_update = len(feed_sensor.feed_entries)
     assert after_first_update == after_second_update
+
+
+@pytest.mark.parametrize(
+    "online_feed",
+    URLS_HEADERS_REQUIRED,
+    ids=lambda feed_url: feed_url["name"],
+)
+def test_fetch_data_headers_required(online_feed: dict) -> None:
+    """Test fetching feed from remote server that requires request with headers."""
+    feed_sensor = FeedParserSensor(
+        feed=online_feed["url"],
+        name=online_feed["name"],
+        date_format=DATE_FORMAT,
+        local_time=False,
+        show_topn=9999,
+        inclusions=["image", "title", "link", "published"],
+        exclusions=[],
+        scan_interval=DEFAULT_SCAN_INTERVAL,
+    )
+    feed_sensor.update()
+    assert feed_sensor.feed_entries

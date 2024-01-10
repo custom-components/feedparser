@@ -9,12 +9,14 @@ from typing import TYPE_CHECKING
 
 import feedparser  # type: ignore[import]
 import homeassistant.helpers.config_validation as cv
+import requests
 import voluptuous as vol
 from dateutil import parser
 from feedparser import FeedParserDict
 from homeassistant.components.sensor import PLATFORM_SCHEMA, SensorEntity
 from homeassistant.const import CONF_NAME, CONF_SCAN_INTERVAL
 from homeassistant.util import dt
+from requests_file import FileAdapter
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -38,6 +40,7 @@ DEFAULT_DATE_FORMAT = "%a, %b %d %I:%M %p"
 DEFAULT_SCAN_INTERVAL = timedelta(hours=1)
 DEFAULT_THUMBNAIL = "https://www.home-assistant.io/images/favicon-192x192-full.png"
 DEFAULT_TOPN = 9999
+USER_AGENT = f"Home Assistant Feed-parser Integration {__version__}"
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
@@ -124,9 +127,14 @@ class FeedParserSensor(SensorEntity):
     def update(self: FeedParserSensor) -> None:
         """Parse the feed and update the state of the sensor."""
         _LOGGER.debug("Feed %s: Polling feed data from %s", self.name, self._feed)
-        parsed_feed: FeedParserDict = feedparser.parse(self._feed)
+        s: requests.Session = requests.Session()
+        s.mount("file://", FileAdapter())
+        s.headers.update({"User-Agent": USER_AGENT})
+        res: requests.Response = s.get(self._feed)
+        res.raise_for_status()
+        parsed_feed: FeedParserDict = feedparser.parse(res.text)
 
-        if not parsed_feed:
+        if not parsed_feed.entries:
             self._attr_native_value = None
             _LOGGER.warning("Feed %s: No data received.", self.name)
             return
