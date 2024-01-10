@@ -24,7 +24,7 @@ classifiers = [
 ]
 requires-python = ">=3.11.0"
 dependencies = [
-  "feedparser==6.0.10",
+  "feedparser==6.0.11",
   "homeassistant",
   "python-dateutil",
   "requests-file",
