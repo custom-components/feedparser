@@ -265,7 +265,7 @@ class FeedParserSensor(SensorEntity):
         """Return link from feed entry."""
         if "links" in feed_entry:
             if len(feed_entry["links"]) > 1:
-                _LOGGER.warning(
+                _LOGGER.debug(
                     "Feed %s: More than one link found for %s. Using the first link.",
                     self.name,
                     feed_entry,
