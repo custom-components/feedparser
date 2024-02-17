@@ -7,6 +7,8 @@ logger:
 # Loads default set of integrations. Do not remove.
 default_config:
 
+debugpy:
+
 http:
   server_port: 9123
 
