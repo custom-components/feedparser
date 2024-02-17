@@ -239,7 +239,7 @@ class FeedParserSensor(SensorEntity):
         return parsed_time
 
     def _process_image(self: FeedParserSensor, feed_entry: FeedParserDict) -> str:
-        if "enclosures" in feed_entry and feed_entry["enclosures"]:
+        if feed_entry.get("enclosures"):
             images = [
                 enc for enc in feed_entry["enclosures"] if enc.type.startswith("image/")
             ]
