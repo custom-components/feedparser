@@ -43,6 +43,7 @@ dev = [
   "types-requests",
   "voluptuous-stubs",
   "pyyaml",
+  "bumpver"
 
 ]
 [project.urls]
@@ -158,3 +159,27 @@ disable_error_code = ["attr-defined", "import"]
 
 [tool.pytest.ini_options]
 pythonpath = [".", "tests"]
+
+[tool.bumpver]
+current_version = "0.1.11"
+version_pattern = "MAJOR.MINOR.PATCH[PYTAGNUM]"
+commit_message = "bump version {old_version} -> {new_version}"
+tag_message = "{new_version}"
+tag_scope = "default"
+pre_commit_hook = ""
+post_commit_hook = ""
+commit = true
+tag = true
+push = true
+
+[tool.bumpver.file_patterns]
+"pyproject.toml" = [
+    'current_version = "{version}"',
+    'version = "{version}"',
+]
+"custom_components/feedparser/manifest.json" = [
+    'version": "{version}"',
+]
+"custom_components/feedparser/sensor.py" = [
+    '__version__ = "{version}"',
+]
