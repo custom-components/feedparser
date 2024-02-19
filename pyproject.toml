@@ -35,7 +35,7 @@ dependencies = [
 dev = [
   "black",
   "homeassistant-stubs",
-  "pytest==8.0.0",
+  "pytest==8.0.1",
   "mypy",
   "ruff",
   "types-python-dateutil",
