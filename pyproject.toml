@@ -159,6 +159,9 @@ disable_error_code = ["attr-defined", "import"]
 
 [tool.pytest.ini_options]
 pythonpath = [".", "tests"]
+filterwarnings = [
+  "ignore:Inheritance class HomeAssistantApplication from web.Application is discouraged:DeprecationWarning"
+]
 
 [tool.bumpver]
 current_version = "0.1.11"

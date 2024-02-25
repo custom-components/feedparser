@@ -1,0 +1,16 @@
+{
+    "has_images": true,
+    "has_unique_dates": false,
+    "sensor_config": {
+        "name": "stern_auto",
+        "feed_url": "https://www.stern.de/feed/standard/auto/",
+        "inclusions": [
+            "image",
+            "title",
+            "link",
+            "published",
+            "summary"
+        ]
+    },
+    "download_date": "2024-02-23T21:08:09.183484+00:00"
+}

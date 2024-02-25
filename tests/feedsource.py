@@ -90,6 +90,11 @@ class FeedSource:
         return self.metadata.get("all_entries_have_images", True)
 
     @property
+    def all_entries_have_summary(self: "FeedSource") -> bool:
+        """Return all_entries_have_summary."""
+        return self.metadata.get("all_entries_have_summary", True)
+
+    @property
     def has_unique_links(self: "FeedSource") -> bool:
         """Return has_unique_links."""
         return self.metadata.get("has_unique_links", True)
@@ -103,6 +108,16 @@ class FeedSource:
     def has_unique_images(self: "FeedSource") -> bool:
         """Return has_unique_images."""
         return self.metadata.get("has_unique_images", True)
+
+    @property
+    def has_unique_dates(self: "FeedSource") -> bool:
+        """Return has_unique_dates."""
+        return self.metadata.get("has_unique_dates", True)
+
+    @property
+    def has_images_in_summary(self: "FeedSource") -> bool:
+        """Return has_images_in_summary."""
+        return self.metadata.get("has_images_in_summary", False)
 
     @property
     def _common_config(self: "FeedSource") -> dict[str, str | int | bool | list[str]]:

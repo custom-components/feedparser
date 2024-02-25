@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:dcterms="http://purl.org/dc/terms/" version="2.0">
+  <channel>
+    <title><![CDATA[Alle Meldungen - SZ.de]]></title>
+    <description><![CDATA[sz.de]]></description>
+    <link>https://www.sueddeutsche.de</link>
+    <image>
+      <url>https://www.sueddeutsche.de/assets/img/favicon.ico</url>
+      <title>Alle Meldungen - SZ.de</title>
+      <link>https://www.sueddeutsche.de</link>
+    </image>
+    <generator>RSS for Node</generator>
+    <lastBuildDate>Fri, 23 Feb 2024 20:57:17 GMT</lastBuildDate>
+    <atom:link href="https://rss.sueddeutsche.de/alles" rel="self" type="application/rss+xml"/>
+    <copyright><![CDATA[Süddeutsche Zeitung Digitale Medien GmbH – 2024]]></copyright>
+    <language><![CDATA[de]]></language>
+    <managingEditor><![CDATA[kontakt@sueddeutsche.de (Süddeutsche Zeitung Digitale Medien GmbH)]]></managingEditor>
+    <item>
+      <title><![CDATA[Gesundheit: Die Pflegebarriere]]></title>
+      <description><![CDATA[<img src="https://www.sueddeutsche.de/2024/02/23/9ebf3e31-c0b4-4037-aa49-ba771458e0ae.jpeg?rect=363%2C0%2C1675%2C1256&width=1000&fm=jpg&q=60" data-portal-copyright="Illustration: Daniela Rudolf-Lübke" /><p>Nach einem Schlaganfall wird Ernestinas Vater zum Pflegefall. Solange es geht, versorgt sie ihn mit ihrer Mutter zu Hause. Warum das auch mit Rassismus zu tun hat.</p>]]></description>
+      <link>https://www.sueddeutsche.de/projekte/artikel/jetzt/pflege-alter-angehoerige-e101874/</link>
+      <guid isPermaLink="false">er.e101874</guid>
+      <category><![CDATA[Pflege]]></category>
+      <category><![CDATA[Alten- und Pflegeheime]]></category>
+      <dc:creator><![CDATA[Text: Gracia Ndona, Illustrationen: Daniela Rudolf-Lübke]]></dc:creator>
+      <pubDate>Sun, 25 Feb 2024 09:00:00 GMT</pubDate>
+      <dcterms:abstract>Nach einem Schlaganfall wird Ernestinas Vater zum Pflegefall. Solange es geht, versorgt sie ihn mit ihrer Mutter zu Hause. Warum das auch mit Rassismus zu tun hat.</dcterms:abstract>
+      <dc:publisher>SZ</dc:publisher>
+    </item>
+    <item>
+      <title><![CDATA[Österreich: Brennerautobahn wegen zu viel Schnee gesperrt - Lawinengefahr in den Alpen]]></title>
+      <description><![CDATA[<img src="https://www.sueddeutsche.de/2024/02/23/0ca3a843-ac57-43e4-af28-044f5d4358c1.jpeg?rect=455%2C170%2C744%2C558&width=1000&fm=jpg&q=60" data-portal-copyright="Markus Angerer/dpa" /><p>In beide Richtungen geht gerade nichts mehr. Nach 40 Zentimetern Neuschnee muss die wichtige Verkehrsroute geschlossen werden - und für Wintersportler drohen Lawinen.</p>]]></description>
+      <link>https://www.sueddeutsche.de/panorama/brennerautobahn-oesterreich-sperrung-schnee-italien-1.6389309</link>
+      <guid isPermaLink="false">sz.1.6389309</guid>
+      <category><![CDATA[Brenner]]></category>
+      <category><![CDATA[Italien-Reise]]></category>
+      <category><![CDATA[Schneechaos]]></category>
+      <category><![CDATA[Österreich]]></category>
+      <pubDate>Fri, 23 Feb 2024 20:03:09 GMT</pubDate>
+      <dcterms:abstract>In beide Richtungen geht gerade nichts mehr. Nach 40 Zentimetern Neuschnee muss die wichtige Verkehrsroute geschlossen werden - und für Wintersportler drohen Lawinen.</dcterms:abstract>
+      <dc:publisher>SZ/dpa/nadl</dc:publisher>
+    </item>
+    <item>
+      <title><![CDATA[Österreich: Harte Landung]]></title>
+      <description><![CDATA[<img src="https://www.sueddeutsche.de/2024/02/23/d5b365d7-d8cf-4c65-8985-417f8e372e90.jpeg?rect=29%2C0%2C1200%2C900&width=1000&fm=jpg&q=60" data-portal-copyright="IMAGO/photonews.at/Georges Schneider/IMAGO/photonews.at" /><p>Ex-Kanzler Sebastian Kurz wird wegen Falschaussage vor dem Ibiza-Untersuchungsausschuss schuldig gesprochen. Wie begründet der Richter sein Urteil von acht Monaten auf Bewährung? </p>]]></description>
+      <link>https://www.sueddeutsche.de/politik/oesterreich-sebastian-kurz-prozess-schuldspruch-falschaussage-ibiza-affaere-1.6388528</link>
+      <guid isPermaLink="false">sz.1.6388528</guid>
+      <category><![CDATA[Kommentarfunktion]]></category>
+      <category><![CDATA[Sebastian Kurz]]></category>
+      <category><![CDATA[Österreich]]></category>
+      <dc:creator><![CDATA[Von Cathrin Kahlweit, Wien]]></dc:creator>
+      <pubDate>Fri, 23 Feb 2024 19:30:52 GMT</pubDate>
+      <dcterms:abstract>Ex-Kanzler Sebastian Kurz wird wegen Falschaussage vor dem Ibiza-Untersuchungsausschuss schuldig gesprochen. Wie begründet der Richter sein Urteil von acht Monaten auf Bewährung? </dcterms:abstract>
+      <dc:publisher>SZ</dc:publisher>
+    </item>
+    <item>
+      <title><![CDATA[News-Überblick: Das sind die Nachrichten des Tages]]></title>
+      <description><![CDATA[<img src="https://www.sueddeutsche.de/2022/06/07/60207e09-b480-4a33-b0f4-807091bdad15.jpeg?rect=0%2C0%2C800%2C600&width=1000&fm=jpg&q=60" data-portal-copyright="SZ.de" /><p>Die Münchner Wohnen reagiert auf Ärger mit hohen Nachzahlungen, auf dem Nockherberg werden die Grenzen des Singbaren ausgelotet und durch Aying spaziert ein Wolf.</p>]]></description>
+      <link>https://www.sueddeutsche.de/muenchen/news-nachrichten-muenchen-heute-ueberblick-1.6389737</link>
+      <guid isPermaLink="false">sz.1.6389737</guid>
+      <category><![CDATA[München]]></category>
+      <category><![CDATA[Newsletter]]></category>
+      <dc:creator><![CDATA[Von Leo Kilz]]></dc:creator>
+      <pubDate>Fri, 23 Feb 2024 18:34:17 GMT</pubDate>
+      <dcterms:abstract>Die Münchner Wohnen reagiert auf Ärger mit hohen Nachzahlungen, auf dem Nockherberg werden die Grenzen des Singbaren ausgelotet und durch Aying spaziert ein Wolf.</dcterms:abstract>
+      <dc:publisher>SZ</dc:publisher>
+    </item>
+    <item>
+      <title><![CDATA[Österreich: Ex-Kanzler Kurz wegen Falschaussage schuldig gesprochen]]></title>
+      <description><![CDATA[<img src="https://www.sueddeutsche.de/2024/02/23/bb0c1e5d-90a8-4ae2-a9a2-9324af141544.jpeg?rect=71%2C0%2C1200%2C900&width=1000&fm=jpg&q=60" data-portal-copyright="LEONHARD FOEGER/REUTERS" /><p>Vor Gericht stand der frühere ÖVP-Politiker, der Österreich zweimal regierte, wegen des Verdachts, den Ibiza-Untersuchungsausschuss angelogen zu haben. Nun wurde er zu einer Bewährungsstrafe verurteilt.</p>]]></description>
+      <link>https://www.sueddeutsche.de/politik/oesterreich-sebastian-kurz-urteil-falschaussage-1.6389691</link>
+      <guid isPermaLink="false">sz.1.6389691</guid>
+      <category><![CDATA[FPÖ]]></category>
+      <category><![CDATA[Ibiza-Affäre]]></category>
+      <category><![CDATA[Kommentarfunktion]]></category>
+      <category><![CDATA[Sebastian Kurz]]></category>
+      <category><![CDATA[ÖVP]]></category>
+      <category><![CDATA[Österreich]]></category>
+      <pubDate>Fri, 23 Feb 2024 18:12:57 GMT</pubDate>
+      <dcterms:abstract>Vor Gericht stand der frühere ÖVP-Politiker, der Österreich zweimal regierte, wegen des Verdachts, den Ibiza-Untersuchungsausschuss angelogen zu haben. Nun wurde er zu einer Bewährungsstrafe verurteilt.</dcterms:abstract>
+      <dc:publisher>SZ/dpa/kast/jael</dc:publisher>
+    </item>
+    <item>
+      <title><![CDATA[Krieg in der Ukraine: Kampfeswillen der Ukraine laut Biden "ungebrochen"]]></title>
+      <description><![CDATA[<img src="https://www.sueddeutsche.de/2024/02/23/5ac47b2a-c021-4743-8bf4-51ca7f29f104.jpeg?rect=137%2C0%2C1200%2C900&width=1000&fm=jpg&q=60" data-portal-copyright="Anatolii Stepanov/afp" /><p>Der US-Präsident lobt den Mut der Ukrainer und appelliert an den US-Kongress, sie weiter zu unterstützen. Vorher hat er 500 neue Sanktionen gegen Russland angekündigt.</p>]]></description>
+      <link>https://www.sueddeutsche.de/politik/ukraine-krieg-newsblog-biden-us-sanktionen-nawalny-1.6386954</link>
+      <guid isPermaLink="false">sz.1.6386954</guid>
+      <category><![CDATA[Hilfe für die Ukraine]]></category>
+      <category><![CDATA[Kommentarfunktion]]></category>
+      <category><![CDATA[Krieg in der Ukraine]]></category>
+      <category><![CDATA[Politik Russland]]></category>
+      <category><![CDATA[Sicherheitspolitik]]></category>
+      <category><![CDATA[Ukraine]]></category>
+      <category><![CDATA[Waffenlieferungen]]></category>
+      <category><![CDATA[Wladimir Putin]]></category>
+      <category><![CDATA[Wolodimir Selenskij]]></category>
+      <dc:creator><![CDATA[Alle Entwicklungen im Liveblog]]></dc:creator>
+      <pubDate>Fri, 23 Feb 2024 18:03:16 GMT</pubDate>
+      <dcterms:abstract>Der US-Präsident lobt den Mut der Ukrainer und appelliert an den US-Kongress, sie weiter zu unterstützen. Vorher hat er 500 neue Sanktionen gegen Russland angekündigt.</dcterms:abstract>
+      <dc:publisher>SZ</dc:publisher>
+    </item>
+    <item>
+      <title><![CDATA[Zwei Jahre Ukrainekrieg: Das Leben der Toten]]></title>
+      <description><![CDATA[<img src="https://www.sueddeutsche.de/2024/02/23/86d1ae8c-ba9b-42f2-bfd0-750697c670cf.jpeg?rect=292%2C0%2C1760%2C1320&width=1000&fm=jpg&q=60" data-portal-copyright="privat" /><p>Der Aktivist, die Lehrerin, der Dichter: Was waren das für Menschen,die Russlands Überfall auf die Ukraine das Leben gekostet hat? Vierzehn Porträts.</p>]]></description>
+      <link>https://www.sueddeutsche.de/projekte/artikel/politik/ukraine-krieg-russland-e674859/</link>
+      <guid isPermaLink="false">er.e674859</guid>
+      <category><![CDATA[Buch Zwei]]></category>
+      <category><![CDATA[Ukraine]]></category>
+      <category><![CDATA[Krieg]]></category>
+      <dc:creator><![CDATA[Texte von Tomas Avenarius, Nicolas Freund, Cathrin Kahlweit, Frank Nienhuysen und Sonja Zekri]]></dc:creator>
+      <pubDate>Fri, 23 Feb 2024 18:00:00 GMT</pubDate>
+      <dcterms:abstract>Der Aktivist, die Lehrerin, der Dichter: Was waren das für Menschen,die Russlands Überfall auf die Ukraine das Leben gekostet hat? Vierzehn Porträts.</dcterms:abstract>
+      <dc:publisher>SZ</dc:publisher>
+    </item>
+    <item>
+      <title><![CDATA[Chemieindustrie: BASF verschärft Sparkurs]]></title>
+      <description><![CDATA[<img src="https://www.sueddeutsche.de/2023/09/27/ed0f53db-9d31-4742-a04a-54c335d200eb.jpeg?rect=573%2C0%2C1026%2C769&width=1000&fm=jpg&q=60" data-portal-copyright="Andreas Pohlmann/BASF" /><p>Der Chemiekonzern muss mehr Stellen abbauen als bislang angekündigt. Am Stammsitz in Ludwigshafen werden wohl weitere Anlagen stillgelegt. Aus Sicht des Betriebsrats ein "harter Schlag."</p>]]></description>
+      <link>https://www.sueddeutsche.de/wirtschaft/basf-chemieindustrie-konjunktur-martin-brudermueller-1.6388765</link>
+      <guid isPermaLink="false">sz.1.6388765</guid>
+      <category><![CDATA[Chemieindustrie]]></category>
+      <category><![CDATA[Kommentarfunktion]]></category>
+      <category><![CDATA[Unternehmen]]></category>
+      <dc:creator><![CDATA[Von Elisabeth Dostert, Ludwigshafen]]></dc:creator>
+      <pubDate>Fri, 23 Feb 2024 17:30:05 GMT</pubDate>
+      <dcterms:abstract>Der Chemiekonzern muss mehr Stellen abbauen als bislang angekündigt. Am Stammsitz in Ludwigshafen werden wohl weitere Anlagen stillgelegt. Aus Sicht des Betriebsrats ein "harter Schlag."</dcterms:abstract>
+      <dc:publisher>SZ</dc:publisher>
+    </item>
+    <item>
+      <title><![CDATA[Krieg in Nahost: Netanjahu legt Plan für Gazastreifen nach dem Krieg vor]]></title>
+      <description><![CDATA[<img src="https://www.sueddeutsche.de/2024/02/23/e8a49cfb-e5fd-4ca0-a020-f8d7a4e18a73.jpeg?rect=340%2C158%2C735%2C551&width=1000&fm=jpg&q=60" data-portal-copyright="Amir Cohen/Reuters" /><p>Das Militär soll die volle Kontrolle über das Küstengebiet bekommen. Eine Zusammenarbeit mit Palästinensern kommt in dem Konzept nur vage vor. Der Bundestag stimmt dem Bundeswehreinsatz im Roten Meer mit großer Mehrheit zu.</p>]]></description>
+      <link>https://www.sueddeutsche.de/politik/israel-krieg-news-liveticker-netanjahu-gazastreifen-plan-1.6387103</link>
+      <guid isPermaLink="false">sz.1.6387103</guid>
+      <category><![CDATA[Benjamin Netanjahu]]></category>
+      <category><![CDATA[Gaza]]></category>
+      <category><![CDATA[Gazastreifen]]></category>
+      <category><![CDATA[Hamas]]></category>
+      <category><![CDATA[Hisbollah]]></category>
+      <category><![CDATA[Israel]]></category>
+      <category><![CDATA[Kommentarfunktion]]></category>
+      <category><![CDATA[Krieg in Nahost]]></category>
+      <category><![CDATA[Nahostkonflikt]]></category>
+      <category><![CDATA[Palästina]]></category>
+      <category><![CDATA[Proteste zum Nahostkonflikt]]></category>
+      <category><![CDATA[Westjordanland]]></category>
+      <dc:creator><![CDATA[Alle Entwicklungen im Liveblog]]></dc:creator>
+      <pubDate>Fri, 23 Feb 2024 17:23:15 GMT</pubDate>
+      <dcterms:abstract>Das Militär soll die volle Kontrolle über das Küstengebiet bekommen. Eine Zusammenarbeit mit Palästinensern kommt in dem Konzept nur vage vor. Der Bundestag stimmt dem Bundeswehreinsatz im Roten Meer mit großer Mehrheit zu.</dcterms:abstract>
+      <dc:publisher>SZ</dc:publisher>
+    </item>
+    <item>
+      <title><![CDATA[Zugstrecke: Bahnstrecke in Oberbayern für mehrere Wochen gesperrt]]></title>
+      <description><![CDATA[<img src="https://www.sueddeutsche.de/2024/02/23/b072a0d9-79dd-4024-8ba1-9f0eb99c6237.jpeg?rect=0%2C0%2C1199%2C900&width=1000&fm=jpg&q=60" data-portal-copyright="Karl-Josef Hildenbrand/dpa" /><p>Zwischen Augsburg und Schongau müssen Reisende in den nächsten Wochen gute Nerven mitbringen. Ein Hangrutsch sorgt für gravierende Änderungen im Fahrplan. </p>]]></description>
+      <link>https://www.sueddeutsche.de/bayern/bayern-bahn-hangrutsch-sperrung-1.6389585</link>
+      <guid isPermaLink="false">sz.1.6389585</guid>
+      <category><![CDATA[Augsburg]]></category>
+      <category><![CDATA[Bahn und Bus]]></category>
+      <category><![CDATA[Bayern]]></category>
+      <pubDate>Fri, 23 Feb 2024 17:19:30 GMT</pubDate>
+      <dcterms:abstract>Zwischen Augsburg und Schongau müssen Reisende in den nächsten Wochen gute Nerven mitbringen. Ein Hangrutsch sorgt für gravierende Änderungen im Fahrplan. </dcterms:abstract>
+      <dc:publisher>SZ/dpa</dc:publisher>
+    </item>
+    <item>
+      <title><![CDATA[Bierschuppen: Wo die Zeit stehen zu bleiben scheint]]></title>
+      <description><![CDATA[<img src="https://www.sueddeutsche.de/2022/06/21/d4cb4dbd-73fc-45ea-a2eb-4b1d85b5ac37.jpeg?rect=0%2C0%2C1199%2C900&width=1000&fm=jpg&q=60" data-portal-copyright="Alessandra Schellnegger" /><p>Seit knapp 40 Jahren ist in Irmgard Jörgs Stüberl alles so, wie es schon immer war. Sogar die Uhr geht seit Langem leicht vor. Manche sehen darin ein Überbleibsel eines lange verschwundenen Münchens. Vor allem aber ist der "Bierschuppen" eine grundsympathische Bar.</p>]]></description>
+      <link>https://www.sueddeutsche.de/muenchen/muenchen-bierschuppen-dreimuehlenviertel-bar-test-1.6389583</link>
+      <guid isPermaLink="false">sz.1.6389583</guid>
+      <category><![CDATA[Bars in München]]></category>
+      <category><![CDATA[Dreimühlenviertel]]></category>
+      <category><![CDATA[Essen und Trinken in München]]></category>
+      <category><![CDATA[Gastronews]]></category>
+      <category><![CDATA[Isarvorstadt]]></category>
+      <dc:creator><![CDATA[Von Max Fluder]]></dc:creator>
+      <pubDate>Fri, 23 Feb 2024 17:19:08 GMT</pubDate>
+      <dcterms:abstract>Seit knapp 40 Jahren ist in Irmgard Jörgs Stüberl alles so, wie es schon immer war. Sogar die Uhr geht seit Langem leicht vor. Manche sehen darin ein Überbleibsel eines lange verschwundenen Münchens. Vor allem aber ist der "Bierschuppen" eine grundsympathische Bar.</dcterms:abstract>
+      <dc:publisher>SZ</dc:publisher>
+    </item>
+    <item>
+      <title><![CDATA[Agrarpolitik: Brüssel will Landwirte versöhnen - und löst damit Streit in Berlin aus]]></title>
+      <description><![CDATA[<img src="https://www.sueddeutsche.de/2022/06/14/90e3f552-61c7-47ed-9d35-49379e7058ff.jpeg?rect=127%2C0%2C622%2C467&width=1000&fm=jpg&q=60" data-portal-copyright="Rainer Jensen/dpa" /><p>Wenn sich die Koalition beeilt, könnte sie noch diesen Monat Umweltauflagen für die Bewirtschaftung der Äcker lockern - mit dem Segen der EU-Kommission. Doch es gibt Streit, und der grüne Agrarminister droht, zwischen die Fronten zu geraten.</p>]]></description>
+      <link>https://www.sueddeutsche.de/politik/eu-landwirtschaft-unweltauflagen-ackerbau-artenschutz-1.6388831</link>
+      <guid isPermaLink="false">sz.1.6388831</guid>
+      <category><![CDATA[Artenschutz]]></category>
+      <category><![CDATA[Bauernproteste]]></category>
+      <category><![CDATA[Cem Özdemir]]></category>
+      <category><![CDATA[EU-Kommission]]></category>
+      <category><![CDATA[Kommentarfunktion]]></category>
+      <category><![CDATA[Landwirtschaft]]></category>
+      <category><![CDATA[Steffi Lemke]]></category>
+      <dc:creator><![CDATA[Von Michael Bauchmüller, Berlin]]></dc:creator>
+      <pubDate>Fri, 23 Feb 2024 17:16:32 GMT</pubDate>
+      <dcterms:abstract>Wenn sich die Koalition beeilt, könnte sie noch diesen Monat Umweltauflagen für die Bewirtschaftung der Äcker lockern - mit dem Segen der EU-Kommission. Doch es gibt Streit, und der grüne Agrarminister droht, zwischen die Fronten zu geraten.</dcterms:abstract>
+      <dc:publisher>SZ</dc:publisher>
+    </item>
+    <item>
+      <title><![CDATA[Im Streit erstochen: Lebenslange Haft für ukrainische Geflüchtete wegen Mordes an Helfer]]></title>
+      <description><![CDATA[<img src="https://www.sueddeutsche.de/2024/01/09/4eaddd00-299c-491b-90ef-250c72e5075d.jpeg?rect=137%2C111%2C950%2C712&width=1000&fm=jpg&q=60" data-portal-copyright="Florian Peljak" /><p>Das Landgericht München II verurteilt die 52-Jährige wegen Mordes aus niedrigen Beweggründen. Sie hat ihren Helfer in Dachau mit einem Küchenmesser erstochen.</p>]]></description>
+      <link>https://www.sueddeutsche.de/muenchen/dachau-ukrainerin-mord-schwurgericht-1.6389558</link>
+      <guid isPermaLink="false">sz.1.6389558</guid>
+      <category><![CDATA[Dachau]]></category>
+      <category><![CDATA[Gerichtsprozesse in München]]></category>
+      <category><![CDATA[München]]></category>
+      <dc:creator><![CDATA[Von Andreas Salch, München]]></dc:creator>
+      <pubDate>Fri, 23 Feb 2024 17:15:58 GMT</pubDate>
+      <dcterms:abstract>Das Landgericht München II verurteilt die 52-Jährige wegen Mordes aus niedrigen Beweggründen. Sie hat ihren Helfer in Dachau mit einem Küchenmesser erstochen.</dcterms:abstract>
+      <dc:publisher>SZ</dc:publisher>
+    </item>
+    <item>
+      <title><![CDATA[Polen: EU gibt blockierte Gelder frei]]></title>
+      <link>https://www.sueddeutsche.de/politik/polen-eu-gibt-blockierte-gelder-frei-1.6389061</link>
+      <guid isPermaLink="false">sz.1.6389061</guid>
+      <category><![CDATA[Kommentarfunktion]]></category>
+      <category><![CDATA[Politik]]></category>
+      <pubDate>Fri, 23 Feb 2024 17:13:44 GMT</pubDate>
+      <dc:publisher>SZ/dpa</dc:publisher>
+    </item>
+    <item>
+      <title><![CDATA[Momentaufnahmen im Februar: Bilder des Tages]]></title>
+      <description><![CDATA[<img src="https://www.sueddeutsche.de/2024/02/23/9c8b67e1-e40b-4474-9e96-c8c78b3f8516.jpeg?rect=0%2C0%2C1200%2C900&width=1000&fm=jpg&q=60" data-portal-copyright="Alberto Saiz/AP" /><p>Schönes, Erschreckendes, Absurdes und ganz Alltägliches: Momentaufnahmen aus allen Ecken der Welt.</p>]]></description>
+      <link>https://www.sueddeutsche.de/leben/bilder-des-tages-pressefotografie-fotografie-1.6389477</link>
+      <guid isPermaLink="false">sz.1.6389477</guid>
+      <category><![CDATA[Bilder]]></category>
+      <category><![CDATA[Bilder des Tages]]></category>
+      <category><![CDATA[Fotografie]]></category>
+      <category><![CDATA[Pressefotografie]]></category>
+      <dc:creator><![CDATA[Von SZ-Autorinnen und Autoren]]></dc:creator>
+      <pubDate>Fri, 23 Feb 2024 17:09:58 GMT</pubDate>
+      <dcterms:abstract>Schönes, Erschreckendes, Absurdes und ganz Alltägliches: Momentaufnahmen aus allen Ecken der Welt.</dcterms:abstract>
+      <dc:publisher>SZ/berj</dc:publisher>
+    </item>
+  </channel>
+</rss>
