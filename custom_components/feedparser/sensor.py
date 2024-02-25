@@ -191,14 +191,14 @@ class FeedParserSensor(SensorEntity):
             else:
                 sensor_entry[key] = value
 
-            if "image" in self._inclusions and "image" not in sensor_entry:
-                sensor_entry["image"] = self._process_image(feed_entry)
-            if (
-                "link" in self._inclusions
-                and "link" not in sensor_entry
-                and (processed_link := self._process_link(feed_entry))
-            ):
-                sensor_entry["link"] = processed_link
+        if "image" in self._inclusions and "image" not in sensor_entry:
+            sensor_entry["image"] = self._process_image(feed_entry)
+        if (
+            "link" in self._inclusions
+            and "link" not in sensor_entry
+            and (processed_link := self._process_link(feed_entry))
+        ):
+            sensor_entry["link"] = processed_link
         _LOGGER.debug("Feed %s: Generated sensor entry: %s", self.name, sensor_entry)
         return sensor_entry
 
