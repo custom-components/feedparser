@@ -8,6 +8,7 @@ TEST_HASS_PATH = Path(__file__).parents[1] / "test_hass"
 TEST_FEEDS = [
     {
         "has_images": True,
+        "has_unique_images": False,
         "sensor_config": {
             "name": "CTK",
             "feed_url": "https://www.ceskenoviny.cz/sluzby/rss/cr.php",
@@ -37,6 +38,9 @@ TEST_FEEDS = [
     },
     {
         "has_images": False,
+        "has_unique_links": False,
+        "has_unique_titles": False,
+        "has_unique_dates": False,
         "sensor_config": {
             "name": "bbc_europe",
             "feed_url": "http://feeds.bbci.co.uk/news/world/europe/rss.xml",
@@ -54,6 +58,7 @@ TEST_FEEDS = [
     {
         "has_images": True,
         "all_entries_have_images": False,
+        "has_images_in_summary": True,
         "has_unique_links": False,
         "sensor_config": {
             "name": "buienradar_nl",
@@ -72,6 +77,7 @@ TEST_FEEDS = [
     },
     {
         "has_images": False,
+        "has_unique_dates": False,
         "sensor_config": {
             "name": "api_met_no_metalerts",
             "feed_url": "https://api.met.no/weatherapi/metalerts/1.1/",
@@ -85,13 +91,34 @@ TEST_FEEDS = [
         "sensor_config": {
             "name": "anp_nieuws",
             "feed_url": "https://www.omnycontent.com/d/playlist/56ccbbb7-0ff7-4482-9d99-a88800f49f6c/a49c87f6-d567-4189-8692-a8e2009eaf86/9fea2041-fccd-4fcf-8cec-a8e2009eeca2/podcast.rss",
-            "inclusions": ["title", "link", "published", "summary"],
+            "inclusions": ["title", "link", "published", "summary", "image"],
+        },
+    },
+    {
+        "has_images": True,
+        "all_entries_have_images": False,
+        "has_images_in_summary": True,
+        "all_entries_have_summary": False,
+        "sensor_config": {
+            "name": "alle_meldungen",
+            "feed_url": "https://rss.sueddeutsche.de/alles/",
+            "inclusions": ["image", "title", "link", "published", "summary"],
+            "remove_summary_image": True,
+        },
+    },
+    {
+        "has_images": True,
+        "has_unique_dates": False,
+        "sensor_config": {
+            "name": "stern_auto",
+            "feed_url": "https://www.stern.de/feed/standard/auto/",
+            "inclusions": ["image", "title", "link", "published", "summary"],
         },
     },
 ]
 
 DEFAULT_EXCLUSIONS: list[str] = []
-DEFAULT_INCLUSIONS = ["image", "title", "link", "published"]
+DEFAULT_INCLUSIONS = ["image", "title", "link", "summary", "published"]
 DATE_FORMAT = "%a, %d %b %Y %H:%M:%S UTC%z"
 
 URLS_HEADERS_REQUIRED = [

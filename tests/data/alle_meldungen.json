@@ -1,0 +1,19 @@
+{
+    "has_images": true,
+    "all_entries_have_images": false,
+    "has_images_in_summary": true,
+    "all_entries_have_summary": false,
+    "sensor_config": {
+        "name": "alle_meldungen",
+        "feed_url": "https://rss.sueddeutsche.de/alles/",
+        "inclusions": [
+            "image",
+            "title",
+            "link",
+            "published",
+            "summary"
+        ],
+        "remove_summary_image": true
+    },
+    "download_date": "2024-02-23T21:08:09.183484+00:00"
+}

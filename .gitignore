@@ -3,3 +3,11 @@
 build/
 *.egg-info/
 custom_components/hacs
+test_hass/.HA_VERSION
+test_hass/.storage*
+test_hass/blueprints/
+test_hass/custom_components
+test_hass/home-assistant_v2.db*
+test_hass/home-assistant.log*
+test_hass/sensors.yaml
+test_hass/www/

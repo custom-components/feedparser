@@ -12,6 +12,9 @@ jobs:
       matrix:
         python-version: ["3.11"]
     steps:
+      - name: Install xmllint
+        run: sudo apt -y install libxml2-utils
+
       - name: Checkout Repository
         uses: actions/checkout@v4
 

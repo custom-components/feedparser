@@ -1,5 +1,6 @@
 {
     "has_images": true,
+    "has_unique_images": false,
     "sensor_config": {
         "name": "CTK",
         "feed_url": "https://www.ceskenoviny.cz/sluzby/rss/cr.php",
@@ -8,5 +9,5 @@
             "minutes": 30
         }
     },
-    "download_date": "2023-07-30T13:48:50.563494"
+    "download_date": "2024-02-23T21:08:09.183484+00:00"
 }

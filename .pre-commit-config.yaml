@@ -8,16 +8,22 @@ repos:
       - id: end-of-file-fixer
       - id: check-yaml
         exclude: ^test_hass/configuration.yaml$
+      - id: check-toml
       - id: debug-statements
-  - repo: https://github.com/asottile/pyupgrade
-    rev: v3.3.0
+  - repo: https://github.com/lsst-ts/pre-commit-xmllint
+    rev: v1.0.0
     hooks:
-      - id: pyupgrade
-        args: [--py311-plus]
-  - repo: https://github.com/psf/black
-    rev: "22.10.0"
+      - id: format-xmllint
+  - repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+    rev: v2.12.0
     hooks:
-      - id: black
+      - id: pretty-format-toml
+        args: ["--autofix", "--no-sort"]
+  - repo: https://github.com/abravalheri/validate-pyproject
+    rev: v0.16
+    hooks:
+      - id: validate-pyproject
+        additional_dependencies: ["validate-pyproject-schema-store[all]"]
   - repo: https://github.com/pre-commit/mirrors-mypy
     rev: "v1.4.1"
     hooks:
@@ -30,6 +36,10 @@ repos:
             types-PyYAML,
             types-requests,
           ]
+  - repo: https://github.com/psf/black
+    rev: "22.10.0"
+    hooks:
+      - id: black
   - repo: https://github.com/astral-sh/ruff-pre-commit
     # Ruff version.
     rev: v0.0.278

@@ -90,6 +90,11 @@ class FeedSource:
         return self.metadata.get("all_entries_have_images", True)
 
     @property
+    def all_entries_have_summary(self: "FeedSource") -> bool:
+        """Return all_entries_have_summary."""
+        return self.metadata.get("all_entries_have_summary", True)
+
+    @property
     def has_unique_links(self: "FeedSource") -> bool:
         """Return has_unique_links."""
         return self.metadata.get("has_unique_links", True)
@@ -105,12 +110,23 @@ class FeedSource:
         return self.metadata.get("has_unique_images", True)
 
     @property
+    def has_unique_dates(self: "FeedSource") -> bool:
+        """Return has_unique_dates."""
+        return self.metadata.get("has_unique_dates", True)
+
+    @property
+    def has_images_in_summary(self: "FeedSource") -> bool:
+        """Return has_images_in_summary."""
+        return self.metadata.get("has_images_in_summary", False)
+
+    @property
     def _common_config(self: "FeedSource") -> dict[str, str | int | bool | list[str]]:
         """Return common config."""
         return {
             "name": self.name,
             "date_format": self.sensor_config.date_format,
             "show_topn": self.sensor_config.show_topn,
+            "remove_summary_image": self.sensor_config.remove_summary_image,
             "inclusions": self.sensor_config.inclusions,
             "exclusions": self.sensor_config.exclusions,
             "local_time": self.sensor_config.local_time,
@@ -190,6 +206,11 @@ class FeedConfig:
     def show_topn(self: "FeedConfig") -> int:
         """Return show_topn."""
         return self.raw.get("show_topn", 9999)
+
+    @property
+    def remove_summary_image(self: "FeedConfig") -> bool:
+        """Return remove_summary_image."""
+        return self.raw.get("remove_summary_image", False)
 
     @property
     def scan_interval(self: "FeedConfig") -> int:

@@ -35,12 +35,14 @@ CONF_LOCAL_TIME = "local_time"
 CONF_INCLUSIONS = "inclusions"
 CONF_EXCLUSIONS = "exclusions"
 CONF_SHOW_TOPN = "show_topn"
+CONF_REMOVE_SUMMARY_IMG = "remove_summary_image"
 
 DEFAULT_DATE_FORMAT = "%a, %b %d %I:%M %p"
 DEFAULT_SCAN_INTERVAL = timedelta(hours=1)
 DEFAULT_THUMBNAIL = "https://www.home-assistant.io/images/favicon-192x192-full.png"
 DEFAULT_TOPN = 9999
 USER_AGENT = f"Home Assistant Feed-parser Integration {__version__}"
+IMAGE_REGEX = r"<img.+?src=\"(.+?)\".+?>"
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
@@ -49,6 +51,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
         vol.Required(CONF_DATE_FORMAT, default=DEFAULT_DATE_FORMAT): cv.string,
         vol.Optional(CONF_LOCAL_TIME, default=False): cv.boolean,
         vol.Optional(CONF_SHOW_TOPN, default=DEFAULT_TOPN): cv.positive_int,
+        vol.Optional(CONF_REMOVE_SUMMARY_IMG, default=False): cv.boolean,
         vol.Optional(CONF_INCLUSIONS, default=[]): vol.All(cv.ensure_list, [cv.string]),
         vol.Optional(CONF_EXCLUSIONS, default=[]): vol.All(cv.ensure_list, [cv.string]),
         vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): cv.time_period,
@@ -72,6 +75,7 @@ async def async_setup_platform(
                 name=config[CONF_NAME],
                 date_format=config[CONF_DATE_FORMAT],
                 show_topn=config[CONF_SHOW_TOPN],
+                remove_summary_image=config[CONF_REMOVE_SUMMARY_IMG],
                 inclusions=config[CONF_INCLUSIONS],
                 exclusions=config[CONF_EXCLUSIONS],
                 scan_interval=config[CONF_SCAN_INTERVAL],
@@ -95,6 +99,7 @@ class FeedParserSensor(SensorEntity):
         name: str,
         date_format: str,
         show_topn: int,
+        remove_summary_image: bool,
         exclusions: list[str | None],
         inclusions: list[str | None],
         scan_interval: timedelta,
@@ -106,6 +111,7 @@ class FeedParserSensor(SensorEntity):
         self._attr_icon = "mdi:rss"
         self._date_format = date_format
         self._show_topn: int = show_topn
+        self._remove_summary_image = remove_summary_image
         self._inclusions = inclusions
         self._exclusions = exclusions
         self._scan_interval = scan_interval
@@ -119,7 +125,9 @@ class FeedParserSensor(SensorEntity):
         """Return the representation."""
         return (
             f'FeedParserSensor(name="{self.name}", feed="{self._feed}", '
-            f"show_topn={self._show_topn}, inclusions={self._inclusions}, "
+            f"show_topn={self._show_topn}, "
+            f"remove_summary_image={self._remove_summary_image}, "
+            f"inclusions={self._inclusions}, "
             f"exclusions={self._exclusions}, scan_interval={self._scan_interval}, "
             f'local_time={self._local_time}, date_format="{self._date_format}")'
         )
@@ -191,14 +199,20 @@ class FeedParserSensor(SensorEntity):
             else:
                 sensor_entry[key] = value
 
-            if "image" in self._inclusions and "image" not in sensor_entry:
-                sensor_entry["image"] = self._process_image(feed_entry)
-            if (
-                "link" in self._inclusions
-                and "link" not in sensor_entry
-                and (processed_link := self._process_link(feed_entry))
-            ):
-                sensor_entry["link"] = processed_link
+        if "image" in self._inclusions and "image" not in sensor_entry:
+            sensor_entry["image"] = self._process_image(feed_entry)
+        if (
+            "link" in self._inclusions
+            and "link" not in sensor_entry
+            and (processed_link := self._process_link(feed_entry))
+        ):
+            sensor_entry["link"] = processed_link
+        if self._remove_summary_image and "summary" in sensor_entry:
+            sensor_entry["summary"] = re.sub(
+                IMAGE_REGEX,
+                "",
+                sensor_entry["summary"],
+            )
         _LOGGER.debug("Feed %s: Generated sensor entry: %s", self.name, sensor_entry)
         return sensor_entry
 
@@ -239,7 +253,7 @@ class FeedParserSensor(SensorEntity):
         return parsed_time
 
     def _process_image(self: FeedParserSensor, feed_entry: FeedParserDict) -> str:
-        if "enclosures" in feed_entry and feed_entry["enclosures"]:
+        if feed_entry.get("enclosures"):
             images = [
                 enc for enc in feed_entry["enclosures"] if enc.type.startswith("image/")
             ]
@@ -248,7 +262,7 @@ class FeedParserSensor(SensorEntity):
                 return images[0]["href"]
         elif "summary" in feed_entry:
             images = re.findall(
-                r"<img.+?src=\"(.+?)\".+?>",
+                IMAGE_REGEX,
                 feed_entry["summary"],
             )
             if images:
@@ -265,7 +279,7 @@ class FeedParserSensor(SensorEntity):
         """Return link from feed entry."""
         if "links" in feed_entry:
             if len(feed_entry["links"]) > 1:
-                _LOGGER.warning(
+                _LOGGER.debug(
                     "Feed %s: More than one link found for %s. Using the first link.",
                     self.name,
                     feed_entry,

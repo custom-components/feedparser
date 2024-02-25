@@ -14,9 +14,23 @@ def get_feeds() -> list[FeedSource]:
 
 def pytest_generate_tests(metafunc: pytest.Metafunc) -> None:
     """Generate tests and fixtures."""
+    feeds = get_feeds()
     if "feed" in metafunc.fixturenames:
-        feeds = get_feeds()
         metafunc.parametrize("feed", feeds, ids=[f.name for f in feeds], indirect=True)
+    if "feed_with_image_in_summary" in metafunc.fixturenames:
+        feeds_with_image_in_summary = [
+            pytest.param(
+                feed,
+                id=feed.name,
+            )
+            for feed in feeds
+            if feed.has_images_in_summary
+        ]
+        metafunc.parametrize(
+            "feed_with_image_in_summary",
+            feeds_with_image_in_summary,
+            indirect=True,
+        )
 
 
 @pytest.fixture()
@@ -29,3 +43,11 @@ def feed(request: pytest.FixtureRequest) -> FeedSource:
 def feed_sensor(feed: FeedSource) -> FeedParserSensor:
     """Return feed sensor initialized with the local RSS feed."""
     return FeedParserSensor(**feed.sensor_config_local_feed)
+
+
+@pytest.fixture()
+def feed_with_image_in_summary(
+    request: pytest.FixtureRequest,
+) -> FeedSource:
+    """Return feed sensor with images in summary of its entries."""
+    return request.param

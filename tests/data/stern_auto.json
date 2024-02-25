@@ -1,10 +1,11 @@
 {
-    "has_images": false,
+    "has_images": true,
     "has_unique_dates": false,
     "sensor_config": {
-        "name": "api_met_no_metalerts",
-        "feed_url": "https://api.met.no/weatherapi/metalerts/1.1/",
+        "name": "stern_auto",
+        "feed_url": "https://www.stern.de/feed/standard/auto/",
         "inclusions": [
+            "image",
             "title",
             "link",
             "published",
