@@ -150,7 +150,7 @@ target-version = "py311"
 "tests/**" = ["S101"]
 
 [tool.ruff.pylint]
-max-args = 9
+max-args = 10
 
 [[tool.mypy.overrides]]
 module = "feedparser.*"

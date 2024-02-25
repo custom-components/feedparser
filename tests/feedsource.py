@@ -111,6 +111,7 @@ class FeedSource:
             "name": self.name,
             "date_format": self.sensor_config.date_format,
             "show_topn": self.sensor_config.show_topn,
+            "remove_summary_image": self.sensor_config.remove_summary_image,
             "inclusions": self.sensor_config.inclusions,
             "exclusions": self.sensor_config.exclusions,
             "local_time": self.sensor_config.local_time,
@@ -190,6 +191,11 @@ class FeedConfig:
     def show_topn(self: "FeedConfig") -> int:
         """Return show_topn."""
         return self.raw.get("show_topn", 9999)
+
+    @property
+    def remove_summary_image(self: "FeedConfig") -> bool:
+        """Return remove_summary_image."""
+        return self.raw.get("remove_summary_image", False)
 
     @property
     def scan_interval(self: "FeedConfig") -> int:
