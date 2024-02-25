@@ -3,8 +3,8 @@ name = "homeassistant.sensor.feedparser"
 version = "0.1.11"
 description = "Home Assistant custom integration to parse RSS feeds"
 maintainers = [
-  { name = "Ian Richardson", email = "iantrich@gmail.com" },
-  { name = "Ondrej Gajdusek", email = "ondrej@gajdusek.dev" },
+  {name = "Ian Richardson", email = "iantrich@gmail.com"},
+  {name = "Ondrej Gajdusek", email = "ondrej@gajdusek.dev"}
 ]
 keywords = [
   "homeassistant",
@@ -13,14 +13,14 @@ keywords = [
   "feed",
   "parser",
   "custom-component",
-  "custom-integration",
+  "custom-integration"
 ]
 classifiers = [
   "Intended Audience :: End Users/Desktop",
   "Intended Audience :: Developers",
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
-  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.11"
 ]
 requires-python = ">=3.11.0"
 dependencies = [
@@ -28,7 +28,7 @@ dependencies = [
   "homeassistant",
   "python-dateutil",
   "requests-file",
-  "requests",
+  "requests"
 ]
 
 [project.optional-dependencies]
@@ -44,8 +44,8 @@ dev = [
   "voluptuous-stubs",
   "pyyaml",
   "bumpver"
-
 ]
+
 [project.urls]
 "Source Code" = "https://github.com/custom-components/feedparser"
 "Bug Reports" = "https://github.com/custom-components/feedparser/issues"
@@ -100,22 +100,19 @@ select = [
   "SLF",
   "TCH",
   "TRY",
-  "UP",
+  "UP"
 ]
-
 # Q000,ANN,PT009,D,E501,
 ignore = [
-  "D107",   # Missing docstring in __init__
-  "FBT001", # Boolean positional arg in function definition
-  "D203",   # 1 blank line required before class docstring
-  "D213",   # Multi-line docstring summary should start at the first line
-  "FBT001", # Boolean positional argument in function definition
+  "D107",  # Missing docstring in __init__
+  "FBT001",  # Boolean positional arg in function definition
+  "D203",  # 1 blank line required before class docstring
+  "D213",  # Multi-line docstring summary should start at the first line
+  "FBT001"  # Boolean positional argument in function definition
 ]
-
 # Allow autofix for all enabled rules (when `--fix`) is provided.
 fixable = ["ALL"]
 unfixable = []
-
 # Exclude a variety of commonly ignored directories.
 exclude = [
   ".bzr",
@@ -134,15 +131,12 @@ exclude = [
   "buck-out",
   "build",
   "dist",
-  "venv",
+  "venv"
 ]
-
 # Same as Black.
 line-length = 88
-
 # Allow unused variables when underscore-prefixed.
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
-
 # Assume Python 3.11.
 target-version = "py311"
 
@@ -176,13 +170,6 @@ tag = true
 push = true
 
 [tool.bumpver.file_patterns]
-"pyproject.toml" = [
-    'current_version = "{version}"',
-    'version = "{version}"',
-]
-"custom_components/feedparser/manifest.json" = [
-    'version": "{version}"',
-]
-"custom_components/feedparser/sensor.py" = [
-    '__version__ = "{version}"',
-]
+"pyproject.toml" = ['current_version = "{version}"', 'version = "{version}"']
+"custom_components/feedparser/manifest.json" = ['version": "{version}"']
+"custom_components/feedparser/sensor.py" = ['__version__ = "{version}"']

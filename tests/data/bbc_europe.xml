@@ -1,242 +1,243 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
-    <channel>
-        <title><![CDATA[BBC News]]></title>
-        <description><![CDATA[BBC News - Europe]]></description>
-        <link>https://www.bbc.co.uk/news/world/europe</link>
-        <image>
-            <url>https://news.bbcimg.co.uk/nol/shared/img/bbc_news_120x60.gif</url>
-            <title>BBC News</title>
-            <link>https://www.bbc.co.uk/news/world/europe</link>
-        </image>
-        <generator>RSS for Node</generator>
-        <lastBuildDate>Sun, 25 Feb 2024 21:09:08 GMT</lastBuildDate>
-        <atom:link href="https://feeds.bbci.co.uk/news/world/europe/rss.xml" rel="self" type="application/rss+xml"/>
-        <copyright><![CDATA[Copyright: (C) British Broadcasting Corporation, see http://news.bbc.co.uk/2/hi/help/rss/4498287.stm for terms and conditions of reuse.]]></copyright>
-        <language><![CDATA[en-gb]]></language>
-        <ttl>15</ttl>
-        <item>
-            <title><![CDATA[Zelensky says 31,000 troops killed in war in Ukraine]]></title>
-            <description><![CDATA[It is rare for officials to say how many Ukrainian soldiers have died since Russia's full-scale invasion.]]></description>
-            <link>https://www.bbc.co.uk/news/world-europe-68397525</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68397525</guid>
-            <pubDate>Sun, 25 Feb 2024 17:02:08 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/5D87/production/_132734932_gettyimages-2028397377.jpg"/>
-        </item>
-        <item>
-            <title><![CDATA[Navalny's body returned to mother 8 days after death]]></title>
-            <description><![CDATA[Alexei Navalny's mother has been demanding the return of his body since his death in a Russian prison.]]></description>
-            <link>https://www.bbc.co.uk/news/world-europe-68393412</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68393412</guid>
-            <pubDate>Sat, 24 Feb 2024 17:11:46 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/CF0B/production/_132730035_d6ac7bcfef609aa1df26bf7c92c4eb6a394f45e9.jpg"/>
-        </item>
-        <item>
-            <title><![CDATA['I refuse to die': Couple saved from Valencia fire hail dramatic rescue]]></title>
-            <description><![CDATA[Sara Jorge and her boyfriend say they were saved by a mixture of luck and a desire to live.]]></description>
-            <link>https://www.bbc.co.uk/news/world-europe-68390343</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68390343</guid>
-            <pubDate>Sat, 24 Feb 2024 16:26:40 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/4580/production/_132729771_mediaitem132729767.jpg"/>
-        </item>
-        <item>
-            <title><![CDATA[Eiffel Tower set to reopen after six-day strike]]></title>
-            <description><![CDATA[Workers first walked out on Monday in a dispute over the way the tower was managed.]]></description>
-            <link>https://www.bbc.co.uk/news/world-europe-68396481</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68396481</guid>
-            <pubDate>Sun, 25 Feb 2024 10:27:40 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/137CF/production/_132732897_gettyimages-2017159679.jpg"/>
-        </item>
-        <item>
-            <title><![CDATA[Farmers' anger erupts at trade show in Paris]]></title>
-            <description><![CDATA[Clashes erupt between security forces and farmers protesting at the presence of President Macron.]]></description>
-            <link>https://www.bbc.co.uk/news/world-europe-68393316</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68393316</guid>
-            <pubDate>Sat, 24 Feb 2024 16:36:24 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/04B3/production/_132730210_p0hdwst5.jpg"/>
-        </item>
-        <item>
-            <title><![CDATA[Two years into Russia's invasion, exhausted Ukrainians refuse to give up]]></title>
-            <description><![CDATA[Ukrainians may be fatigued by the war, but they still see it as a fight for survival.]]></description>
-            <link>https://www.bbc.co.uk/news/world-europe-68384341</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68384341</guid>
-            <pubDate>Sat, 24 Feb 2024 06:00:14 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/142A/production/_132726150_gettyimages-1916177973.jpg"/>
-        </item>
-        <item>
-            <title><![CDATA[Spanish police search gutted flats after nine killed]]></title>
-            <description><![CDATA[Cladding as well as high winds are being blamed for the flame in the 14-floor complex in Valencia.]]></description>
-            <link>https://www.bbc.co.uk/news/world-europe-68379253</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68379253</guid>
-            <pubDate>Fri, 23 Feb 2024 21:35:05 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/10146/production/_132726856_df2ad6286f89d504a2d6121c32a5e53f276c79a20_0_5500_36671000x667.jpg"/>
-        </item>
-        <item>
-            <title><![CDATA[Four women and a girl killed in Vienna in 24 hours]]></title>
-            <description><![CDATA[The victims were killed in separate, unrelated incidents in the Austrian capital on Friday.]]></description>
-            <link>https://www.bbc.co.uk/news/world-europe-68392233</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68392233</guid>
-            <pubDate>Sun, 25 Feb 2024 11:49:21 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/933C/production/_132729673_vienna.jpg"/>
-        </item>
-        <item>
-            <title><![CDATA[Dissent is dangerous in Putin's Russia, but activists refuse to give up]]></title>
-            <description><![CDATA[Jailed opposition activist Vladimir Kara-Murza refuses to be cowed following the death of Alexei Navalny.]]></description>
-            <link>https://www.bbc.co.uk/news/world-europe-68395030</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68395030</guid>
-            <pubDate>Sun, 25 Feb 2024 01:52:59 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/C03D/production/_132731294_navalny.jpg"/>
-        </item>
-        <item>
-            <title><![CDATA[Germany legalises cannabis, but makes it hard to buy]]></title>
-            <description><![CDATA[Under the law backed by MPs, possession will be legal, but strict rules mean it will be complicated.]]></description>
-            <link>https://www.bbc.co.uk/news/world-europe-68378807</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68378807</guid>
-            <pubDate>Fri, 23 Feb 2024 15:49:45 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/165C7/production/_132719519_gettyimages-1593533473.jpg"/>
-        </item>
-        <item>
-            <title><![CDATA[Ukraine says it has downed second Russian spy plane]]></title>
-            <description><![CDATA[An A-50 radar detection aircraft is reportedly shot down over Russia, more than 200km from the front line.]]></description>
-            <link>https://www.bbc.co.uk/news/world-europe-68387232</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68387232</guid>
-            <pubDate>Sat, 24 Feb 2024 02:27:15 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/13F4C/production/_132304718_e4f1b6671b48d6e1069228d5e44e72aeb7a4ab750_190_3885_21852000x1125.jpg"/>
-        </item>
-        <item>
-            <title><![CDATA[US targets Russia with more than 500 new sanctions]]></title>
-            <description><![CDATA[The new restrictions are related to Russia's invasion of Ukraine and the death of Alexei Navalny.]]></description>
-            <link>https://www.bbc.co.uk/news/world-us-canada-68380251</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-us-canada-68380251</guid>
-            <pubDate>Fri, 23 Feb 2024 18:14:15 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/15574/production/_132721478_gettyimages-2015829959.jpg"/>
-        </item>
-        <item>
-            <title><![CDATA[McCann suspect 'pre-convicted' in rape trial - lawyer]]></title>
-            <description><![CDATA[Christian Brückner's defence says his trial is tainted by him being repeatedly linked to Madeline.]]></description>
-            <link>https://www.bbc.co.uk/news/world-europe-68384229</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68384229</guid>
-            <pubDate>Fri, 23 Feb 2024 16:53:07 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/4846/production/_132720581_bruckner.jpg"/>
-        </item>
-        <item>
-            <title><![CDATA['Little Britain': How Russian media mocked UK missile failure]]></title>
-            <description><![CDATA[After news of the failed test leaks, Russian media wastes little time in ridiculing the UK.]]></description>
-            <link>https://www.bbc.co.uk/news/world-68369556</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-68369556</guid>
-            <pubDate>Thu, 22 Feb 2024 12:38:05 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/16699/production/_132710819_03f0f4ee-fe01-40c7-96cd-068e9650041d.jpg"/>
-        </item>
-        <item>
-            <title><![CDATA[Kremlin lashes out after Biden aims barb at Putin]]></title>
-            <description><![CDATA[Moscow responds to Joe Biden's sweary remarks about the Russian president at a California fundraiser.]]></description>
-            <link>https://www.bbc.co.uk/news/world-68367482</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-68367482</guid>
-            <pubDate>Thu, 22 Feb 2024 17:01:21 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/161DE/production/_132709509_mediaitem132709508.jpg"/>
-        </item>
-        <item>
-            <title><![CDATA[Rosenberg: How two years of war have changed Russia]]></title>
-            <description><![CDATA[The BBC's Russia Editor reports on a catalogue of drama, bloodshed and tragedy since the war began.]]></description>
-            <link>https://www.bbc.co.uk/news/world-europe-68359252</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68359252</guid>
-            <pubDate>Thu, 22 Feb 2024 06:00:04 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/11486/production/_132709707_moscowmural-index-epa.jpg"/>
-        </item>
-        <item>
-            <title><![CDATA[‘I miss you’: Ukraine’s children orphaned by Russian missile]]></title>
-            <description><![CDATA[Dozens of children were orphaned the day a missile hit the village of Hroza in October 2023, killing 59.]]></description>
-            <link>https://www.bbc.co.uk/news/world-europe-68346891</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68346891</guid>
-            <pubDate>Thu, 22 Feb 2024 02:40:46 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/CA4E/production/_132709715_hrozapromo16x9.jpg"/>
-        </item>
-        <item>
-            <title><![CDATA[Ukraine war in maps: Russia makes limited advances]]></title>
-            <description><![CDATA[Russia has made limited advances along the front line, with the war in Ukraine about to enter its third year.]]></description>
-            <link>https://www.bbc.co.uk/news/world-europe-60506682</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-60506682</guid>
-            <pubDate>Wed, 21 Feb 2024 12:48:06 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/339A/production/_132701231_ukraine_maps_piece_promo_976x549-2x-nc.png"/>
-        </item>
-        <item>
-            <title><![CDATA[Navalny's widow faces daunting challenge]]></title>
-            <description><![CDATA[Yulia Navalnaya has made a dramatic and deliberate move to the forefront of Russian opposition politics.]]></description>
-            <link>https://www.bbc.co.uk/news/world-europe-68345057</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68345057</guid>
-            <pubDate>Tue, 20 Feb 2024 04:42:34 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/1B75/production/_132692070_navalnaya-index-reuters.jpg"/>
-        </item>
-        <item>
-            <title><![CDATA[Farmers' anger erupts at trade show in Paris]]></title>
-            <description><![CDATA[Clashes erupt between security forces and farmers protesting at the presence of President Macron.]]></description>
-            <link>https://www.bbc.co.uk/news/world-europe-68393316</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68393316</guid>
-            <pubDate>Sat, 24 Feb 2024 16:36:24 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/04B3/production/_132730210_p0hdwst5.jpg"/>
-        </item>
-        <item>
-            <title><![CDATA[Watch: A look back at the Ukraine war two years on]]></title>
-            <description><![CDATA[The BBC's Joe Inwood reflects on two years since Russia launched its full scale invasion of Ukraine.]]></description>
-            <link>https://www.bbc.co.uk/news/world-europe-68388657</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68388657</guid>
-            <pubDate>Sat, 24 Feb 2024 01:41:35 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/B844/production/_132727174_p0hdt8v2.jpg"/>
-        </item>
-        <item>
-            <title><![CDATA[Valencia fire: Early videos show how flames spread]]></title>
-            <description><![CDATA[Experts say highly flammable cladding may have helped the fire spread.]]></description>
-            <link>https://www.bbc.co.uk/news/world-europe-68387970</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68387970</guid>
-            <pubDate>Fri, 23 Feb 2024 19:11:15 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/5E58/production/_132725142_p0hds9db.jpg"/>
-        </item>
-        <item>
-            <title><![CDATA[Moment two rescued from deadly Spain tower block fires]]></title>
-            <description><![CDATA[A fire in two residential buildings in Valencia has killed at least five people, with several still missing.]]></description>
-            <link>https://www.bbc.co.uk/news/world-europe-68375765</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68375765</guid>
-            <pubDate>Thu, 22 Feb 2024 20:39:08 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/5D99/production/_132716932_p0hdkws1.jpg"/>
-        </item>
-        <item>
-            <title><![CDATA[Watch Yulia Navalnaya speak following report of husband's death]]></title>
-            <description><![CDATA[Yulia Navalnaya tells a conference in Munich she doesn't know whether the "horrible news" is true.]]></description>
-            <link>https://www.bbc.co.uk/news/world-europe-68319500</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68319500</guid>
-            <pubDate>Fri, 16 Feb 2024 15:12:57 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/A165/production/_132671314_p0hcd2fy.jpg"/>
-        </item>
-        <item>
-            <title><![CDATA[Watch: BBC Russia Editor on news of Navalny's death]]></title>
-            <description><![CDATA[News of Alexei Navalny's death will worsen relations between Russia and the west, Steve Rosenberg says.]]></description>
-            <link>https://www.bbc.co.uk/news/world-europe-68319499</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68319499</guid>
-            <pubDate>Fri, 16 Feb 2024 16:03:21 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/5345/production/_132671312_p0hcdft0.jpg"/>
-        </item>
-        <item>
-            <title><![CDATA[Watch: Navalny seen in video link a day before his reported death]]></title>
-            <description><![CDATA[Russian opposition politician Alexei Navalny has died in jail, prison authorities say.]]></description>
-            <link>https://www.bbc.co.uk/news/world-europe-68319164</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68319164</guid>
-            <pubDate>Fri, 16 Feb 2024 14:14:08 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/C202/production/_132666694_p0hccktp.jpg"/>
-        </item>
-        <item>
-            <title><![CDATA[Arrested and poisoned: See Navalny's moments of defiance]]></title>
-            <description><![CDATA[See key moments in Alexei Navalny's career as an outspoken critic of President Putin.]]></description>
-            <link>https://www.bbc.co.uk/news/world-68320972</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-68320972</guid>
-            <pubDate>Fri, 16 Feb 2024 18:23:46 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/11695/production/_132671317_p0hcfhs0.jpg"/>
-        </item>
-        <item>
-            <title><![CDATA[Putin is responsible - Biden responds to Navalny death reports]]></title>
-            <description><![CDATA[US President Joe Biden used reports of Alexei Navalny's death to insist on the importance of Ukraine aid.]]></description>
-            <link>https://www.bbc.co.uk/news/world-us-canada-68313386</link>
-            <guid isPermaLink="false">https://www.bbc.co.uk/news/world-us-canada-68313386</guid>
-            <pubDate>Fri, 16 Feb 2024 17:54:57 GMT</pubDate>
-            <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/E35F/production/_132670285_p0hcf876.jpg"/>
-        </item>
-    </channel>
+<?xml version="1.0" encoding="UTF-8"?>
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:media="http://search.yahoo.com/mrss/" version="2.0">
+  <channel>
+    <title><![CDATA[BBC News]]></title>
+    <description><![CDATA[BBC News - Europe]]></description>
+    <link>https://www.bbc.co.uk/news/world/europe</link>
+    <image>
+      <url>https://news.bbcimg.co.uk/nol/shared/img/bbc_news_120x60.gif</url>
+      <title>BBC News</title>
+      <link>https://www.bbc.co.uk/news/world/europe</link>
+    </image>
+    <generator>RSS for Node</generator>
+    <lastBuildDate>Sun, 25 Feb 2024 21:09:08 GMT</lastBuildDate>
+    <atom:link href="https://feeds.bbci.co.uk/news/world/europe/rss.xml" rel="self" type="application/rss+xml"/>
+    <copyright><![CDATA[Copyright: (C) British Broadcasting Corporation, see http://news.bbc.co.uk/2/hi/help/rss/4498287.stm for terms and conditions of reuse.]]></copyright>
+    <language><![CDATA[en-gb]]></language>
+    <ttl>15</ttl>
+    <item>
+      <title><![CDATA[Zelensky says 31,000 troops killed in war in Ukraine]]></title>
+      <description><![CDATA[It is rare for officials to say how many Ukrainian soldiers have died since Russia's full-scale invasion.]]></description>
+      <link>https://www.bbc.co.uk/news/world-europe-68397525</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68397525</guid>
+      <pubDate>Sun, 25 Feb 2024 17:02:08 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/5D87/production/_132734932_gettyimages-2028397377.jpg"/>
+    </item>
+    <item>
+      <title><![CDATA[Navalny's body returned to mother 8 days after death]]></title>
+      <description><![CDATA[Alexei Navalny's mother has been demanding the return of his body since his death in a Russian prison.]]></description>
+      <link>https://www.bbc.co.uk/news/world-europe-68393412</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68393412</guid>
+      <pubDate>Sat, 24 Feb 2024 17:11:46 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/CF0B/production/_132730035_d6ac7bcfef609aa1df26bf7c92c4eb6a394f45e9.jpg"/>
+    </item>
+    <item>
+      <title><![CDATA['I refuse to die': Couple saved from Valencia fire hail dramatic rescue]]></title>
+      <description><![CDATA[Sara Jorge and her boyfriend say they were saved by a mixture of luck and a desire to live.]]></description>
+      <link>https://www.bbc.co.uk/news/world-europe-68390343</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68390343</guid>
+      <pubDate>Sat, 24 Feb 2024 16:26:40 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/4580/production/_132729771_mediaitem132729767.jpg"/>
+    </item>
+    <item>
+      <title><![CDATA[Eiffel Tower set to reopen after six-day strike]]></title>
+      <description><![CDATA[Workers first walked out on Monday in a dispute over the way the tower was managed.]]></description>
+      <link>https://www.bbc.co.uk/news/world-europe-68396481</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68396481</guid>
+      <pubDate>Sun, 25 Feb 2024 10:27:40 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/137CF/production/_132732897_gettyimages-2017159679.jpg"/>
+    </item>
+    <item>
+      <title><![CDATA[Farmers' anger erupts at trade show in Paris]]></title>
+      <description><![CDATA[Clashes erupt between security forces and farmers protesting at the presence of President Macron.]]></description>
+      <link>https://www.bbc.co.uk/news/world-europe-68393316</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68393316</guid>
+      <pubDate>Sat, 24 Feb 2024 16:36:24 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/04B3/production/_132730210_p0hdwst5.jpg"/>
+    </item>
+    <item>
+      <title><![CDATA[Two years into Russia's invasion, exhausted Ukrainians refuse to give up]]></title>
+      <description><![CDATA[Ukrainians may be fatigued by the war, but they still see it as a fight for survival.]]></description>
+      <link>https://www.bbc.co.uk/news/world-europe-68384341</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68384341</guid>
+      <pubDate>Sat, 24 Feb 2024 06:00:14 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/142A/production/_132726150_gettyimages-1916177973.jpg"/>
+    </item>
+    <item>
+      <title><![CDATA[Spanish police search gutted flats after nine killed]]></title>
+      <description><![CDATA[Cladding as well as high winds are being blamed for the flame in the 14-floor complex in Valencia.]]></description>
+      <link>https://www.bbc.co.uk/news/world-europe-68379253</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68379253</guid>
+      <pubDate>Fri, 23 Feb 2024 21:35:05 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/10146/production/_132726856_df2ad6286f89d504a2d6121c32a5e53f276c79a20_0_5500_36671000x667.jpg"/>
+    </item>
+    <item>
+      <title><![CDATA[Four women and a girl killed in Vienna in 24 hours]]></title>
+      <description><![CDATA[The victims were killed in separate, unrelated incidents in the Austrian capital on Friday.]]></description>
+      <link>https://www.bbc.co.uk/news/world-europe-68392233</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68392233</guid>
+      <pubDate>Sun, 25 Feb 2024 11:49:21 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/933C/production/_132729673_vienna.jpg"/>
+    </item>
+    <item>
+      <title><![CDATA[Dissent is dangerous in Putin's Russia, but activists refuse to give up]]></title>
+      <description><![CDATA[Jailed opposition activist Vladimir Kara-Murza refuses to be cowed following the death of Alexei Navalny.]]></description>
+      <link>https://www.bbc.co.uk/news/world-europe-68395030</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68395030</guid>
+      <pubDate>Sun, 25 Feb 2024 01:52:59 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/C03D/production/_132731294_navalny.jpg"/>
+    </item>
+    <item>
+      <title><![CDATA[Germany legalises cannabis, but makes it hard to buy]]></title>
+      <description><![CDATA[Under the law backed by MPs, possession will be legal, but strict rules mean it will be complicated.]]></description>
+      <link>https://www.bbc.co.uk/news/world-europe-68378807</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68378807</guid>
+      <pubDate>Fri, 23 Feb 2024 15:49:45 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/165C7/production/_132719519_gettyimages-1593533473.jpg"/>
+    </item>
+    <item>
+      <title><![CDATA[Ukraine says it has downed second Russian spy plane]]></title>
+      <description><![CDATA[An A-50 radar detection aircraft is reportedly shot down over Russia, more than 200km from the front line.]]></description>
+      <link>https://www.bbc.co.uk/news/world-europe-68387232</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68387232</guid>
+      <pubDate>Sat, 24 Feb 2024 02:27:15 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/13F4C/production/_132304718_e4f1b6671b48d6e1069228d5e44e72aeb7a4ab750_190_3885_21852000x1125.jpg"/>
+    </item>
+    <item>
+      <title><![CDATA[US targets Russia with more than 500 new sanctions]]></title>
+      <description><![CDATA[The new restrictions are related to Russia's invasion of Ukraine and the death of Alexei Navalny.]]></description>
+      <link>https://www.bbc.co.uk/news/world-us-canada-68380251</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-us-canada-68380251</guid>
+      <pubDate>Fri, 23 Feb 2024 18:14:15 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/15574/production/_132721478_gettyimages-2015829959.jpg"/>
+    </item>
+    <item>
+      <title><![CDATA[McCann suspect 'pre-convicted' in rape trial - lawyer]]></title>
+      <description><![CDATA[Christian Brückner's defence says his trial is tainted by him being repeatedly linked to Madeline.]]></description>
+      <link>https://www.bbc.co.uk/news/world-europe-68384229</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68384229</guid>
+      <pubDate>Fri, 23 Feb 2024 16:53:07 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/4846/production/_132720581_bruckner.jpg"/>
+    </item>
+    <item>
+      <title><![CDATA['Little Britain': How Russian media mocked UK missile failure]]></title>
+      <description><![CDATA[After news of the failed test leaks, Russian media wastes little time in ridiculing the UK.]]></description>
+      <link>https://www.bbc.co.uk/news/world-68369556</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-68369556</guid>
+      <pubDate>Thu, 22 Feb 2024 12:38:05 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/16699/production/_132710819_03f0f4ee-fe01-40c7-96cd-068e9650041d.jpg"/>
+    </item>
+    <item>
+      <title><![CDATA[Kremlin lashes out after Biden aims barb at Putin]]></title>
+      <description><![CDATA[Moscow responds to Joe Biden's sweary remarks about the Russian president at a California fundraiser.]]></description>
+      <link>https://www.bbc.co.uk/news/world-68367482</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-68367482</guid>
+      <pubDate>Thu, 22 Feb 2024 17:01:21 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/161DE/production/_132709509_mediaitem132709508.jpg"/>
+    </item>
+    <item>
+      <title><![CDATA[Rosenberg: How two years of war have changed Russia]]></title>
+      <description><![CDATA[The BBC's Russia Editor reports on a catalogue of drama, bloodshed and tragedy since the war began.]]></description>
+      <link>https://www.bbc.co.uk/news/world-europe-68359252</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68359252</guid>
+      <pubDate>Thu, 22 Feb 2024 06:00:04 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/11486/production/_132709707_moscowmural-index-epa.jpg"/>
+    </item>
+    <item>
+      <title><![CDATA[‘I miss you’: Ukraine’s children orphaned by Russian missile]]></title>
+      <description><![CDATA[Dozens of children were orphaned the day a missile hit the village of Hroza in October 2023, killing 59.]]></description>
+      <link>https://www.bbc.co.uk/news/world-europe-68346891</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68346891</guid>
+      <pubDate>Thu, 22 Feb 2024 02:40:46 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/CA4E/production/_132709715_hrozapromo16x9.jpg"/>
+    </item>
+    <item>
+      <title><![CDATA[Ukraine war in maps: Russia makes limited advances]]></title>
+      <description><![CDATA[Russia has made limited advances along the front line, with the war in Ukraine about to enter its third year.]]></description>
+      <link>https://www.bbc.co.uk/news/world-europe-60506682</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-60506682</guid>
+      <pubDate>Wed, 21 Feb 2024 12:48:06 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/339A/production/_132701231_ukraine_maps_piece_promo_976x549-2x-nc.png"/>
+    </item>
+    <item>
+      <title><![CDATA[Navalny's widow faces daunting challenge]]></title>
+      <description><![CDATA[Yulia Navalnaya has made a dramatic and deliberate move to the forefront of Russian opposition politics.]]></description>
+      <link>https://www.bbc.co.uk/news/world-europe-68345057</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68345057</guid>
+      <pubDate>Tue, 20 Feb 2024 04:42:34 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/1B75/production/_132692070_navalnaya-index-reuters.jpg"/>
+    </item>
+    <item>
+      <title><![CDATA[Farmers' anger erupts at trade show in Paris]]></title>
+      <description><![CDATA[Clashes erupt between security forces and farmers protesting at the presence of President Macron.]]></description>
+      <link>https://www.bbc.co.uk/news/world-europe-68393316</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68393316</guid>
+      <pubDate>Sat, 24 Feb 2024 16:36:24 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/04B3/production/_132730210_p0hdwst5.jpg"/>
+    </item>
+    <item>
+      <title><![CDATA[Watch: A look back at the Ukraine war two years on]]></title>
+      <description><![CDATA[The BBC's Joe Inwood reflects on two years since Russia launched its full scale invasion of Ukraine.]]></description>
+      <link>https://www.bbc.co.uk/news/world-europe-68388657</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68388657</guid>
+      <pubDate>Sat, 24 Feb 2024 01:41:35 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/B844/production/_132727174_p0hdt8v2.jpg"/>
+    </item>
+    <item>
+      <title><![CDATA[Valencia fire: Early videos show how flames spread]]></title>
+      <description><![CDATA[Experts say highly flammable cladding may have helped the fire spread.]]></description>
+      <link>https://www.bbc.co.uk/news/world-europe-68387970</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68387970</guid>
+      <pubDate>Fri, 23 Feb 2024 19:11:15 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/5E58/production/_132725142_p0hds9db.jpg"/>
+    </item>
+    <item>
+      <title><![CDATA[Moment two rescued from deadly Spain tower block fires]]></title>
+      <description><![CDATA[A fire in two residential buildings in Valencia has killed at least five people, with several still missing.]]></description>
+      <link>https://www.bbc.co.uk/news/world-europe-68375765</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68375765</guid>
+      <pubDate>Thu, 22 Feb 2024 20:39:08 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/5D99/production/_132716932_p0hdkws1.jpg"/>
+    </item>
+    <item>
+      <title><![CDATA[Watch Yulia Navalnaya speak following report of husband's death]]></title>
+      <description><![CDATA[Yulia Navalnaya tells a conference in Munich she doesn't know whether the "horrible news" is true.]]></description>
+      <link>https://www.bbc.co.uk/news/world-europe-68319500</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68319500</guid>
+      <pubDate>Fri, 16 Feb 2024 15:12:57 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/A165/production/_132671314_p0hcd2fy.jpg"/>
+    </item>
+    <item>
+      <title><![CDATA[Watch: BBC Russia Editor on news of Navalny's death]]></title>
+      <description><![CDATA[News of Alexei Navalny's death will worsen relations between Russia and the west, Steve Rosenberg says.]]></description>
+      <link>https://www.bbc.co.uk/news/world-europe-68319499</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68319499</guid>
+      <pubDate>Fri, 16 Feb 2024 16:03:21 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/5345/production/_132671312_p0hcdft0.jpg"/>
+    </item>
+    <item>
+      <title><![CDATA[Watch: Navalny seen in video link a day before his reported death]]></title>
+      <description><![CDATA[Russian opposition politician Alexei Navalny has died in jail, prison authorities say.]]></description>
+      <link>https://www.bbc.co.uk/news/world-europe-68319164</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-europe-68319164</guid>
+      <pubDate>Fri, 16 Feb 2024 14:14:08 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/C202/production/_132666694_p0hccktp.jpg"/>
+    </item>
+    <item>
+      <title><![CDATA[Arrested and poisoned: See Navalny's moments of defiance]]></title>
+      <description><![CDATA[See key moments in Alexei Navalny's career as an outspoken critic of President Putin.]]></description>
+      <link>https://www.bbc.co.uk/news/world-68320972</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-68320972</guid>
+      <pubDate>Fri, 16 Feb 2024 18:23:46 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/11695/production/_132671317_p0hcfhs0.jpg"/>
+    </item>
+    <item>
+      <title><![CDATA[Putin is responsible - Biden responds to Navalny death reports]]></title>
+      <description><![CDATA[US President Joe Biden used reports of Alexei Navalny's death to insist on the importance of Ukraine aid.]]></description>
+      <link>https://www.bbc.co.uk/news/world-us-canada-68313386</link>
+      <guid isPermaLink="false">https://www.bbc.co.uk/news/world-us-canada-68313386</guid>
+      <pubDate>Fri, 16 Feb 2024 17:54:57 GMT</pubDate>
+      <media:thumbnail width="240" height="135" url="https://ichef.bbci.co.uk/ace/standard/240/cpsprodpb/E35F/production/_132670285_p0hcf876.jpg"/>
+    </item>
+  </channel>
 </rss>
