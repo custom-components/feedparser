@@ -1,9 +1,12 @@
 {
     "has_images": false,
+    "has_unique_links": false,
+    "has_unique_titles": false,
+    "has_unique_dates": false,
     "sensor_config": {
         "name": "bbc_europe",
         "feed_url": "http://feeds.bbci.co.uk/news/world/europe/rss.xml",
         "date_format": "%a, %d %b %Y %H:%M:%S %z"
     },
-    "download_date": "2023-07-30T13:48:50.563494"
+    "download_date": "2024-02-25T21:09:08.348208+00:00"
 }

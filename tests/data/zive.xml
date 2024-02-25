@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<rss version="2.0" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
   <channel>
     <title>Živě.cz</title>
     <link>https://www.zive.cz</link>
@@ -12,7 +12,7 @@
       <url>https://www.zive.cz/Client.Images/Logos/logo-zive-rss.gif</url>
       <link>https://www.zive.cz</link>
     </image>
-    <atom:link rel="self" type="application/rss+xml" href="https://www.zive.cz/rss/sc-47" />
+    <atom:link rel="self" type="application/rss+xml" href="https://www.zive.cz/rss/sc-47"/>
     <item>
       <title>Příběh o chlapíkovi, který vzal Mig-23 a utekl komunistům. Pak se v malé Cessně vrátil pro rodinu</title>
       <link>https://vtm.zive.cz/clanky/pribeh-o-chlapikovi-ktery-vzal-mig-23-a-utekl-komunistum-pak-se-v-male-cessne-vratil-pro-rodinu/sc-870-a-223354/default.aspx</link>

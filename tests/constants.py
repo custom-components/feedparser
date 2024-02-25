@@ -38,6 +38,9 @@ TEST_FEEDS = [
     },
     {
         "has_images": False,
+        "has_unique_links": False,
+        "has_unique_titles": False,
+        "has_unique_dates": False,
         "sensor_config": {
             "name": "bbc_europe",
             "feed_url": "http://feeds.bbci.co.uk/news/world/europe/rss.xml",

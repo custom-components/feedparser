@@ -6,8 +6,8 @@
     <description>Farevarsler fra Meteorologisk institutt</description>
     <language>no</language>
     <copyright>Copyright The Norwegian Meteorological Institute, licensed under Norwegian license for public data (NLOD) and Creative Commons 4.0 BY</copyright>
-    <pubDate>Fri, 18 Aug 2023 09:22:00 +0000</pubDate>
-    <lastBuildDate>Fri, 18 Aug 2023 09:22:00 +0000</lastBuildDate>
+    <pubDate>Fri, 23 Feb 2024 21:06:00 +0000</pubDate>
+    <lastBuildDate>Fri, 23 Feb 2024 21:06:00 +0000</lastBuildDate>
     <category>Met</category>
     <generator>XML::LibXML::Generator 0.1</generator>
     <docs>http://blogs.law.harvard.edu/tech/rss</docs>
@@ -17,13 +17,319 @@
       <url>https://api.met.no/images/logo_2013_no.png</url>
     </image>
     <item>
-      <title>Kuling, gult niv&#xE5;, Loppa - Slettnes fyr, 18 August 05:00 UTC til 18 August 10:00 UTC.</title>
-      <description>Update: Fredag morgen forbig&#xE5;ende s&#xF8;rvest stiv kuling 15 m/s. </description>
-      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.230818043729845.1412</link>
+      <title>Storm, gult niv&#xE5;, Fr&#xF8;ya - R&#xF8;rvik, 2024-02-23T01:00:00+00:00, 2024-02-24T14:00:00+00:00</title>
+      <description>Update: I dag, fredag s&#xF8;r&#xF8;st opp i sterk kuling 20 m/s. Sent i kveld &#xF8;kning til s&#xF8;rvest liten og periodevis full storm 25, fra l&#xF8;rdag morgen  sterk kuling 20.</description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.20240223181256.040</link>
       <author>post@met.no (The Norwegian Meteorological Institute)</author>
       <category>Met</category>
-      <guid>2.49.0.1.578.0.230818043729845.1412</guid>
-      <pubDate>Fri, 18 Aug 2023 04:37:29 +0000</pubDate>
+      <guid>2.49.0.1.578.0.20240223181256.040</guid>
+      <pubDate>Fri, 23 Feb 2024 18:13:25 +0000</pubDate>
+    </item>
+    <item>
+      <title>Storm, gult niv&#xE5;, Ona - Fr&#xF8;ya, 2024-02-23T17:00:00+00:00, 2024-02-24T14:00:00+00:00</title>
+      <description>Update: I kveld, fredag, &#xF8;kning til s&#xF8;rvest liten storm 22 m/s, l&#xF8;rdag morgen minking til stiv kuling 15 m/s </description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.20240223181221.033</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.20240223181221.033</guid>
+      <pubDate>Fri, 23 Feb 2024 18:12:40 +0000</pubDate>
+    </item>
+    <item>
+      <title>Kuling, gult niv&#xE5;, Svin&#xF8;y - Ona, 2024-02-23T17:00:00+00:00, 2024-02-24T14:00:00+00:00</title>
+      <description>Update: Fra i kveld, fredag, s&#xF8;rvest sterk kuling 20 m/s, fra l&#xF8;rdag morgen stiv kuling 15.</description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.20240223181149.055</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.20240223181149.055</guid>
+      <pubDate>Fri, 23 Feb 2024 18:12:10 +0000</pubDate>
+    </item>
+    <item>
+      <title>Kuling, gult niv&#xE5;, M&#xE5;l&#xF8;y - Svin&#xF8;y, 2024-02-23T15:00:00+00:00, 2024-02-24T14:00:00+00:00</title>
+      <description>Update: I kveld, fredag, s&#xF8;rvestlig periodevis sterk kuling 20 m/s, fra l&#xF8;rdag morgen s&#xF8;rlig stiv kuling 15. L&#xF8;rdag ettermiddag minkende.</description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.20240223180402.090</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.20240223180402.090</guid>
+      <pubDate>Fri, 23 Feb 2024 18:11:27 +0000</pubDate>
+    </item>
+    <item>
+      <title>Kuling, gult niv&#xE5;, Fedje - M&#xE5;l&#xF8;y, 2024-02-24T06:00:00+00:00, 2024-02-24T14:00:00+00:00</title>
+      <description>Alert: Fra tidlig l&#xF8;rdag formiddag s&#xF8;rlig periodevis stiv kuling 15 m/s. L&#xF8;rdag ettermiddag minkende.</description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.20240223175956.023</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.20240223175956.023</guid>
+      <pubDate>Fri, 23 Feb 2024 18:03:15 +0000</pubDate>
+    </item>
+    <item>
+      <title>Storm, gult niv&#xE5;, R&#xF8;rvik - Sandnessj&#xF8;en, 2024-02-23T01:00:00+00:00, 2024-02-24T17:00:00+00:00</title>
+      <description>Update: I dag, fredag ettermiddag og kveld,  s&#xF8;r&#xF8;stlig stiv kuling 15 m/s, periodevis sterk kuling 20. Fra natt til l&#xF8;rdag s&#xF8;rvestlig sterk kuling 20, periodevis liten storm 22.  Fra l&#xF8;rdag ettermiddag minkende til s&#xF8;rlig stiv kuling 15. </description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.20240223154859.092</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.20240223154859.092</guid>
+      <pubDate>Fri, 23 Feb 2024 15:49:33 +0000</pubDate>
+    </item>
+    <item>
+      <title>Storm, gult niv&#xE5;, Bod&#xF8; - L&#xF8;dingen, 2024-02-23T09:00:00+00:00, 2024-02-24T17:00:00+00:00</title>
+      <description>Update: I dag, fredag ettermiddag og kveld s&#xF8;r&#xF8;st stiv kuling 15 m/s, periodevis sterk kuling 20. Fra l&#xF8;rdag morgen &#xF8;kning til s&#xF8;rvest sterk kuling 20, periodevis liten storm 22. Sent l&#xF8;rdag ettermiddag minkende. </description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.20240223154742.048</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.20240223154742.048</guid>
+      <pubDate>Fri, 23 Feb 2024 15:48:07 +0000</pubDate>
+    </item>
+    <item>
+      <title>Storm, gult niv&#xE5;, St&#xF8;tt - Bod&#xF8;, 2024-02-23T07:00:00+00:00, 2024-02-24T17:00:00+00:00</title>
+      <description>Update: i dag, fredag ettermiddag og kveld, s&#xF8;r&#xF8;st sterk kuling 20 m/s. Fra l&#xF8;rdag morgen s&#xF8;rvest periodevis liten storm 22.  L&#xF8;rdag ettermiddag minkende. </description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.20240223154702.020</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.20240223154702.020</guid>
+      <pubDate>Fri, 23 Feb 2024 15:47:32 +0000</pubDate>
+    </item>
+    <item>
+      <title>Storm, gult niv&#xE5;, Sandnessj&#xF8;en - St&#xF8;tt, 2024-02-23T06:00:00+00:00, 2024-02-24T17:00:00+00:00</title>
+      <description>Update: I dag, fredag ettermiddag s&#xF8;r&#xF8;st stiv kuling 15 m/s, periodevis sterk kuling. Fra sent natt til l&#xF8;rdag &#xF8;kning til s&#xF8;r og s&#xF8;rvest sterk kuling, periodevis liten storm 22. Fra l&#xF8;rdag ettermiddag gradvis minkende til s&#xF8;rlig stiv kuling og etterhvert minkende.  </description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.20240223150947.058</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.20240223150947.058</guid>
+      <pubDate>Fri, 23 Feb 2024 15:11:05 +0000</pubDate>
+    </item>
+    <item>
+      <title>Sn&#xF8;, gult niv&#xE5;, Deler av Hordaland og Sogn og Fjordane, 2024-02-23T09:00:00+00:00, 2024-02-24T03:00:00+00:00</title>
+      <description>Update: Fra fredag formiddag til tidlig l&#xF8;rdag er det ventet lokalt mye sn&#xF8;, 5 til 20 cm i perioden. Sn&#xF8;grensen vil ligger mellom 200 og 400m. Nedb&#xF8;raktiviteten er ventet &#xE5; avta natt til l&#xF8;rdag, f&#xF8;rst i s&#xF8;r.</description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.20240223142229.005</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.20240223142229.005</guid>
+      <pubDate>Fri, 23 Feb 2024 14:38:10 +0000</pubDate>
+    </item>
+    <item>
+      <title>Kuling, gult niv&#xE5;, Torsv&#xE5;g - Fruholmen, 2024-02-23T09:00:00+00:00, 2024-02-24T17:00:00+00:00</title>
+      <description>Update: I ettermiddag, fredag, s&#xF8;r&#xF8;st og s&#xF8;rlig stiv kuling 15 m/s. Fra i kveld periodevis sterk kuling 20. </description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.20240223135048.089</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.20240223135048.089</guid>
+      <pubDate>Fri, 23 Feb 2024 14:11:48 +0000</pubDate>
+    </item>
+    <item>
+      <title>Storm, gult niv&#xE5;, Skomv&#xE6;r - Torsv&#xE5;g, 2024-02-23T15:00:00+00:00, 2024-02-24T15:00:00+00:00</title>
+      <description>Alert: Fredag periodevis s&#xF8;r&#xF8;stelig stiv kuling, 15 m/s. Fra l&#xF8;rdag formiddag dreiene til s&#xF8;rvestlig sterk kuling 20, med periodevis liten storm  22.</description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.20240223105056.089</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.20240223105056.089</guid>
+      <pubDate>Fri, 23 Feb 2024 11:03:35 +0000</pubDate>
+    </item>
+    <item>
+      <title>Kuling, gult niv&#xE5;, Fruholmen - Vard&#xF8;, 2024-02-23T13:00:00+00:00, 2024-02-24T13:00:00+00:00</title>
+      <description>Alert: Fredag periodevis s&#xF8;rlig stiv kuling 15 m/s. Fra l&#xF8;rdag morgen opp i periodevis sterk kuling 20.</description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.20240223100820.016</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.20240223100820.016</guid>
+      <pubDate>Fri, 23 Feb 2024 10:50:48 +0000</pubDate>
+    </item>
+    <item>
+      <title>Sterk ising p&#xE5; skip, oransje niv&#xE5;, B2, 23 februar 21:00 UTC til 24 februar 12:00 UTC. </title>
+      <description>Alert: Utrygt for sterk ising.</description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.240223100000.0839_7_0</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.240223100000.0839_7_0</guid>
+      <pubDate>Fri, 23 Feb 2024 09:40:42 +0000</pubDate>
+    </item>
+    <item>
+      <title>Sterk ising p&#xE5; skip, oransje niv&#xE5;, C2, 23 februar 21:00 UTC til 24 februar 14:00 UTC. </title>
+      <description>Alert: Utrygt for sterk ising.</description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.240223100000.0845_7_0</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.240223100000.0845_7_0</guid>
+      <pubDate>Fri, 23 Feb 2024 09:40:42 +0000</pubDate>
+    </item>
+    <item>
+      <title>Kuling, D2, 23 februar 21:00 UTC til 24 februar 14:00 UTC. </title>
+      <description>Update: Nordlig sterk kuling 20 m/s.</description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.240223100000.0852_1_0</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.240223100000.0852_1_0</guid>
+      <pubDate>Fri, 23 Feb 2024 09:40:42 +0000</pubDate>
+    </item>
+    <item>
+      <title>Storm, F3, 23 februar 16:00 UTC til 24 februar 19:00 UTC. </title>
+      <description>Update: S&#xF8;rvest liten storm 22 m/s.</description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.240223100000.0861_1_0</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.240223100000.0861_1_0</guid>
+      <pubDate>Fri, 23 Feb 2024 09:40:42 +0000</pubDate>
+    </item>
+    <item>
+      <title>Storm, Dype D4, 24 februar 12:00 UTC til 24 februar 22:00 UTC. </title>
+      <description>Alert: S&#xF8;rlig liten storm 22 m/s.</description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.240223100000.4044_1_0</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.240223100000.4044_1_0</guid>
+      <pubDate>Fri, 23 Feb 2024 09:40:42 +0000</pubDate>
+    </item>
+    <item>
+      <title>Storm, Dype E4, 24 februar 09:00 UTC til 24 februar 21:00 UTC. </title>
+      <description>Update: S&#xF8;rlig liten storm 22 m/s.</description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.240223100000.4045_1_0</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.240223100000.4045_1_0</guid>
+      <pubDate>Fri, 23 Feb 2024 09:40:42 +0000</pubDate>
+    </item>
+    <item>
+      <title>Kuling, Storegga-Haltenbanken til 0-meridianen, 23 februar 20:00 UTC til 24 februar 10:00 UTC. </title>
+      <description>Update: S&#xF8;rvest sterk kuling 20 m/s.</description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.240223100000.7003_1_0</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.240223100000.7003_1_0</guid>
+      <pubDate>Fri, 23 Feb 2024 09:40:42 +0000</pubDate>
+    </item>
+    <item>
+      <title>Storm, Haltenbanken, 23 februar 16:00 UTC til 24 februar 12:00 UTC. </title>
+      <description>Update: S&#xF8;rvest full storm 25 m/s.</description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.240223100000.7004_1_0</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.240223100000.7004_1_0</guid>
+      <pubDate>Fri, 23 Feb 2024 09:40:42 +0000</pubDate>
+    </item>
+    <item>
+      <title>Storm, Fr&#xF8;yabanken, 23 februar 20:00 UTC til 24 februar 11:00 UTC. </title>
+      <description>Update: S&#xF8;rvest liten storm 22 m/s.</description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.240223100000.7005_1_0</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.240223100000.7005_1_0</guid>
+      <pubDate>Fri, 23 Feb 2024 09:40:42 +0000</pubDate>
+    </item>
+    <item>
+      <title>Storm, Storegga, 23 februar 18:00 UTC til 24 februar 08:00 UTC. </title>
+      <description>Update: Vestlig liten storm 22 m/s.</description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.240223100000.7006_1_0</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.240223100000.7006_1_0</guid>
+      <pubDate>Fri, 23 Feb 2024 09:40:42 +0000</pubDate>
+    </item>
+    <item>
+      <title>Storm, Ytre Vestfjorden, 24 februar 04:00 UTC til 24 februar 22:00 UTC. </title>
+      <description>Update: S&#xF8;rlig liten storm 22 m/s.</description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.240223100000.7016_1_0</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.240223100000.7016_1_0</guid>
+      <pubDate>Fri, 23 Feb 2024 09:40:42 +0000</pubDate>
+    </item>
+    <item>
+      <title>Storm, Sklinnabanken, 23 februar 16:00 UTC til 24 februar 17:00 UTC. </title>
+      <description>Update: S&#xF8;rvest liten storm 22 m/s.</description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.240223100000.7063_1_0</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.240223100000.7063_1_0</guid>
+      <pubDate>Fri, 23 Feb 2024 09:40:42 +0000</pubDate>
+    </item>
+    <item>
+      <title>Storm, Tr&#xE6;nabanken, 23 februar 18:00 UTC til 24 februar 21:00 UTC. </title>
+      <description>Update: S&#xF8;rlig liten storm 22 m/s.</description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.240223100000.7076_1_0</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.240223100000.7076_1_0</guid>
+      <pubDate>Fri, 23 Feb 2024 09:40:42 +0000</pubDate>
+    </item>
+    <item>
+      <title>Storm, R&#xF8;stbanken, 24 februar 03:00 UTC til 24 februar 21:00 UTC. </title>
+      <description>Update: S&#xF8;rvest liten storm 22 m/s.</description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.240223100000.7077_1_0</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.240223100000.7077_1_0</guid>
+      <pubDate>Fri, 23 Feb 2024 09:40:42 +0000</pubDate>
+    </item>
+    <item>
+      <title>Storm, Vester&#xE5;lsbankene, 24 februar 07:00 UTC til 24 februar 21:00 UTC. </title>
+      <description>Update: S&#xF8;rlig liten storm 22 m/s.</description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.240223100000.7078_1_0</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.240223100000.7078_1_0</guid>
+      <pubDate>Fri, 23 Feb 2024 09:40:42 +0000</pubDate>
+    </item>
+    <item>
+      <title>Storm, Bankene utenfor Troms, 24 februar 09:00 UTC til 24 februar 22:00 UTC. </title>
+      <description>Alert: S&#xF8;rlig liten storm 22 m/s.</description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.240223100000.7079_1_0</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.240223100000.7079_1_0</guid>
+      <pubDate>Fri, 23 Feb 2024 09:40:42 +0000</pubDate>
+    </item>
+    <item>
+      <title>Storm, Troms&#xF8;flaket, 24 februar 04:00 UTC til 24 februar 22:00 UTC. </title>
+      <description>Alert: S&#xF8;rlig liten storm 22 m/s.</description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.240223100000.7080_1_0</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.240223100000.7080_1_0</guid>
+      <pubDate>Fri, 23 Feb 2024 09:40:42 +0000</pubDate>
+    </item>
+    <item>
+      <title>Kuling, Hjelms&#xF8;ybanken, 24 februar 06:00 UTC til 24 februar 09:00 UTC. </title>
+      <description>Alert: S&#xF8;rlig sterk kuling 20 m/s.</description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.240223100000.7081_1_0</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.240223100000.7081_1_0</guid>
+      <pubDate>Fri, 23 Feb 2024 09:40:42 +0000</pubDate>
+    </item>
+    <item>
+      <title>Kuling, Nordkappbanken, 24 februar 09:00 UTC til 24 februar 18:00 UTC. </title>
+      <description>Alert: S&#xF8;rvest sterk kuling 20 m/s.</description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.240223100000.7082_1_0</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.240223100000.7082_1_0</guid>
+      <pubDate>Fri, 23 Feb 2024 09:40:42 +0000</pubDate>
+    </item>
+    <item>
+      <title>Kraftig sn&#xF8;fokk, gult niv&#xE5;, Fjelloverganger i Nord-Troms og Finnmark, 2024-02-24T04:00:00+00:00, 2024-02-24T23:00:00+00:00</title>
+      <description>Alert: Det ventes lokal sn&#xF8;fokk i fjellet p&#xE5; grunn av kraftig vind fra s&#xF8;r.  </description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.20240223090058.034</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.20240223090058.034</guid>
+      <pubDate>Fri, 23 Feb 2024 09:34:02 +0000</pubDate>
+    </item>
+    <item>
+      <title>Kraftig sn&#xF8;fokk, gult niv&#xE5;, Fjelloverganger i Nordland, 2024-02-23T20:00:00+00:00, 2024-02-24T23:00:00+00:00</title>
+      <description>Alert: Det ventes lokal sn&#xF8;fokk i fjellet p&#xE5; grunn av kraftig vind fra s&#xF8;r&#xF8;st, l&#xF8;rdag morgen dreining til s&#xF8;rlig vind.</description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.20240223080748.011</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.20240223080748.011</guid>
+      <pubDate>Fri, 23 Feb 2024 08:57:05 +0000</pubDate>
+    </item>
+    <item>
+      <title>Kraftige vindkast, gult niv&#xE5;, Lofoten, 2024-02-24T08:00:00+00:00, 2024-02-24T21:00:00+00:00</title>
+      <description>Alert: L&#xF8;rdag morgen er det ventet lokalt kraftige vindkast p&#xE5; 28-33 m/s fra s&#xF8;r. Vinden vil minke sent l&#xF8;rdag kveld. </description>
+      <link>https://api.met.no/weatherapi/metalerts/1.1/?cap=2.49.0.1.578.0.20240223080235.087</link>
+      <author>post@met.no (The Norwegian Meteorological Institute)</author>
+      <category>Met</category>
+      <guid>2.49.0.1.578.0.20240223080235.087</guid>
+      <pubDate>Fri, 23 Feb 2024 08:50:36 +0000</pubDate>
     </item>
   </channel>
 </rss>
