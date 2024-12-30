@@ -268,6 +268,11 @@ class FeedParserSensor(SensorEntity):
             if images:
                 # pick the first image found
                 return images[0]
+        elif "enclosure" in feed_entry and feed_entry["enclosure"]:
+            enc = feed_entry["enclosure"] if feed_entry["enclosure"].type.startswith("image/") else None
+            if enc and "url" in enc:
+                return enc["url"]
+
         _LOGGER.debug(
             "Feed %s: Image is in inclusions, but no image was found for %s",
             self.name,
