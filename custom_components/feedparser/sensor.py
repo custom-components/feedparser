@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import asyncio
+import hashlib
 import re
 from datetime import timedelta
 
@@ -149,3 +150,8 @@ class FeedParserSensor(SensorEntity):
     @property
     def extra_state_attributes(self):
         return {"entries": self._entries}
+
+    @property
+    def unique_id(self) -> str:
+        """Return a unique ID for the sensor."""
+        return f"feedparser_{hashlib.sha1(self._feed.encode()).hexdigest()}"
