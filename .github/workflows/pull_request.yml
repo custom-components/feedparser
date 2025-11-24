@@ -16,7 +16,7 @@ jobs:
         run: sudo apt -y install libxml2-utils
 
       - name: Checkout Repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Set Up Python-${{ matrix.python-version }}
         uses: actions/setup-python@v5
