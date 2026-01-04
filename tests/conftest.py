@@ -1,5 +1,7 @@
 """Pytest configuration."""
 
+from unittest.mock import AsyncMock, MagicMock
+
 import pytest
 from constants import TEST_FEEDS
 from feedsource import FeedSource
@@ -40,9 +42,17 @@ def feed(request: pytest.FixtureRequest) -> FeedSource:
 
 
 @pytest.fixture()
-def feed_sensor(feed: FeedSource) -> FeedParserSensor:
+def mock_hass() -> MagicMock:
+    """Return a mock Home Assistant instance."""
+    hass = MagicMock()
+    hass.async_add_executor_job = AsyncMock()
+    return hass
+
+
+@pytest.fixture()
+def feed_sensor(feed: FeedSource, mock_hass: MagicMock) -> FeedParserSensor:
     """Return feed sensor initialized with the local RSS feed."""
-    return FeedParserSensor(**feed.sensor_config_local_feed)
+    return FeedParserSensor(hass=mock_hass, **feed.sensor_config_local_feed)
 
 
 @pytest.fixture()

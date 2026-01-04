@@ -4,6 +4,7 @@ import re
 from contextlib import nullcontext, suppress
 from datetime import UTC, datetime
 from typing import TYPE_CHECKING
+from unittest.mock import MagicMock
 
 import feedparser
 import pytest
@@ -21,15 +22,19 @@ if TYPE_CHECKING:
     import time
 
 
-def test_simple(feed_sensor: FeedParserSensor) -> None:
+@pytest.mark.asyncio
+async def test_simple(feed_sensor: FeedParserSensor) -> None:
     """Test simple."""
-    feed_sensor.update()
+    await feed_sensor.async_update()
     assert feed_sensor.feed_entries
 
 
-def test_update_sensor(feed: FeedSource) -> None:
+@pytest.mark.asyncio
+async def test_update_sensor(feed: FeedSource, mock_hass: MagicMock) -> None:
     """Test instantiate sensor."""
+
     feed_sensor = FeedParserSensor(
+        hass=mock_hass,
         feed=feed.path.absolute().as_uri(),
         name=feed.name,
         date_format=feed.sensor_config.date_format,
@@ -38,9 +43,9 @@ def test_update_sensor(feed: FeedSource) -> None:
         remove_summary_image=feed.sensor_config.remove_summary_image,
         inclusions=feed.sensor_config.inclusions,
         exclusions=feed.sensor_config.exclusions,
-        scan_interval=feed.sensor_config.scan_interval,
+        scan_interval=feed.sensor_config.scan_interval_timedelta,
     )
-    feed_sensor.update()
+    await feed_sensor.async_update()
     assert feed_sensor.feed_entries
 
     # assert that the sensor value is equal to the number of entries
@@ -91,10 +96,13 @@ def test_update_sensor(feed: FeedSource) -> None:
         ), "Duplicate images found"
 
 
-def test_update_sensor_with_topn(feed: FeedSource) -> None:
+@pytest.mark.asyncio
+async def test_update_sensor_with_topn(feed: FeedSource, mock_hass: MagicMock) -> None:
     """Test that the sensor stores only the topn entries."""
+
     show_topn = 1
     feed_sensor = FeedParserSensor(
+        hass=mock_hass,
         feed=feed.path.absolute().as_uri(),
         name=feed.name,
         date_format=DATE_FORMAT,
@@ -105,7 +113,7 @@ def test_update_sensor_with_topn(feed: FeedSource) -> None:
         exclusions=[],
         scan_interval=DEFAULT_SCAN_INTERVAL,
     )
-    feed_sensor.update()
+    await feed_sensor.async_update()
     assert feed_sensor.feed_entries
 
     # assert that the sensor value is equal to the number of
@@ -118,14 +126,15 @@ def test_update_sensor_with_topn(feed: FeedSource) -> None:
     [True, False],
     ids=["local_time", "default_time"],
 )
-def test_update_sensor_entries_time(
+@pytest.mark.asyncio
+async def test_update_sensor_entries_time(
     feed: FeedSource,
     feed_sensor: FeedParserSensor,
     local_time: bool,
 ) -> None:
     """Test that the sensor converts the published date to local time."""
     feed_sensor.local_time = local_time
-    feed_sensor.update()
+    await feed_sensor.async_update()
     assert feed_sensor.feed_entries
 
     # load the feed with feedparser
@@ -154,12 +163,13 @@ def test_update_sensor_entries_time(
     assert first_entry_time == first_sensor_entry_time
 
 
-def test_check_duplicates(feed_sensor: FeedParserSensor) -> None:
+@pytest.mark.asyncio
+async def test_check_duplicates(feed_sensor: FeedParserSensor) -> None:
     """Test that the sensor stores only unique entries."""
-    feed_sensor.update()
+    await feed_sensor.async_update()
     assert feed_sensor.extra_state_attributes["entries"]
     after_first_update = len(feed_sensor.feed_entries)
-    feed_sensor.update()
+    await feed_sensor.async_update()
     after_second_update = len(feed_sensor.feed_entries)
     assert after_first_update == after_second_update
 
@@ -169,9 +179,15 @@ def test_check_duplicates(feed_sensor: FeedParserSensor) -> None:
     URLS_HEADERS_REQUIRED,
     ids=lambda feed_url: feed_url["name"],
 )
-def test_fetch_data_headers_required(online_feed: dict) -> None:
+@pytest.mark.asyncio
+async def test_fetch_data_headers_required(
+    online_feed: dict,
+    mock_hass: MagicMock,
+) -> None:
     """Test fetching feed from remote server that requires request with headers."""
+
     feed_sensor = FeedParserSensor(
+        hass=mock_hass,
         feed=online_feed["url"],
         name=online_feed["name"],
         date_format=DATE_FORMAT,
@@ -182,19 +198,23 @@ def test_fetch_data_headers_required(online_feed: dict) -> None:
         exclusions=[],
         scan_interval=DEFAULT_SCAN_INTERVAL,
     )
-    feed_sensor.update()
+    await feed_sensor.async_update()
     assert feed_sensor.feed_entries
 
 
-def test_remove_summary_image(
+@pytest.mark.asyncio
+async def test_remove_summary_image(
     feed_with_image_in_summary: FeedSource,
+    mock_hass: MagicMock,
 ) -> None:
     """Test that the sensor removes the image from the summary."""
+
     feed = feed_with_image_in_summary
     feed_sensor = FeedParserSensor(
+        hass=mock_hass,
         **feed.sensor_config_local_feed | {"remove_summary_image": False},
     )
-    feed_sensor.update()
+    await feed_sensor.async_update()
     assert feed_sensor.feed_entries
 
     # assert that the sensor does not remove the image from the summary
@@ -204,22 +224,26 @@ def test_remove_summary_image(
     )
 
     feed_sensor = FeedParserSensor(
+        hass=mock_hass,
         **feed.sensor_config_local_feed | {"remove_summary_image": True},
     )
-    feed_sensor.update()
+    await feed_sensor.async_update()
     assert feed_sensor.feed_entries
 
     with nullcontext() if feed.all_entries_have_summary else suppress(KeyError):
         assert all("img" not in e["summary"] for e in feed_sensor.feed_entries)
 
 
-def test_image_not_in_entries(feed: FeedSource) -> None:
+@pytest.mark.asyncio
+async def test_image_not_in_entries(feed: FeedSource, mock_hass: MagicMock) -> None:
     """Test that the sensor does not include the image in any feed entry."""
+
     # keep only the title in the inclusions
     feed_sensor = FeedParserSensor(
+        hass=mock_hass,
         **feed.sensor_config_local_feed | {"inclusions": ["title"]},
     )
-    feed_sensor.update()
+    await feed_sensor.async_update()
     assert feed_sensor.feed_entries
     # assert that the sensor does not include the image in its feed entries
     assert all("image" not in e for e in feed_sensor.feed_entries)
