@@ -11,9 +11,7 @@ import voluptuous as vol
 from homeassistant.config_entries import (
     ConfigEntry,
     ConfigFlow,
-    ConfigFlowResult,
     OptionsFlow,
-    OptionsFlowWithReload,
 )
 from homeassistant.const import CONF_NAME
 from requests_file import FileAdapter
@@ -175,7 +173,7 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
     async def async_step_user(
         self,
         user_input: Mapping[str, object] | None = None,
-    ) -> ConfigFlowResult:
+    ) -> object:
         """Handle the initial step."""
         errors: dict[str, str] = {}
 
@@ -247,8 +245,10 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
         response.raise_for_status()
 
 
-class FeedparserOptionsFlow(OptionsFlowWithReload):
+class FeedparserOptionsFlow(OptionsFlow):
     """Handle options for Feedparser."""
+
+    automatic_reload = True
 
     def __init__(self, config_entry: ConfigEntry) -> None:
         """Initialize options flow."""
@@ -257,7 +257,7 @@ class FeedparserOptionsFlow(OptionsFlowWithReload):
     async def async_step_init(
         self,
         user_input: Mapping[str, object] | None = None,
-    ) -> ConfigFlowResult:
+    ) -> object:
         """Manage Feedparser options."""
         if user_input is not None:
             options = {

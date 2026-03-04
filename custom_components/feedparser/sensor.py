@@ -78,6 +78,13 @@ class ParsedFeed(Protocol):
     entries: list[Mapping[str, object]]
 
 
+class FeedparserEntityPlatform(Protocol):
+    """Protocol for entity platform poll interval fields used by this integration."""
+
+    scan_interval: timedelta
+    scan_interval_seconds: float
+
+
 def _scan_interval_to_timedelta(value: object) -> timedelta:
     """Convert stored scan interval values to timedelta."""
     if isinstance(value, timedelta):
@@ -130,7 +137,7 @@ async def async_setup_entry(
         data.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
     )
 
-    current_platform = async_get_current_platform()
+    current_platform = cast("FeedparserEntityPlatform", async_get_current_platform())
     current_platform.scan_interval = scan_interval
     current_platform.scan_interval_seconds = scan_interval.total_seconds()
 
@@ -188,7 +195,7 @@ class FeedParserSensor(SensorEntity):
         self._exclusions = exclusions
         self._scan_interval = scan_interval
         self._local_time = local_time
-        self._entries: list[dict[str, str]] = []
+        self._entries: list[dict[str, object]] = []
         self._attr_extra_state_attributes = {"entries": self._entries}
         self._attr_attribution = "Data retrieved using RSS feedparser"
         _LOGGER.debug("Feed %s: FeedParserSensor initialized - %s", self.name, self)
@@ -247,7 +254,7 @@ class FeedParserSensor(SensorEntity):
     def _generate_entries(
         self: FeedParserSensor,
         parsed_feed: ParsedFeed,
-    ) -> list[dict[str, str]]:
+    ) -> list[dict[str, object]]:
         return [
             self._generate_sensor_entry(feed_entry)
             for feed_entry in parsed_feed.entries[
@@ -258,9 +265,9 @@ class FeedParserSensor(SensorEntity):
     def _generate_sensor_entry(
         self: FeedParserSensor,
         feed_entry: Mapping[str, object],
-    ) -> dict[str, str]:
+    ) -> dict[str, object]:
         _LOGGER.debug("Feed %s: Generating sensor entry for %s", self.name, feed_entry)
-        sensor_entry = {}
+        sensor_entry: dict[str, object] = {}
         for key, value in feed_entry.items():
             if not isinstance(key, str):
                 continue
@@ -291,11 +298,13 @@ class FeedParserSensor(SensorEntity):
         ):
             sensor_entry["link"] = processed_link
         if self._remove_summary_image and "summary" in sensor_entry:
-            sensor_entry["summary"] = re.sub(
-                IMAGE_REGEX,
-                "",
-                sensor_entry["summary"],
-            )
+            summary = sensor_entry.get("summary")
+            if isinstance(summary, str):
+                sensor_entry["summary"] = re.sub(
+                    IMAGE_REGEX,
+                    "",
+                    summary,
+                )
         _LOGGER.debug("Feed %s: Generated sensor entry: %s", self.name, sensor_entry)
         return sensor_entry
 
@@ -384,7 +393,7 @@ class FeedParserSensor(SensorEntity):
         return ""
 
     @property
-    def feed_entries(self: FeedParserSensor) -> list[dict[str, str]]:
+    def feed_entries(self: FeedParserSensor) -> list[dict[str, object]]:
         """Return feed entries."""
         if hasattr(self, "_entries"):
             return self._entries
