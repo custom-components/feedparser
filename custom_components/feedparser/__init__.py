@@ -5,6 +5,8 @@ from __future__ import annotations
 from datetime import timedelta
 from typing import TYPE_CHECKING
 
+import homeassistant.helpers.config_validation as cv
+
 from .const import (
     CONF_DATE_FORMAT,
     CONF_EXCLUSIONS,
@@ -18,6 +20,7 @@ from .const import (
     DEFAULT_REMOVE_SUMMARY_IMAGE,
     DEFAULT_SCAN_INTERVAL,
     DEFAULT_TOPN,
+    DOMAIN,
     ENTRY_VERSION,
     OPTION_KEYS,
     PLATFORMS,
@@ -26,6 +29,9 @@ from .const import (
 if TYPE_CHECKING:
     from homeassistant.config_entries import ConfigEntry
     from homeassistant.core import HomeAssistant
+
+
+CONFIG_SCHEMA = cv.platform_only_config_schema(DOMAIN)
 
 
 def _normalize_list(value: object) -> list[str]:
