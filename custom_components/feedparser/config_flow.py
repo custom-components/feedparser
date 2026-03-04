@@ -4,13 +4,14 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from datetime import timedelta
-from typing import Any
+from typing import Any, cast
 
 import requests
 import voluptuous as vol
 from homeassistant.config_entries import (
     ConfigEntry,
     ConfigFlow,
+    FlowResult,
     OptionsFlow,
 )
 from homeassistant.const import CONF_NAME
@@ -173,7 +174,7 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
     async def async_step_user(
         self,
         user_input: Mapping[str, object] | None = None,
-    ) -> object:
+    ) -> FlowResult:
         """Handle the initial step."""
         errors: dict[str, str] = {}
 
@@ -220,20 +221,26 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
                                 str(user_input[CONF_EXCLUSIONS]).strip(),
                             ),
                         }
-                        return self.async_create_entry(
-                            title=data[CONF_NAME],
-                            data=data,
-                            options=options,
+                        return cast(
+                            "FlowResult",
+                            self.async_create_entry(
+                                title=data[CONF_NAME],
+                                data=data,
+                                options=options,
+                            ),
                         )
 
         data_schema = _schema_with_defaults(
             include_feed_identity=True,
         )
 
-        return self.async_show_form(
-            step_id="user",
-            data_schema=data_schema,
-            errors=errors,
+        return cast(
+            "FlowResult",
+            self.async_show_form(
+                step_id="user",
+                data_schema=data_schema,
+                errors=errors,
+            ),
         )
 
     @staticmethod
@@ -257,7 +264,7 @@ class FeedparserOptionsFlow(OptionsFlow):
     async def async_step_init(
         self,
         user_input: Mapping[str, object] | None = None,
-    ) -> object:
+    ) -> FlowResult:
         """Manage Feedparser options."""
         if user_input is not None:
             options = {
@@ -269,7 +276,7 @@ class FeedparserOptionsFlow(OptionsFlow):
                 CONF_INCLUSIONS: _split_csv(str(user_input[CONF_INCLUSIONS]).strip()),
                 CONF_EXCLUSIONS: _split_csv(str(user_input[CONF_EXCLUSIONS]).strip()),
             }
-            return self.async_create_entry(title="", data=options)
+            return cast("FlowResult", self.async_create_entry(title="", data=options))
 
         merged = {**self._config_entry.data, **self._config_entry.options}
         data_schema = _schema_with_defaults(
@@ -289,4 +296,7 @@ class FeedparserOptionsFlow(OptionsFlow):
             inclusions=_join_csv(merged.get(CONF_INCLUSIONS, [])),
             exclusions=_join_csv(merged.get(CONF_EXCLUSIONS, [])),
         )
-        return self.async_show_form(step_id="init", data_schema=data_schema)
+        return cast(
+            "FlowResult",
+            self.async_show_form(step_id="init", data_schema=data_schema),
+        )
