@@ -1,46 +1,54 @@
 """Feedparser sensor."""
+
 from __future__ import annotations
 
 import email.utils
 import logging
 import re
+from collections.abc import Mapping
 from datetime import datetime, timedelta, timezone
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Protocol, cast
 
 import feedparser  # type: ignore[import]
 import homeassistant.helpers.config_validation as cv
 import requests
 import voluptuous as vol
 from dateutil import parser
-from feedparser import FeedParserDict
 from homeassistant.components.sensor import PLATFORM_SCHEMA, SensorEntity
-from homeassistant.const import CONF_NAME, CONF_SCAN_INTERVAL
+from homeassistant.const import CONF_NAME
+from homeassistant.helpers.entity_platform import async_get_current_platform
 from homeassistant.util import dt
 from requests_file import FileAdapter
 
+from .const import (
+    CONF_DATE_FORMAT,
+    CONF_EXCLUSIONS,
+    CONF_FEED_URL,
+    CONF_INCLUSIONS,
+    CONF_LOCAL_TIME,
+    CONF_REMOVE_SUMMARY_IMAGE,
+    CONF_SCAN_INTERVAL,
+    CONF_SHOW_TOPN,
+    DEFAULT_DATE_FORMAT,
+    DEFAULT_LOCAL_TIME,
+    DEFAULT_REMOVE_SUMMARY_IMAGE,
+    DEFAULT_SCAN_INTERVAL,
+    DEFAULT_TOPN,
+)
+
 if TYPE_CHECKING:
+    from homeassistant.config_entries import ConfigEntry
     from homeassistant.core import HomeAssistant
     from homeassistant.helpers.entity_platform import AddEntitiesCallback
     from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
-__version__ = "0.1.11"
+__version__ = "1.0.0"
 
 COMPONENT_REPO = "https://github.com/custom-components/feedparser/"
 
 REQUIREMENTS = ["feedparser"]
 
-CONF_FEED_URL = "feed_url"
-CONF_DATE_FORMAT = "date_format"
-CONF_LOCAL_TIME = "local_time"
-CONF_INCLUSIONS = "inclusions"
-CONF_EXCLUSIONS = "exclusions"
-CONF_SHOW_TOPN = "show_topn"
-CONF_REMOVE_SUMMARY_IMG = "remove_summary_image"
-
-DEFAULT_DATE_FORMAT = "%a, %b %d %I:%M %p"
-DEFAULT_SCAN_INTERVAL = timedelta(hours=1)
 DEFAULT_THUMBNAIL = "https://www.home-assistant.io/images/favicon-192x192-full.png"
-DEFAULT_TOPN = 9999
 USER_AGENT = f"Home Assistant Feed-parser Integration {__version__}"
 IMAGE_REGEX = r"<img.+?src=\"(.+?)\".+?>"
 
@@ -49,9 +57,12 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
         vol.Required(CONF_NAME): cv.string,
         vol.Required(CONF_FEED_URL): cv.string,
         vol.Required(CONF_DATE_FORMAT, default=DEFAULT_DATE_FORMAT): cv.string,
-        vol.Optional(CONF_LOCAL_TIME, default=False): cv.boolean,
+        vol.Optional(CONF_LOCAL_TIME, default=DEFAULT_LOCAL_TIME): cv.boolean,
         vol.Optional(CONF_SHOW_TOPN, default=DEFAULT_TOPN): cv.positive_int,
-        vol.Optional(CONF_REMOVE_SUMMARY_IMG, default=False): cv.boolean,
+        vol.Optional(
+            CONF_REMOVE_SUMMARY_IMAGE,
+            default=DEFAULT_REMOVE_SUMMARY_IMAGE,
+        ): cv.boolean,
         vol.Optional(CONF_INCLUSIONS, default=[]): vol.All(cv.ensure_list, [cv.string]),
         vol.Optional(CONF_EXCLUSIONS, default=[]): vol.All(cv.ensure_list, [cv.string]),
         vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): cv.time_period,
@@ -59,6 +70,28 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 )
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
+
+
+class ParsedFeed(Protocol):
+    """Protocol for parsed feed object."""
+
+    entries: list[Mapping[str, object]]
+
+
+def _scan_interval_to_timedelta(value: object) -> timedelta:
+    """Convert stored scan interval values to timedelta."""
+    if isinstance(value, timedelta):
+        return value
+
+    if isinstance(value, Mapping):
+        raw_hours = value.get("hours")
+        raw_minutes = value.get("minutes")
+        hours = raw_hours if isinstance(raw_hours, int) else 0
+        minutes = raw_minutes if isinstance(raw_minutes, int) else 0
+        total_minutes = max(1, (hours * 60) + minutes)
+        return timedelta(minutes=total_minutes)
+
+    return DEFAULT_SCAN_INTERVAL
 
 
 async def async_setup_platform(
@@ -75,11 +108,48 @@ async def async_setup_platform(
                 name=config[CONF_NAME],
                 date_format=config[CONF_DATE_FORMAT],
                 show_topn=config[CONF_SHOW_TOPN],
-                remove_summary_image=config[CONF_REMOVE_SUMMARY_IMG],
+                remove_summary_image=config[CONF_REMOVE_SUMMARY_IMAGE],
                 inclusions=config[CONF_INCLUSIONS],
                 exclusions=config[CONF_EXCLUSIONS],
                 scan_interval=config[CONF_SCAN_INTERVAL],
                 local_time=config[CONF_LOCAL_TIME],
+            ),
+        ],
+        update_before_add=True,
+    )
+
+
+async def async_setup_entry(
+    hass: HomeAssistant,  # noqa: ARG001
+    entry: ConfigEntry,
+    async_add_entities: AddEntitiesCallback,
+) -> None:
+    """Set up Feedparser sensor from a config entry."""
+    data = {**entry.data, **entry.options}
+    scan_interval = _scan_interval_to_timedelta(
+        data.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
+    )
+
+    current_platform = async_get_current_platform()
+    current_platform.scan_interval = scan_interval
+    current_platform.scan_interval_seconds = scan_interval.total_seconds()
+
+    async_add_entities(
+        [
+            FeedParserSensor(
+                feed=data[CONF_FEED_URL],
+                name=data[CONF_NAME],
+                date_format=data.get(CONF_DATE_FORMAT, DEFAULT_DATE_FORMAT),
+                show_topn=data.get(CONF_SHOW_TOPN, DEFAULT_TOPN),
+                remove_summary_image=data.get(
+                    CONF_REMOVE_SUMMARY_IMAGE,
+                    DEFAULT_REMOVE_SUMMARY_IMAGE,
+                ),
+                inclusions=data.get(CONF_INCLUSIONS, []),
+                exclusions=data.get(CONF_EXCLUSIONS, []),
+                scan_interval=scan_interval,
+                local_time=data.get(CONF_LOCAL_TIME, DEFAULT_LOCAL_TIME),
+                unique_id=entry.entry_id,
             ),
         ],
         update_before_add=True,
@@ -104,10 +174,12 @@ class FeedParserSensor(SensorEntity):
         inclusions: list[str | None],
         scan_interval: timedelta,
         local_time: bool,
+        unique_id: str | None = None,
     ) -> None:
         """Initialize the Feedparser sensor."""
         self._feed = feed
         self._attr_name = name
+        self._attr_unique_id = unique_id
         self._attr_icon = "mdi:rss"
         self._date_format = date_format
         self._show_topn: int = show_topn
@@ -120,6 +192,11 @@ class FeedParserSensor(SensorEntity):
         self._attr_extra_state_attributes = {"entries": self._entries}
         self._attr_attribution = "Data retrieved using RSS feedparser"
         _LOGGER.debug("Feed %s: FeedParserSensor initialized - %s", self.name, self)
+
+    @property
+    def scan_interval(self: FeedParserSensor) -> timedelta:
+        """Return polling interval."""
+        return self._scan_interval
 
     def __repr__(self: FeedParserSensor) -> str:
         """Return the representation."""
@@ -140,7 +217,7 @@ class FeedParserSensor(SensorEntity):
         s.headers.update({"User-Agent": USER_AGENT})
         res: requests.Response = s.get(self._feed)
         res.raise_for_status()
-        parsed_feed: FeedParserDict = feedparser.parse(res.text)
+        parsed_feed = cast("ParsedFeed", feedparser.parse(res.text))
 
         if not parsed_feed.entries:
             self._attr_native_value = None
@@ -169,7 +246,7 @@ class FeedParserSensor(SensorEntity):
 
     def _generate_entries(
         self: FeedParserSensor,
-        parsed_feed: FeedParserDict,
+        parsed_feed: ParsedFeed,
     ) -> list[dict[str, str]]:
         return [
             self._generate_sensor_entry(feed_entry)
@@ -180,11 +257,13 @@ class FeedParserSensor(SensorEntity):
 
     def _generate_sensor_entry(
         self: FeedParserSensor,
-        feed_entry: FeedParserDict,
+        feed_entry: Mapping[str, object],
     ) -> dict[str, str]:
         _LOGGER.debug("Feed %s: Generating sensor entry for %s", self.name, feed_entry)
         sensor_entry = {}
         for key, value in feed_entry.items():
+            if not isinstance(key, str):
+                continue
             if (
                 (self._inclusions and key not in self._inclusions)
                 or ("parsed" in key)
@@ -192,10 +271,14 @@ class FeedParserSensor(SensorEntity):
             ):
                 continue
             if key in ["published", "updated", "created", "expired"]:
-                parsed_date: datetime = self._parse_date(value)
-                sensor_entry[key] = parsed_date.strftime(self._date_format)
+                if isinstance(value, str):
+                    parsed_date: datetime = self._parse_date(value)
+                    sensor_entry[key] = parsed_date.strftime(self._date_format)
             elif key == "image":
-                sensor_entry["image"] = value.get("href")
+                if isinstance(value, Mapping):
+                    href = value.get("href")
+                    if isinstance(href, str):
+                        sensor_entry["image"] = href
             else:
                 sensor_entry[key] = value
 
@@ -252,18 +335,26 @@ class FeedParserSensor(SensorEntity):
         _LOGGER.debug("Feed %s: Parsed date: %s", self.name, parsed_time)
         return parsed_time
 
-    def _process_image(self: FeedParserSensor, feed_entry: FeedParserDict) -> str:
-        if feed_entry.get("enclosures"):
-            images = [
-                enc for enc in feed_entry["enclosures"] if enc.type.startswith("image/")
-            ]
-            if images:
-                # pick the first image found
-                return images[0]["href"]
-        elif "summary" in feed_entry:
+    def _process_image(self: FeedParserSensor, feed_entry: Mapping[str, object]) -> str:
+        enclosures = feed_entry.get("enclosures")
+        if isinstance(enclosures, list):
+            for enclosure in enclosures:
+                if not isinstance(enclosure, dict):
+                    continue
+                enclosure_type = enclosure.get("type")
+                href = enclosure.get("href")
+                if (
+                    isinstance(enclosure_type, str)
+                    and enclosure_type.startswith("image/")
+                    and isinstance(href, str)
+                ):
+                    return href
+
+        summary = feed_entry.get("summary")
+        if isinstance(summary, str):
             images = re.findall(
                 IMAGE_REGEX,
-                feed_entry["summary"],
+                summary,
             )
             if images:
                 # pick the first image found
@@ -275,16 +366,21 @@ class FeedParserSensor(SensorEntity):
         )
         return DEFAULT_THUMBNAIL  # use default image if no image found
 
-    def _process_link(self: FeedParserSensor, feed_entry: FeedParserDict) -> str:
+    def _process_link(self: FeedParserSensor, feed_entry: Mapping[str, object]) -> str:
         """Return link from feed entry."""
-        if "links" in feed_entry:
-            if len(feed_entry["links"]) > 1:
+        links = feed_entry.get("links")
+        if isinstance(links, list) and links:
+            if len(links) > 1:
                 _LOGGER.debug(
                     "Feed %s: More than one link found for %s. Using the first link.",
                     self.name,
                     feed_entry,
                 )
-            return feed_entry["links"][0]["href"]
+            first_link = links[0]
+            if isinstance(first_link, dict):
+                href = first_link.get("href")
+                if isinstance(href, str):
+                    return href
         return ""
 
     @property

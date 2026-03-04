@@ -1,4 +1,4 @@
-""""Tests the feedparser sensor."""
+""" "Tests the feedparser sensor."""
 
 import re
 from contextlib import nullcontext, suppress

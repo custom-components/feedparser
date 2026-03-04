@@ -1,0 +1,48 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Feedparser",
+        "description": "Create a sensor from an RSS/Atom feed.",
+        "data": {
+          "name": "Name",
+          "feed_url": "Feed URL",
+          "date_format": "Date format",
+          "local_time": "Convert dates to local time",
+          "scan_interval_hours": "Scan interval hours",
+          "scan_interval_minutes": "Scan interval minutes",
+          "show_topn": "Number of entries",
+          "remove_summary_image": "Remove image tags from summary",
+          "inclusions": "Included fields (comma-separated)",
+          "exclusions": "Excluded fields (comma-separated)"
+        }
+      }
+    },
+    "error": {
+      "already_configured": "This feed is already configured.",
+      "cannot_connect": "Failed to download the feed.",
+      "invalid_url": "URL is invalid."
+    },
+    "abort": {
+      "already_configured": "This feed is already configured."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Feedparser options",
+        "description": "Update feed parsing behavior.",
+        "data": {
+          "date_format": "Date format",
+          "local_time": "Convert dates to local time",
+          "scan_interval_hours": "Scan interval hours",
+          "scan_interval_minutes": "Scan interval minutes",
+          "show_topn": "Number of entries",
+          "remove_summary_image": "Remove image tags from summary",
+          "inclusions": "Included fields (comma-separated)",
+          "exclusions": "Excluded fields (comma-separated)"
+        }
+      }
+    }
+  }
+}

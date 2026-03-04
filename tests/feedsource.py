@@ -1,4 +1,5 @@
 """Feed source class to be used in tests."""
+
 import json
 from datetime import datetime, timedelta
 from functools import cached_property
