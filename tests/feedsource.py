@@ -15,7 +15,7 @@ from constants import (
     TEST_HASS_PATH,
 )
 
-yaml.Dumper.ignore_aliases = lambda *args: True  # type: ignore[method-assign] # noqa: ARG005, E501
+yaml.Dumper.ignore_aliases = lambda *args: True  # type: ignore[method-assign] # noqa: ARG005
 
 
 class FeedSource:
