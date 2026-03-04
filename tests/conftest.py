@@ -33,19 +33,19 @@ def pytest_generate_tests(metafunc: pytest.Metafunc) -> None:
         )
 
 
-@pytest.fixture()
+@pytest.fixture
 def feed(request: pytest.FixtureRequest) -> FeedSource:
     """Return feed file source."""
     return request.param
 
 
-@pytest.fixture()
+@pytest.fixture
 def feed_sensor(feed: FeedSource) -> FeedParserSensor:
     """Return feed sensor initialized with the local RSS feed."""
     return FeedParserSensor(**feed.sensor_config_local_feed)
 
 
-@pytest.fixture()
+@pytest.fixture
 def feed_with_image_in_summary(
     request: pytest.FixtureRequest,
 ) -> FeedSource:

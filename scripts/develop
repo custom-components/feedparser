@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+set -e
+
+cd "$(dirname "$0")/.."
+
+mkdir -p "${PWD}/test_hass"
+if [ ! -L "${PWD}/test_hass/custom_components" ]; then
+	(
+		cd "${PWD}/test_hass"
+		ln -s "../custom_components" "custom_components"
+	)
+fi
+
+DEV_USER="${HASS_DEV_USER:-dev}"
+DEV_PASS="${HASS_DEV_PASS:-dev}"
+
+if ! hass --script auth -c "${PWD}/test_hass" list 2>/dev/null | grep -Fxq "${DEV_USER}"; then
+	hass --script auth -c "${PWD}/test_hass" add "${DEV_USER}" "${DEV_PASS}" >/dev/null
+fi
+
+cat >"${PWD}/test_hass/.storage/onboarding" <<'EOF'
+{
+	"version": 4,
+	"minor_version": 1,
+	"key": "onboarding",
+	"data": {
+		"done": [
+			"user",
+			"core_config",
+			"analytics",
+			"integration"
+		]
+	}
+}
+EOF
+
+hass --config "${PWD}/test_hass" --debug

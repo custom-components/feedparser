@@ -1,4 +1,4 @@
-""""Tests the feedparser sensor."""
+"""Tests the feedparser sensor."""
 
 import re
 from contextlib import nullcontext, suppress
@@ -141,8 +141,10 @@ def test_update_sensor_entries_time(
     first_entry_time: datetime = datetime(*first_entry_struct_time[:6], tzinfo=UTC)
 
     # get the time of the first entry in the sensor
+    published = feed_sensor.feed_entries[0].get("published")
+    assert isinstance(published, str)
     first_sensor_entry_time: datetime = datetime.strptime(  # noqa: DTZ007
-        feed_sensor.feed_entries[0]["published"],
+        published,
         feed.sensor_config.date_format,
     )
 
@@ -199,8 +201,9 @@ def test_remove_summary_image(
 
     # assert that the sensor does not remove the image from the summary
     assert any(
-        re.search(IMAGE_REGEX, e["summary"]) is not None
+        isinstance(summary, str) and re.search(IMAGE_REGEX, summary) is not None
         for e in feed_sensor.feed_entries
+        for summary in [e.get("summary")]
     )
 
     feed_sensor = FeedParserSensor(
@@ -210,7 +213,11 @@ def test_remove_summary_image(
     assert feed_sensor.feed_entries
 
     with nullcontext() if feed.all_entries_have_summary else suppress(KeyError):
-        assert all("img" not in e["summary"] for e in feed_sensor.feed_entries)
+        assert all(
+            not isinstance(summary, str) or "img" not in summary
+            for e in feed_sensor.feed_entries
+            for summary in [e.get("summary")]
+        )
 
 
 def test_image_not_in_entries(feed: FeedSource) -> None:

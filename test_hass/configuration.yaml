@@ -6,10 +6,9 @@ logger:
 
 # Loads default set of integrations. Do not remove.
 default_config:
+demo:
 
 debugpy:
 
 http:
   server_port: 9123
-
-sensor: !include sensors.yaml

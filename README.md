@@ -10,12 +10,6 @@ RSS feed custom component for [Home Assistant](https://www.home-assistant.io/) w
 [![Discord][discord-shield]][discord]
 [![Community Forum][forum-shield]][forum]
 
-## Support
-Hey dude! Help me out for a couple of :beers: or a :coffee:!
-
-[![coffee](https://www.buymeacoffee.com/assets/img/custom_images/black_img.png)](https://www.buymeacoffee.com/zJtVxUAgH)
-
-
 ## Installation
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg)](https://github.com/hacs/integration)
 
@@ -30,6 +24,17 @@ Alternatively, click on the button below to add the repository:
 
 
 ## Configuration
+
+### UI configuration (recommended)
+
+1. Go to **Settings** -> **Devices & Services** -> **Integrations**.
+2. Click **Add Integration** and search for **Feedparser**.
+3. Fill in at least `Name` and `Feed URL`.
+4. Optional include/exclude fields are entered as comma-separated values.
+
+To update parsing behavior later, open the Feedparser integration card and use **Configure** (options flow).
+
+### YAML configuration (legacy)
 
 **Example configuration.yaml:**
 
@@ -58,30 +63,48 @@ sensor:
     show_topn: 1
 ```
 
-If you wish the integration to look for enclosures in the feed entries, add `image` to `inclusions` list. Do not use `enclosure`.
-The integration tries to get the link to an image for the given feed item and stores it under the attribute named `image`. If it fails to find it, it assigns the Home Assistant logo to it instead.
+If you wish the integration to look for enclosures in the feed entries, add `image` to the `inclusions` list. Do not use `enclosure`.
+The integration tries to extract an image URL and stores it under the `image` attribute. If no image can be found, it uses the Home Assistant logo as a fallback.
 
-Note that the original `pubDate` field is available under `published` attribute for the given feed entry. Other date-type values that can be available are `updated`, `created` and `expired`. Please refer to [the documentation of the original feedparser](https://feedparser.readthedocs.io/en/latest/date-parsing.html) library.
+Note that the original `pubDate` field is available under `published`. Other date-like fields that may be present are `updated`, `created`, and `expired`. Refer to the original [feedparser date parsing documentation](https://feedparser.readthedocs.io/en/latest/date-parsing.html) for feed-specific details.
 
-**Configuration variables:**
+### Configuration reference
 
-key | description
-:--- | :---
-**platform (Required)** | The platform name
-**name (Required)** | Name your feed
-**feed_url (Required)** | The RSS feed URL
-**date_format (Optional)** | strftime date format for date strings **Default** `%a, %b %d %I:%M %p`
-**local_time (Optional)** | Whether to convert date into local time **Default** false
-**show_topn (Optional)** | fetch how many entres from rss source，if not set then fetch all
-**inclusions (Optional)** | List of fields to include from populating the list
-**exclusions (Optional)** | List of fields to exclude from populating the list
-**scan_interval (Optional)** | Update interval in hours
+The integration supports both UI setup (recommended) and legacy YAML setup. Most options are the same in both paths.
 
-***
+| Key | Required | Type | Default | Example | What it does |
+| :-- | :-- | :-- | :-- | :-- | :-- |
+| `platform` (YAML only) | Yes (YAML) | string | - | `feedparser` | Home Assistant platform name used in YAML mode. |
+| `name` | Yes | string | - | `Engineering Feed` | Name shown for the sensor entity. |
+| `feed_url` | Yes | URL string | - | `https://www.nu.nl/rss/Algemeen` | RSS/Atom feed URL to fetch and parse. Supports `http`, `https`, and `file` in dev/testing. |
+| `date_format` | No | string (`strftime`) | `%a, %b %d %I:%M %p` | `%a, %d %b %Y %H:%M:%S %Z` | Output format for date fields in feed entries. |
+| `local_time` | No | boolean | `false` | `true` | Converts parsed date values from feed timezone to Home Assistant local timezone. |
+| `scan_interval` | No | duration object | `1 hour` | `{ hours: 1, minutes: 30 }` | Polling interval for refreshing feed data. Minimum effective value is 1 minute. |
+| `show_topn` | No | integer | `9999` | `10` | Maximum number of entries exposed in sensor attributes. |
+| `remove_summary_image` | No | boolean | `false` | `true` | Strips `<img ...>` tags from the `summary` field. |
+| `inclusions` | No | list of strings (YAML) / comma-separated string (UI) | all fields | `title, link, published, image` | If set, only listed fields are kept for each entry. |
+| `exclusions` | No | list of strings (YAML) / comma-separated string (UI) | none | `summary, language` | Fields to remove from each entry after parsing. |
 
-Note: Will return all fields if no inclusions or exclusions are specified
+### Notes and behavior details
+
+- **`inclusions` vs `exclusions`**: If `inclusions` is set, only those fields are considered. `exclusions` then removes fields from that resulting set.
+- **When neither `inclusions` nor `exclusions` is set**: all available feed fields are returned.
+- **`image` extraction**: adding `image` to `inclusions` enables image URL extraction from enclosures or summary HTML.
+- **UI vs YAML input format**:
+  - UI uses comma-separated text for `inclusions` and `exclusions`.
+  - YAML uses proper lists.
+  - UI config flow uses separate scan interval fields for hours/minutes; YAML uses `scan_interval` object keys (`hours`, `minutes`).
+- **Date parsing**: if a feed date is malformed, parser behavior depends on feed content and fallback parsing.
 
 Due to how `custom_components` are loaded, it is normal to see a `ModuleNotFoundError` error on first boot after adding this, to resolve it, restart Home-Assistant.
+
+## Development Container
+
+This repository includes a devcontainer inspired by the `custom-components/readme` blueprint.
+
+1. Open the repo in VS Code.
+2. Run **Dev Containers: Reopen in Container**.
+3. After dependencies install, run `bash scripts/develop` to start Home Assistant with `test_hass`.
 
 [commits-shield]: https://img.shields.io/github/commit-activity/y/custom-components/feedparser.svg?style=for-the-badge
 [commits]: https://github.com/custom-components/feedparser/commits/master
