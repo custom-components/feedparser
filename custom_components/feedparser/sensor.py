@@ -269,26 +269,50 @@ class FeedParserSensor(SensorEntity):
         _LOGGER.debug("Feed %s: Generating sensor entry for %s", self.name, feed_entry)
         sensor_entry: dict[str, object] = {}
         for key, value in feed_entry.items():
-            if not isinstance(key, str):
+            if not isinstance(key, str) or self._should_skip_key(key):
                 continue
-            if (
-                (self._inclusions and key not in self._inclusions)
-                or ("parsed" in key)
-                or (key in self._exclusions)
-            ):
-                continue
-            if key in ["published", "updated", "created", "expired"]:
-                if isinstance(value, str):
-                    parsed_date: datetime = self._parse_date(value)
-                    sensor_entry[key] = parsed_date.strftime(self._date_format)
-            elif key == "image":
-                if isinstance(value, Mapping):
-                    href = value.get("href")
-                    if isinstance(href, str):
-                        sensor_entry["image"] = href
-            else:
-                sensor_entry[key] = value
+            self._store_sensor_entry_value(sensor_entry, key, value)
 
+        self._add_derived_values(sensor_entry, feed_entry)
+        _LOGGER.debug("Feed %s: Generated sensor entry: %s", self.name, sensor_entry)
+        return sensor_entry
+
+    def _should_skip_key(self: FeedParserSensor, key: str) -> bool:
+        """Return whether a feed key should be skipped."""
+        return bool(
+            (self._inclusions and key not in self._inclusions)
+            or ("parsed" in key)
+            or (key in self._exclusions),
+        )
+
+    def _store_sensor_entry_value(
+        self: FeedParserSensor,
+        sensor_entry: dict[str, object],
+        key: str,
+        value: object,
+    ) -> None:
+        """Store a normalized entry value."""
+        if key in ["published", "updated", "created", "expired"]:
+            if isinstance(value, str):
+                parsed_date: datetime = self._parse_date(value)
+                sensor_entry[key] = parsed_date.strftime(self._date_format)
+            return
+
+        if key == "image":
+            if isinstance(value, Mapping):
+                href = value.get("href")
+                if isinstance(href, str):
+                    sensor_entry["image"] = href
+            return
+
+        sensor_entry[key] = value
+
+    def _add_derived_values(
+        self: FeedParserSensor,
+        sensor_entry: dict[str, object],
+        feed_entry: Mapping[str, object],
+    ) -> None:
+        """Add values derived from feed content and options."""
         if "image" in self._inclusions and "image" not in sensor_entry:
             sensor_entry["image"] = self._process_image(feed_entry)
         if (
@@ -305,8 +329,6 @@ class FeedParserSensor(SensorEntity):
                     "",
                     summary,
                 )
-        _LOGGER.debug("Feed %s: Generated sensor entry: %s", self.name, sensor_entry)
-        return sensor_entry
 
     def _parse_date(self: FeedParserSensor, date: str) -> datetime:
         try:
