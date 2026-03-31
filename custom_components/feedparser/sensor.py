@@ -260,7 +260,14 @@ class FeedParserSensor(SensorEntity):
             if images:
                 # pick the first image found
                 return images[0]["href"]
-        elif "summary" in feed_entry:
+        if feed_entry.get("media_content"):
+            images = [
+                enc for enc in feed_entry["media_content"] if enc['type'].startswith("image/")
+            ]
+            if images:
+                # pick the first image found
+                return images[0]["url"]
+        if "summary" in feed_entry:
             images = re.findall(
                 IMAGE_REGEX,
                 feed_entry["summary"],
