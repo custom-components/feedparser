@@ -30,9 +30,10 @@ Alternatively, click on the button below to add the repository:
 1. Go to **Settings** -> **Devices & Services** -> **Integrations**.
 2. Click **Add Integration** and search for **Feedparser**.
 3. Fill in at least `Name` and `Feed URL`.
-4. Optional include/exclude fields are entered as comma-separated values.
+4. Set the refresh interval with the duration field (minimum 1 minute).
+5. Optional include/exclude fields are entered as comma-separated values.
 
-To update parsing behavior later, open the Feedparser integration card and use **Configure** (options flow).
+To update refresh or parsing behavior later, open the Feedparser integration card and use **Configure** (options flow). Saved changes reload only that feed entry so the new settings take effect immediately.
 
 ### YAML configuration (legacy)
 
@@ -79,7 +80,7 @@ The integration supports both UI setup (recommended) and legacy YAML setup. Most
 | `feed_url` | Yes | URL string | - | `https://www.nu.nl/rss/Algemeen` | RSS/Atom feed URL to fetch and parse. Supports `http`, `https`, and `file` in dev/testing. |
 | `date_format` | No | string (`strftime`) | `%a, %b %d %I:%M %p` | `%a, %d %b %Y %H:%M:%S %Z` | Output format for date fields in feed entries. |
 | `local_time` | No | boolean | `false` | `true` | Converts parsed date values from feed timezone to Home Assistant local timezone. |
-| `scan_interval` | No | duration object | `1 hour` | `{ hours: 1, minutes: 30 }` | Polling interval for refreshing feed data. Minimum effective value is 1 minute. |
+| `scan_interval` | No | duration object | `1 hour` | `{ hours: 1, minutes: 30 }` | Polling interval for refreshing feed data. UI input must be at least 1 minute. |
 | `show_topn` | No | integer | `9999` | `10` | Maximum number of entries exposed in sensor attributes. |
 | `remove_summary_image` | No | boolean | `false` | `true` | Strips `<img ...>` tags from the `summary` field. |
 | `inclusions` | No | list of strings (YAML) / comma-separated string (UI) | all fields | `title, link, published, image` | If set, only listed fields are kept for each entry. |
@@ -93,7 +94,7 @@ The integration supports both UI setup (recommended) and legacy YAML setup. Most
 - **UI vs YAML input format**:
   - UI uses comma-separated text for `inclusions` and `exclusions`.
   - YAML uses proper lists.
-  - UI config flow uses separate scan interval fields for hours/minutes; YAML uses `scan_interval` object keys (`hours`, `minutes`).
+  - UI uses a single duration control for `scan_interval`; YAML uses `scan_interval` object keys such as `hours` and `minutes`.
 - **Date parsing**: if a feed date is malformed, parser behavior depends on feed content and fallback parsing.
 
 Due to how `custom_components` are loaded, it is normal to see a `ModuleNotFoundError` error on first boot after adding this, to resolve it, restart Home-Assistant.
