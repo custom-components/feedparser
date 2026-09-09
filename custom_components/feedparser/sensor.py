@@ -196,7 +196,6 @@ class FeedParserSensor(SensorEntity):
         self._scan_interval = scan_interval
         self._local_time = local_time
         self._entries: list[dict[str, object]] = []
-        self._attr_extra_state_attributes = {"entries": self._entries}
         self._attr_attribution = "Data retrieved using RSS feedparser"
         _LOGGER.debug("Feed %s: FeedParserSensor initialized - %s", self.name, self)
 
@@ -243,8 +242,11 @@ class FeedParserSensor(SensorEntity):
             self.name,
             self.native_value,
         )
-        self._entries.clear()  # clear the entries to avoid duplicates
-        self._entries.extend(self._generate_entries(parsed_feed))
+        # Replace the list instead of mutating it in place. Home Assistant
+        # keeps references to nested attribute values in previous State objects, so
+        # in-place mutation would also change the previous state snapshot and hide
+        # genuine `entries` attribute changes from state triggers.
+        self._entries = self._generate_entries(parsed_feed)
         _LOGGER.debug(
             "Feed %s: Sensor state updated - %s entries",
             self.name,
@@ -432,6 +434,8 @@ class FeedParserSensor(SensorEntity):
         self._local_time = value
 
     @property
-    def extra_state_attributes(self: FeedParserSensor) -> dict[str, list]:
+    def extra_state_attributes(
+        self: FeedParserSensor,
+    ) -> dict[str, list[dict[str, object]]]:
         """Return entity specific state attributes."""
         return {"entries": self.feed_entries}

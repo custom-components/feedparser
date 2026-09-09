@@ -13,8 +13,10 @@ from homeassistant.config_entries import (
     ConfigFlow,
     FlowResult,
     OptionsFlow,
+    OptionsFlowWithReload,
 )
 from homeassistant.const import CONF_NAME
+from homeassistant.helpers import selector
 from requests_file import FileAdapter
 from yarl import URL
 
@@ -36,9 +38,6 @@ from .const import (
     DOMAIN,
     ENTRY_VERSION,
 )
-
-CONF_SCAN_INTERVAL_HOURS = "scan_interval_hours"
-CONF_SCAN_INTERVAL_MINUTES = "scan_interval_minutes"
 
 
 def _split_csv(value: str) -> list[str]:
@@ -99,12 +98,23 @@ def _scan_interval_to_dict(value: object) -> dict[str, int]:
 
 def _scan_interval_from_input(user_input: Mapping[str, object]) -> dict[str, int]:
     """Build normalized scan interval dict from flow input."""
-    if CONF_SCAN_INTERVAL in user_input:
-        return _scan_interval_to_dict(user_input[CONF_SCAN_INTERVAL])
+    value = user_input.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL)
 
-    hours = _to_int(user_input.get(CONF_SCAN_INTERVAL_HOURS), 0)
-    minutes = _to_int(user_input.get(CONF_SCAN_INTERVAL_MINUTES), 0)
-    total_minutes = max(1, (hours * 60) + minutes)
+    if isinstance(value, timedelta):
+        total_minutes = int(value.total_seconds() // 60)
+    elif isinstance(value, Mapping):
+        days = _to_int(value.get("days"), 0)
+        hours = _to_int(value.get("hours"), 0)
+        minutes = _to_int(value.get("minutes"), 0)
+        seconds = _to_int(value.get("seconds"), 0)
+        total_minutes = (days * 24 * 60) + (hours * 60) + minutes + (seconds // 60)
+    else:
+        total_minutes = int(DEFAULT_SCAN_INTERVAL.total_seconds() // 60)
+
+    if total_minutes < 1:
+        msg = "Refresh interval must be at least 1 minute"
+        raise vol.Invalid(msg)
+
     return {
         "hours": total_minutes // 60,
         "minutes": total_minutes % 60,
@@ -132,16 +142,24 @@ def _schema_with_defaults(
         vol.Required(CONF_DATE_FORMAT, default=date_format): str,
         vol.Required(CONF_LOCAL_TIME, default=local_time): bool,
         vol.Required(
-            CONF_SCAN_INTERVAL_HOURS,
-            default=normalized_scan_interval["hours"],
-        ): vol.All(vol.Coerce(int), vol.Range(min=0)),
-        vol.Required(
-            CONF_SCAN_INTERVAL_MINUTES,
-            default=normalized_scan_interval["minutes"],
-        ): vol.All(vol.Coerce(int), vol.Range(min=0, max=59)),
+            CONF_SCAN_INTERVAL,
+            default=normalized_scan_interval,
+        ): selector.DurationSelector(
+            selector.DurationSelectorConfig(
+                allow_negative=False,
+                enable_day=False,
+                enable_second=False,
+            ),
+        ),
         vol.Required(CONF_SHOW_TOPN, default=show_topn): vol.All(
+            selector.NumberSelector(
+                selector.NumberSelectorConfig(
+                    min=1,
+                    step=1,
+                    mode=selector.NumberSelectorMode.BOX,
+                ),
+            ),
             vol.Coerce(int),
-            vol.Range(min=1),
         ),
         vol.Required(
             CONF_REMOVE_SUMMARY_IMAGE,
@@ -167,9 +185,9 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
     VERSION = ENTRY_VERSION
 
     @staticmethod
-    def async_get_options_flow(config_entry: ConfigEntry) -> OptionsFlow:
+    def async_get_options_flow(_config_entry: ConfigEntry) -> OptionsFlow:
         """Get the options flow for this handler."""
-        return FeedparserOptionsFlow(config_entry)
+        return FeedparserOptionsFlow()
 
     async def async_step_user(
         self,
@@ -180,6 +198,13 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             feed_url = str(user_input[CONF_FEED_URL]).strip()
+            scan_interval: dict[str, int] | None = None
+
+            try:
+                scan_interval = _scan_interval_from_input(user_input)
+            except vol.Invalid:
+                errors[CONF_SCAN_INTERVAL] = "scan_interval_too_short"
+
             try:
                 parsed_url = URL(feed_url)
             except ValueError:
@@ -187,48 +212,50 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
             else:
                 if parsed_url.scheme not in ("http", "https", "file"):
                     errors[CONF_FEED_URL] = "invalid_url"
-                else:
-                    await self.async_set_unique_id(feed_url)
-                    self._abort_if_unique_id_configured(error="already_configured")
 
-                    try:
-                        await self.hass.async_add_executor_job(
-                            self._validate_feed_url,
-                            feed_url,
-                        )
-                    except requests.RequestException:
-                        errors["base"] = "cannot_connect"
-                    else:
-                        data = {
-                            CONF_NAME: str(user_input[CONF_NAME]).strip(),
-                            CONF_FEED_URL: feed_url,
-                        }
-                        options = {
-                            CONF_DATE_FORMAT: str(user_input[CONF_DATE_FORMAT]).strip(),
-                            CONF_LOCAL_TIME: bool(user_input[CONF_LOCAL_TIME]),
-                            CONF_SCAN_INTERVAL: _scan_interval_from_input(user_input),
-                            CONF_SHOW_TOPN: _to_int(
-                                user_input[CONF_SHOW_TOPN],
-                                DEFAULT_TOPN,
-                            ),
-                            CONF_REMOVE_SUMMARY_IMAGE: bool(
-                                user_input[CONF_REMOVE_SUMMARY_IMAGE],
-                            ),
-                            CONF_INCLUSIONS: _split_csv(
-                                str(user_input[CONF_INCLUSIONS]).strip(),
-                            ),
-                            CONF_EXCLUSIONS: _split_csv(
-                                str(user_input[CONF_EXCLUSIONS]).strip(),
-                            ),
-                        }
-                        return cast(
-                            "FlowResult",
-                            self.async_create_entry(
-                                title=data[CONF_NAME],
-                                data=data,
-                                options=options,
-                            ),
-                        )
+            if not errors:
+                await self.async_set_unique_id(feed_url)
+                self._abort_if_unique_id_configured(error="already_configured")
+
+                try:
+                    await self.hass.async_add_executor_job(
+                        self._validate_feed_url,
+                        feed_url,
+                    )
+                except requests.RequestException:
+                    errors["base"] = "cannot_connect"
+                else:
+                    assert scan_interval is not None
+                    data = {
+                        CONF_NAME: str(user_input[CONF_NAME]).strip(),
+                        CONF_FEED_URL: feed_url,
+                    }
+                    options = {
+                        CONF_DATE_FORMAT: str(user_input[CONF_DATE_FORMAT]).strip(),
+                        CONF_LOCAL_TIME: bool(user_input[CONF_LOCAL_TIME]),
+                        CONF_SCAN_INTERVAL: scan_interval,
+                        CONF_SHOW_TOPN: _to_int(
+                            user_input[CONF_SHOW_TOPN],
+                            DEFAULT_TOPN,
+                        ),
+                        CONF_REMOVE_SUMMARY_IMAGE: bool(
+                            user_input[CONF_REMOVE_SUMMARY_IMAGE],
+                        ),
+                        CONF_INCLUSIONS: _split_csv(
+                            str(user_input[CONF_INCLUSIONS]).strip(),
+                        ),
+                        CONF_EXCLUSIONS: _split_csv(
+                            str(user_input[CONF_EXCLUSIONS]).strip(),
+                        ),
+                    }
+                    return cast(
+                        "FlowResult",
+                        self.async_create_entry(
+                            title=data[CONF_NAME],
+                            data=data,
+                            options=options,
+                        ),
+                    )
 
         data_schema = _schema_with_defaults(
             include_feed_identity=True,
@@ -252,33 +279,43 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
         response.raise_for_status()
 
 
-class FeedparserOptionsFlow(OptionsFlow):
+class FeedparserOptionsFlow(OptionsFlowWithReload):
     """Handle options for Feedparser."""
-
-    automatic_reload = True
-
-    def __init__(self, config_entry: ConfigEntry) -> None:
-        """Initialize options flow."""
-        self._config_entry = config_entry
 
     async def async_step_init(
         self,
         user_input: Mapping[str, object] | None = None,
     ) -> FlowResult:
         """Manage Feedparser options."""
-        if user_input is not None:
-            options = {
-                CONF_DATE_FORMAT: str(user_input[CONF_DATE_FORMAT]).strip(),
-                CONF_LOCAL_TIME: bool(user_input[CONF_LOCAL_TIME]),
-                CONF_SCAN_INTERVAL: _scan_interval_from_input(user_input),
-                CONF_SHOW_TOPN: _to_int(user_input[CONF_SHOW_TOPN], DEFAULT_TOPN),
-                CONF_REMOVE_SUMMARY_IMAGE: bool(user_input[CONF_REMOVE_SUMMARY_IMAGE]),
-                CONF_INCLUSIONS: _split_csv(str(user_input[CONF_INCLUSIONS]).strip()),
-                CONF_EXCLUSIONS: _split_csv(str(user_input[CONF_EXCLUSIONS]).strip()),
-            }
-            return cast("FlowResult", self.async_create_entry(title="", data=options))
+        errors: dict[str, str] = {}
 
-        merged = {**self._config_entry.data, **self._config_entry.options}
+        if user_input is not None:
+            try:
+                scan_interval = _scan_interval_from_input(user_input)
+            except vol.Invalid:
+                errors[CONF_SCAN_INTERVAL] = "scan_interval_too_short"
+            else:
+                options = {
+                    CONF_DATE_FORMAT: str(user_input[CONF_DATE_FORMAT]).strip(),
+                    CONF_LOCAL_TIME: bool(user_input[CONF_LOCAL_TIME]),
+                    CONF_SCAN_INTERVAL: scan_interval,
+                    CONF_SHOW_TOPN: _to_int(user_input[CONF_SHOW_TOPN], DEFAULT_TOPN),
+                    CONF_REMOVE_SUMMARY_IMAGE: bool(
+                        user_input[CONF_REMOVE_SUMMARY_IMAGE],
+                    ),
+                    CONF_INCLUSIONS: _split_csv(
+                        str(user_input[CONF_INCLUSIONS]).strip(),
+                    ),
+                    CONF_EXCLUSIONS: _split_csv(
+                        str(user_input[CONF_EXCLUSIONS]).strip(),
+                    ),
+                }
+                return cast(
+                    "FlowResult",
+                    self.async_create_entry(title="", data=options),
+                )
+
+        merged = {**self.config_entry.data, **self.config_entry.options}
         data_schema = _schema_with_defaults(
             include_feed_identity=False,
             date_format=str(merged.get(CONF_DATE_FORMAT, DEFAULT_DATE_FORMAT)),
@@ -298,5 +335,9 @@ class FeedparserOptionsFlow(OptionsFlow):
         )
         return cast(
             "FlowResult",
-            self.async_show_form(step_id="init", data_schema=data_schema),
+            self.async_show_form(
+                step_id="init",
+                data_schema=data_schema,
+                errors=errors,
+            ),
         )
