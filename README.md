@@ -56,6 +56,12 @@ sensor:
     feed_url: https://www.nu.nl/rss/Algemeen
     local_time: true
     show_topn: 1
+
+  # Some servers block or stall unknown clients; send a browser User-Agent instead
+  - platform: feedparser
+    name: Picky Server Feed
+    feed_url: https://example.com/rss
+    user_agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36'
 ```
 
 If you wish the integration to look for enclosures in the feed entries, add `image` to `inclusions` list. Do not use `enclosure`.
@@ -76,6 +82,7 @@ key | description
 **inclusions (Optional)** | List of fields to include from populating the list
 **exclusions (Optional)** | List of fields to exclude from populating the list
 **scan_interval (Optional)** | Update interval in hours
+**user_agent (Optional)** | User-Agent header sent when fetching the feed **Default** `Home Assistant Feed-parser Integration <version>`
 
 ***
 

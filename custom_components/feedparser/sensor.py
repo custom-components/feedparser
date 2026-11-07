@@ -36,6 +36,7 @@ CONF_INCLUSIONS = "inclusions"
 CONF_EXCLUSIONS = "exclusions"
 CONF_SHOW_TOPN = "show_topn"
 CONF_REMOVE_SUMMARY_IMG = "remove_summary_image"
+CONF_USER_AGENT = "user_agent"
 
 DEFAULT_DATE_FORMAT = "%a, %b %d %I:%M %p"
 DEFAULT_SCAN_INTERVAL = timedelta(hours=1)
@@ -55,6 +56,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
         vol.Optional(CONF_INCLUSIONS, default=[]): vol.All(cv.ensure_list, [cv.string]),
         vol.Optional(CONF_EXCLUSIONS, default=[]): vol.All(cv.ensure_list, [cv.string]),
         vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): cv.time_period,
+        vol.Optional(CONF_USER_AGENT, default=USER_AGENT): cv.string,
     },
 )
 
@@ -80,6 +82,7 @@ async def async_setup_platform(
                 exclusions=config[CONF_EXCLUSIONS],
                 scan_interval=config[CONF_SCAN_INTERVAL],
                 local_time=config[CONF_LOCAL_TIME],
+                user_agent=config[CONF_USER_AGENT],
             ),
         ],
         update_before_add=True,
@@ -104,6 +107,7 @@ class FeedParserSensor(SensorEntity):
         inclusions: list[str | None],
         scan_interval: timedelta,
         local_time: bool,
+        user_agent: str = USER_AGENT,
     ) -> None:
         """Initialize the Feedparser sensor."""
         self._feed = feed
@@ -116,6 +120,7 @@ class FeedParserSensor(SensorEntity):
         self._exclusions = exclusions
         self._scan_interval = scan_interval
         self._local_time = local_time
+        self._user_agent = user_agent
         self._entries: list[dict[str, str]] = []
         self._attr_extra_state_attributes = {"entries": self._entries}
         self._attr_attribution = "Data retrieved using RSS feedparser"
@@ -129,7 +134,8 @@ class FeedParserSensor(SensorEntity):
             f"remove_summary_image={self._remove_summary_image}, "
             f"inclusions={self._inclusions}, "
             f"exclusions={self._exclusions}, scan_interval={self._scan_interval}, "
-            f'local_time={self._local_time}, date_format="{self._date_format}")'
+            f'local_time={self._local_time}, date_format="{self._date_format}", '
+            f'user_agent="{self._user_agent}")'
         )
 
     def update(self: FeedParserSensor) -> None:
@@ -137,7 +143,7 @@ class FeedParserSensor(SensorEntity):
         _LOGGER.debug("Feed %s: Polling feed data from %s", self.name, self._feed)
         s: requests.Session = requests.Session()
         s.mount("file://", FileAdapter())
-        s.headers.update({"User-Agent": USER_AGENT})
+        s.headers.update({"User-Agent": self._user_agent})
         res: requests.Response = s.get(self._feed)
         res.raise_for_status()
         parsed_feed: FeedParserDict = feedparser.parse(res.text)

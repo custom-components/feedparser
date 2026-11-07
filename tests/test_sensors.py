@@ -3,22 +3,27 @@
 import re
 from contextlib import nullcontext, suppress
 from datetime import UTC, datetime
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import feedparser
 import pytest
+import requests
 from constants import DATE_FORMAT, URLS_HEADERS_REQUIRED
 from feedsource import FeedSource
 
 from custom_components.feedparser.sensor import (
+    CONF_USER_AGENT,
     DEFAULT_SCAN_INTERVAL,
     DEFAULT_THUMBNAIL,
     IMAGE_REGEX,
+    PLATFORM_SCHEMA,
+    USER_AGENT,
     FeedParserSensor,
 )
 
 if TYPE_CHECKING:
     import time
+    from collections.abc import Callable
 
 
 def test_simple(feed_sensor: FeedParserSensor) -> None:
@@ -223,3 +228,59 @@ def test_image_not_in_entries(feed: FeedSource) -> None:
     assert feed_sensor.feed_entries
     # assert that the sensor does not include the image in its feed entries
     assert all("image" not in e for e in feed_sensor.feed_entries)
+
+
+@pytest.fixture()
+def sent_user_agents(monkeypatch: pytest.MonkeyPatch) -> list[str | bytes | None]:
+    """Record the User-Agent header of every request the sensor sends."""
+    sent: list[str | bytes | None] = []
+    original_get: Callable[..., requests.Response] = requests.Session.get
+
+    def spy_get(
+        self: requests.Session,
+        url: str,
+        *args: Any,  # noqa: ANN401
+        **kwargs: Any,  # noqa: ANN401
+    ) -> requests.Response:
+        response = original_get(self, url, *args, **kwargs)
+        sent.append(response.request.headers.get("User-Agent"))
+        return response
+
+    monkeypatch.setattr(requests.Session, "get", spy_get)
+    return sent
+
+
+def test_default_user_agent(
+    feed: FeedSource,
+    sent_user_agents: list[str | bytes | None],
+) -> None:
+    """Test that the integration's User-Agent is sent when none is configured."""
+    feed_sensor = FeedParserSensor(**feed.sensor_config_local_feed)
+    feed_sensor.update()
+    assert sent_user_agents == [USER_AGENT]
+
+
+def test_custom_user_agent(
+    feed: FeedSource,
+    sent_user_agents: list[str | bytes | None],
+) -> None:
+    """Test that a configured User-Agent replaces the default one."""
+    custom_user_agent = "Mozilla/5.0 (compatible; FeedTest/1.0)"
+    feed_sensor = FeedParserSensor(
+        **feed.sensor_config_local_feed | {"user_agent": custom_user_agent},
+    )
+    feed_sensor.update()
+    assert sent_user_agents == [custom_user_agent]
+
+
+def test_user_agent_config_schema() -> None:
+    """Test that user_agent is optional and defaults to the integration's agent."""
+    base_config = {
+        "platform": "feedparser",
+        "name": "Test Feed",
+        "feed_url": "https://example.com/feed.xml",
+    }
+    assert PLATFORM_SCHEMA(base_config)[CONF_USER_AGENT] == USER_AGENT
+
+    custom_config = base_config | {CONF_USER_AGENT: "Custom/1.0"}
+    assert PLATFORM_SCHEMA(custom_config)[CONF_USER_AGENT] == "Custom/1.0"
