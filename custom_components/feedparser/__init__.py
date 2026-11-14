@@ -27,10 +27,12 @@ from .const import (
     PLATFORMS,
 )
 from .coordinator import FeedparserConfigEntry, FeedparserCoordinator
+from .yaml_import import async_remove_stale_yaml_entries
 
 if TYPE_CHECKING:
     from homeassistant.config_entries import ConfigEntry
     from homeassistant.core import HomeAssistant
+    from homeassistant.helpers.typing import ConfigType
 
 
 CONFIG_SCHEMA = cv.platform_only_config_schema(DOMAIN)
@@ -73,8 +75,13 @@ def _normalize_scan_interval(value: object) -> dict[str, int]:
     }
 
 
-async def async_setup(hass: HomeAssistant, config: dict) -> bool:  # noqa: ARG001
-    """Set up Feedparser from YAML (legacy path)."""
+async def async_setup(hass: HomeAssistant, config: ConfigType) -> bool:
+    """Set up Feedparser.
+
+    The YAML sensors themselves are imported by the sensor platform; here, entries
+    whose YAML sensor was removed are cleaned up.
+    """
+    await async_remove_stale_yaml_entries(hass, config)
     return True
 
 
