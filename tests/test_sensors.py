@@ -221,6 +221,7 @@ def test_check_duplicates(feed_sensor: FeedParserSensor) -> None:
     assert after_first_update == after_second_update
 
 
+@pytest.mark.online
 @pytest.mark.parametrize(
     "online_feed",
     URLS_HEADERS_REQUIRED,

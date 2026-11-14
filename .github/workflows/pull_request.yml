@@ -35,6 +35,10 @@ jobs:
       - name: Run Tests
         run: pytest -sv tests/
 
+      - name: Run Online Tests
+        # the Home Assistant test plugin blocks DNS, so run these without it
+        run: pytest -sv -p no:homeassistant -m online tests/
+
       - name: Analysis (git diff)
         if: failure()
         run: git diff

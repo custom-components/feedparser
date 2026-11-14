@@ -34,8 +34,10 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
   "black",
-  "homeassistant-stubs",
-  "pytest==9.0.2",
+  # pytest-homeassistant-custom-component pins an exact Home Assistant (and
+  # pytest) version; keep homeassistant-stubs on the same Home Assistant release.
+  "homeassistant-stubs==2026.10.0",
+  "pytest-homeassistant-custom-component==0.13.375",
   "mypy",
   "ruff",
   "types-python-dateutil",
@@ -151,6 +153,12 @@ module = "feedparser.*"
 disable_error_code = ["attr-defined", "import"]
 
 [tool.pytest.ini_options]
+addopts = "-m 'not online'"
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = [
+  "online: needs internet access; run with `pytest -p no:homeassistant -m online` because the Home Assistant test plugin blocks DNS"
+]
 pythonpath = [".", "tests"]
 filterwarnings = [
   "ignore:Inheritance class HomeAssistantApplication from web.Application is discouraged:DeprecationWarning"
