@@ -86,6 +86,12 @@ sensor:
     name: Picky Server Feed
     feed_url: https://example.com/rss
     user_agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36'
+
+  # Only keep weather warnings that mention Leicester
+  - platform: feedparser
+    name: Leicester Weather Warnings
+    feed_url: http://www.metoffice.gov.uk/public/data/PWSCache/WarningsRSS/Region/em
+    match: Leicester
 ```
 
 If you wish the integration to look for enclosures in the feed entries, add `image` to the `inclusions` list. Do not use `enclosure`.
@@ -156,12 +162,15 @@ The integration supports both UI and YAML setup. Most options are the same in bo
 | `remove_summary_image` | No | boolean | `false` | `true` | Strips `<img ...>` tags from the `summary` field. |
 | `inclusions` | No | list of strings (YAML) / comma-separated string (UI) | all fields | `title, link, published, image` | If set, only listed fields are kept for each entry. |
 | `exclusions` | No | list of strings (YAML) / comma-separated string (UI) | none | `summary, language` | Fields to remove from each entry after parsing. |
+| `match` | No | regular expression | none | `Leicester` or `rain\|snow` | Only entries whose title or summary contains a match are kept. Ignores case. |
+| `exclude_match` | No | regular expression | none | `sponsored\|advert` | Entries whose title or summary contains a match are removed. Ignores case. |
 | `user_agent` | No | string | `Home Assistant Feed-parser Integration <version>` | `Mozilla/5.0 (compatible; MyFeedReader/1.0)` | User-Agent header sent when fetching the feed (and when validating it during UI setup). Leave empty in the UI to use the default. |
 
 ### Notes and behavior details
 
 - **`inclusions` vs `exclusions`**: If `inclusions` is set, only those fields are considered. `exclusions` then removes fields from that resulting set.
 - **When neither `inclusions` nor `exclusions` is set**: all available feed fields are returned.
+- **Filtering entries with `match` and `exclude_match`**: these choose which *entries* are kept, while `inclusions` and `exclusions` choose which *fields* each entry keeps. They search the entry's `title` and `summary` (the RSS `<description>`), even if those fields are not in `inclusions`. Filtering runs before `show_topn`, so `show_topn` counts matching entries, and the sensor's state is the number of matching entries. To get several filtered sensors from one feed, add the feed more than once with different names and patterns. Patterns are [Python regular expressions](https://docs.python.org/3/library/re.html#regular-expression-syntax) and are found anywhere in the text, so `Leicester` matches "Leicester, Leicestershire". Use a template sensor only if you need to reshape entries, not just choose them.
 - **`image` extraction**: adding `image` to `inclusions` enables image URL extraction from image enclosures, Media RSS (`media:content`, `media:thumbnail`), the first image in the summary HTML, or the first image in the full content (`content:encoded`, used by WordPress feeds).
 - **`user_agent`**: some servers reject or never answer requests from unknown clients. If a feed works in a browser but fails in Home Assistant, try a browser User-Agent.
 - **UI vs YAML input format**:

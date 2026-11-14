@@ -33,6 +33,21 @@ IMAGE_EXTENSIONS = (".jpg", ".jpeg", ".png", ".gif", ".webp", ".avif", ".svg")
 DATE_KEYS = ("published", "updated", "created", "expired")
 
 
+# Entry fields searched by the `match` / `exclude_match` filters. RSS
+# <description> is exposed by feedparser as `summary`.
+FILTER_KEYS = ("title", "summary")
+
+
+def compile_filter(pattern: str) -> re.Pattern[str] | None:
+    """Compile an entry filter pattern (case-insensitive), or None if it is blank.
+
+    Raises ``re.error`` if the pattern is not a valid regular expression.
+    """
+    if not pattern.strip():
+        return None
+    return re.compile(pattern, re.IGNORECASE)
+
+
 class ParsedFeed(Protocol):
     """Protocol for parsed feed object."""
 
@@ -90,8 +105,14 @@ class FeedReader:
         exclusions: list[str],
         local_time: bool,
         user_agent: str = USER_AGENT,
+        match: str = "",
+        exclude_match: str = "",
     ) -> None:
-        """Initialize the reader."""
+        """Initialize the reader.
+
+        Raises ``re.error`` if `match` or `exclude_match` is not a valid regular
+        expression.
+        """
         self.feed = feed
         self.name = name
         self.local_time = local_time
@@ -101,6 +122,8 @@ class FeedReader:
         self._inclusions = inclusions
         self._exclusions = exclusions
         self._user_agent = user_agent
+        self._match = compile_filter(match)
+        self._exclude_match = compile_filter(exclude_match)
 
     def __repr__(self: FeedReader) -> str:
         """Return the representation."""
@@ -110,7 +133,10 @@ class FeedReader:
             f"remove_summary_image={self._remove_summary_image}, "
             f"inclusions={self._inclusions}, exclusions={self._exclusions}, "
             f'local_time={self.local_time}, date_format="{self._date_format}", '
-            f'user_agent="{self._user_agent}")'
+            f'user_agent="{self._user_agent}", '
+            f"match={self._match.pattern if self._match else None!r}, "
+            f"exclude_match="
+            f"{self._exclude_match.pattern if self._exclude_match else None!r})"
         )
 
     def read(self: FeedReader) -> list[dict[str, object]]:
@@ -137,9 +163,14 @@ class FeedReader:
         self: FeedReader,
         parsed_feed: ParsedFeed,
     ) -> list[dict[str, object]]:
-        """Build sensor entries from a parsed feed, skipping broken ones."""
+        """Build sensor entries from a parsed feed, skipping broken ones.
+
+        Entries are filtered before `show_topn` is applied, so the limit counts
+        matching entries only.
+        """
         entries: list[dict[str, object]] = []
-        for feed_entry in parsed_feed.entries[: self._show_topn]:
+        kept = [e for e in parsed_feed.entries if self._is_wanted(e)]
+        for feed_entry in kept[: self._show_topn]:
             try:
                 entries.append(self._generate_sensor_entry(feed_entry))
             except Exception:
@@ -150,6 +181,19 @@ class FeedReader:
                     feed_entry.get("id") or feed_entry.get("link"),
                 )
         return entries
+
+    def _is_wanted(self: FeedReader, feed_entry: Mapping[str, object]) -> bool:
+        """Return whether an entry passes the `match` / `exclude_match` filters."""
+        if self._match is None and self._exclude_match is None:
+            return True
+        text = "\n".join(
+            value
+            for key in FILTER_KEYS
+            if isinstance(value := feed_entry.get(key), str)
+        )
+        if self._match is not None and not self._match.search(text):
+            return False
+        return self._exclude_match is None or not self._exclude_match.search(text)
 
     def _generate_sensor_entry(
         self: FeedReader,

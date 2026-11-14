@@ -12,6 +12,8 @@
           "scan_interval": "Aktualisierungsintervall",
           "show_topn": "Maximale Einträge",
           "remove_summary_image": "Bild-Tags aus der Zusammenfassung entfernen",
+          "match": "Nur passende Einträge",
+          "exclude_match": "Passende Einträge überspringen",
           "inclusions": "Einbezogene Felder",
           "exclusions": "Ausgeschlossene Felder",
           "user_agent": "User-Agent"
@@ -24,6 +26,8 @@
           "scan_interval": "Wie oft der Feed aktualisiert wird. Das Mindestintervall beträgt 1 Minute.",
           "show_topn": "Maximale Anzahl von Einträgen im Attribut `entries`. Große Werte erhöhen die Zustandsgröße.",
           "remove_summary_image": "Entfernt Bild-Tags aus dem Feld `summary`. Ein separates Feld `image` wird nicht entfernt.",
+          "match": "Optionaler regulärer Ausdruck. Nur Einträge, deren Titel oder Zusammenfassung einen Treffer enthält, werden behalten (Groß-/Kleinschreibung egal), zum Beispiel `Leicester` oder `Regen|Schnee`. Leer lassen, um alle Einträge zu behalten.",
+          "exclude_match": "Optionaler regulärer Ausdruck. Einträge, deren Titel oder Zusammenfassung einen Treffer enthält, werden entfernt (Groß-/Kleinschreibung egal). Wird zusammen mit dem Filter oben angewendet.",
           "inclusions": "Optionale, durch Kommas getrennte Positivliste, zum Beispiel `title, link, published`. Leer lassen, um alle Felder außer den ausgeschlossenen beizubehalten.",
           "exclusions": "Optionale, durch Kommas getrennte Felder, die entfernt werden sollen. Ausschlüsse werden nach den Einschlüssen angewendet.",
           "user_agent": "Optionaler HTTP-User-Agent, der beim Abrufen des Feeds gesendet wird. Manche Server blockieren unbekannte Clients oder antworten nicht; verwende dafür einen Browser-User-Agent. Leer lassen für den Standardwert."
@@ -47,7 +51,8 @@
       "cannot_connect": "Der Feed konnte nicht heruntergeladen werden.",
       "invalid_url": "Die URL ist ungültig.",
       "invalid_feed": "Die URL wurde geladen, scheint aber kein RSS- oder Atom-Feed zu sein.",
-      "scan_interval_too_short": "Das Aktualisierungsintervall muss mindestens 1 Minute betragen."
+      "scan_interval_too_short": "Das Aktualisierungsintervall muss mindestens 1 Minute betragen.",
+      "invalid_pattern": "Kein gültiger regulärer Ausdruck."
     },
     "abort": {
       "already_configured": "Dieser Feed ist bereits konfiguriert.",
@@ -67,6 +72,8 @@
           "scan_interval": "Aktualisierungsintervall",
           "show_topn": "Maximale Einträge",
           "remove_summary_image": "Bild-Tags aus der Zusammenfassung entfernen",
+          "match": "Nur passende Einträge",
+          "exclude_match": "Passende Einträge überspringen",
           "inclusions": "Einbezogene Felder",
           "exclusions": "Ausgeschlossene Felder",
           "user_agent": "User-Agent"
@@ -77,6 +84,8 @@
           "scan_interval": "Wie oft der Feed aktualisiert wird. Das Mindestintervall beträgt 1 Minute.",
           "show_topn": "Maximale Anzahl von Einträgen im Attribut `entries`. Große Werte erhöhen die Zustandsgröße.",
           "remove_summary_image": "Entfernt Bild-Tags aus dem Feld `summary`. Ein separates Feld `image` wird nicht entfernt.",
+          "match": "Optionaler regulärer Ausdruck. Nur Einträge, deren Titel oder Zusammenfassung einen Treffer enthält, werden behalten (Groß-/Kleinschreibung egal), zum Beispiel `Leicester` oder `Regen|Schnee`. Leer lassen, um alle Einträge zu behalten.",
+          "exclude_match": "Optionaler regulärer Ausdruck. Einträge, deren Titel oder Zusammenfassung einen Treffer enthält, werden entfernt (Groß-/Kleinschreibung egal). Wird zusammen mit dem Filter oben angewendet.",
           "inclusions": "Optionale, durch Kommas getrennte Positivliste, zum Beispiel `title, link, published`. Leer lassen, um alle Felder außer den ausgeschlossenen beizubehalten.",
           "exclusions": "Optionale, durch Kommas getrennte Felder, die entfernt werden sollen. Ausschlüsse werden nach den Einschlüssen angewendet.",
           "user_agent": "Optionaler HTTP-User-Agent, der beim Abrufen des Feeds gesendet wird. Manche Server blockieren unbekannte Clients oder antworten nicht; verwende dafür einen Browser-User-Agent. Leer lassen für den Standardwert."
@@ -95,7 +104,8 @@
       }
     },
     "error": {
-      "scan_interval_too_short": "Das Aktualisierungsintervall muss mindestens 1 Minute betragen."
+      "scan_interval_too_short": "Das Aktualisierungsintervall muss mindestens 1 Minute betragen.",
+      "invalid_pattern": "Kein gültiger regulärer Ausdruck."
     }
   },
   "issues": {
