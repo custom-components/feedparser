@@ -28,6 +28,18 @@
           "exclusions": "Optional comma-separated fields to remove. Exclusions are applied after inclusions.",
           "user_agent": "Optional HTTP User-Agent sent when fetching the feed. Some servers block or stall unknown clients; set a browser User-Agent for those. Leave empty to use the default."
         }
+      },
+      "reconfigure": {
+        "title": "Change feed",
+        "description": "Change the sensor name or the feed URL. The entity ID and history are kept.",
+        "data": {
+          "name": "Name",
+          "feed_url": "Feed URL"
+        },
+        "data_description": {
+          "name": "Friendly name for the sensor.",
+          "feed_url": "RSS or Atom feed URL. HTTP, HTTPS, and local file URLs are supported."
+        }
       }
     },
     "error": {
@@ -39,7 +51,9 @@
     },
     "abort": {
       "already_configured": "This feed is already configured.",
-      "managed_in_ui": "This feed is managed in the UI."
+      "managed_in_ui": "This feed is managed in the UI.",
+      "reconfigure_successful": "The feed was updated.",
+      "managed_in_yaml": "\"{name}\" is set up in configuration.yaml. Change its name or URL there and restart Home Assistant, or first move it to the UI from its options."
     }
   },
   "options": {

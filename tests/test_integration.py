@@ -41,6 +41,7 @@ from custom_components.feedparser.yaml_import import (
 
 if TYPE_CHECKING:
     from freezegun.api import FrozenDateTimeFactory
+    from homeassistant.config_entries import ConfigFlowResult
     from homeassistant.core import HomeAssistant, State
 
 pytestmark = pytest.mark.usefixtures("enable_custom_integrations")
@@ -236,6 +237,117 @@ async def test_same_feed_with_different_name_is_allowed(
     assert get_state(hass, "sensor.test_feed_titles").state == "1"
 
 
+async def start_reconfigure(
+    hass: HomeAssistant,
+    entry: MockConfigEntry,
+) -> ConfigFlowResult:
+    """Start a reconfigure flow for an entry and return its first form."""
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN,
+        context={
+            "source": config_entries.SOURCE_RECONFIGURE,
+            "entry_id": entry.entry_id,
+        },
+    )
+    assert result["type"] is FlowResultType.FORM
+    assert result["step_id"] == "reconfigure"
+    return result
+
+
+async def test_reconfigure_changes_name_and_url(
+    hass: HomeAssistant,
+    tmp_path: Path,
+) -> None:
+    """Reconfigure renames the sensor and switches its feed, keeping the entity ID."""
+    old_url = write_feed(tmp_path / "old.xml", ["one"])
+    new_url = write_feed(tmp_path / "new.xml", ["a", "b", "c"])
+    entry = await add_entry(hass, "Test Feed", old_url)
+    assert get_state(hass).state == "1"
+
+    result = await start_reconfigure(hass, entry)
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        {CONF_NAME: " Renamed Feed ", CONF_FEED_URL: f" {new_url} "},
+    )
+    assert result["type"] is FlowResultType.ABORT
+    assert result["reason"] == "reconfigure_successful"
+    await hass.async_block_till_done()
+
+    assert entry.title == "Renamed Feed"
+    assert entry.data == {CONF_NAME: "Renamed Feed", CONF_FEED_URL: new_url}
+    state = get_state(hass)  # same entity ID as before
+    assert state.state == "3"
+    assert state.attributes["friendly_name"] == "Renamed Feed"
+    assert hass.states.get("sensor.renamed_feed") is None
+
+
+async def test_reconfigure_keeps_own_name(
+    hass: HomeAssistant,
+    tmp_path: Path,
+) -> None:
+    """Changing only the URL is not blocked by the entry's own name."""
+    url = write_feed(tmp_path / "feed.xml", ["one"])
+    entry = await add_entry(hass, "Test Feed", url)
+
+    result = await start_reconfigure(hass, entry)
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        {CONF_NAME: "Test Feed", CONF_FEED_URL: url},
+    )
+    assert result["type"] is FlowResultType.ABORT
+    assert result["reason"] == "reconfigure_successful"
+
+
+async def test_reconfigure_rejects_duplicate(
+    hass: HomeAssistant,
+    tmp_path: Path,
+) -> None:
+    """Reconfigure can't give a feed the name another sensor of that feed uses."""
+    url = write_feed(tmp_path / "feed.xml", ["one"])
+    await add_entry(hass, "Test Feed", url)
+    other = await add_entry(hass, "Other Feed", url)
+
+    result = await start_reconfigure(hass, other)
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        {CONF_NAME: "test feed", CONF_FEED_URL: url},
+    )
+    assert result["type"] is FlowResultType.FORM
+    assert result["errors"] == {CONF_NAME: "already_configured"}
+    assert other.data[CONF_NAME] == "Other Feed"
+
+
+@pytest.mark.parametrize(
+    ("make_url", "field", "error"),
+    [
+        (lambda _p: "ftp://example.com/feed", CONF_FEED_URL, "invalid_url"),
+        (lambda p: (p / "missing.xml").as_uri(), "base", "cannot_connect"),
+        (lambda p: (p / "page.html").as_uri(), CONF_FEED_URL, "invalid_feed"),
+    ],
+    ids=["bad_scheme", "unreachable", "not_a_feed"],
+)
+async def test_reconfigure_errors(
+    hass: HomeAssistant,
+    tmp_path: Path,
+    make_url: Any,  # noqa: ANN401
+    field: str,
+    error: str,
+) -> None:
+    """A bad new URL is reported on the form and the entry is left unchanged."""
+    (tmp_path / "page.html").write_text("<html><body>hi</body></html>")
+    url = write_feed(tmp_path / "feed.xml", ["one"])
+    entry = await add_entry(hass, "Test Feed", url)
+
+    result = await start_reconfigure(hass, entry)
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        {CONF_NAME: "Test Feed", CONF_FEED_URL: make_url(tmp_path)},
+    )
+    assert result["type"] is FlowResultType.FORM
+    assert result["errors"] == {field: error}
+    assert entry.data[CONF_FEED_URL] == url
+
+
 async def setup_yaml(hass: HomeAssistant, *sensors: dict[str, Any]) -> None:
     """Set up the sensor domain with YAML feedparser platforms."""
     assert await async_setup_component(
@@ -244,6 +356,41 @@ async def setup_yaml(hass: HomeAssistant, *sensors: dict[str, Any]) -> None:
         {"sensor": [{"platform": DOMAIN, **sensor} for sensor in sensors]},
     )
     await hass.async_block_till_done()
+
+
+async def test_reconfigure_yaml_feed(hass: HomeAssistant, tmp_path: Path) -> None:
+    """A YAML feed is changed in YAML; once moved to the UI it can be reconfigured."""
+    url = write_feed(tmp_path / "feed.xml", ["one"])
+    await setup_yaml(hass, {"name": "Yaml Feed", "feed_url": url})
+    entry = hass.config_entries.async_entries(DOMAIN)[0]
+
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN,
+        context={
+            "source": config_entries.SOURCE_RECONFIGURE,
+            "entry_id": entry.entry_id,
+        },
+    )
+    assert result["type"] is FlowResultType.ABORT
+    assert result["reason"] == "managed_in_yaml"
+
+    hass.config_entries.async_update_entry(
+        entry,
+        data={**entry.data, CONF_MANAGED_BY_YAML: False},
+    )
+    result = await start_reconfigure(hass, entry)
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        {CONF_NAME: "Renamed Feed", CONF_FEED_URL: url},
+    )
+    assert result["type"] is FlowResultType.ABORT
+    assert result["reason"] == "reconfigure_successful"
+    await hass.async_block_till_done()
+    assert entry.title == "Renamed Feed"
+    assert entry.data[CONF_MANAGED_BY_YAML] is False
+    assert get_state(hass, "sensor.yaml_feed").attributes["friendly_name"] == (
+        "Renamed Feed"
+    )
 
 
 async def test_yaml_is_imported(hass: HomeAssistant, tmp_path: Path) -> None:

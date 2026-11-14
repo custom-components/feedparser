@@ -37,6 +37,8 @@ Feeds can be set up in the UI, in `configuration.yaml`, or both. Feeds from YAML
 
 To update refresh or parsing behavior later, open the Feedparser integration card and use **Configure** (options flow). Saved changes reload only that feed entry so the new settings take effect immediately.
 
+To fix the sensor name or feed URL, open the entry's menu (⋮) and choose **Reconfigure**. The new URL is checked like it is at setup, and the entity ID and history are kept. Feeds from `configuration.yaml` are renamed in the YAML instead (or move them to the UI first).
+
 - The same feed URL can be added more than once (for example, once with all fields and once with only titles), as long as each sensor has a different name.
 - If a feed cannot be reached when Home Assistant starts, the entry is retried automatically in the background. If a later refresh fails, the sensor becomes `unavailable` until the feed responds again.
 

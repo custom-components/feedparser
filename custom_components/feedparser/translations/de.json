@@ -28,6 +28,18 @@
           "exclusions": "Optionale, durch Kommas getrennte Felder, die entfernt werden sollen. Ausschlüsse werden nach den Einschlüssen angewendet.",
           "user_agent": "Optionaler HTTP-User-Agent, der beim Abrufen des Feeds gesendet wird. Manche Server blockieren unbekannte Clients oder antworten nicht; verwende dafür einen Browser-User-Agent. Leer lassen für den Standardwert."
         }
+      },
+      "reconfigure": {
+        "title": "Feed ändern",
+        "description": "Ändere den Sensornamen oder die Feed-URL. Entitäts-ID und Verlauf bleiben erhalten.",
+        "data": {
+          "name": "Name",
+          "feed_url": "Feed-URL"
+        },
+        "data_description": {
+          "name": "Anzeigename für den Sensor.",
+          "feed_url": "URL eines RSS- oder Atom-Feeds. HTTP, HTTPS und lokale Datei-URLs werden unterstützt."
+        }
       }
     },
     "error": {
@@ -39,7 +51,9 @@
     },
     "abort": {
       "already_configured": "Dieser Feed ist bereits konfiguriert.",
-      "managed_in_ui": "Dieser Feed wird in der Benutzeroberfläche verwaltet."
+      "managed_in_ui": "Dieser Feed wird in der Benutzeroberfläche verwaltet.",
+      "reconfigure_successful": "Der Feed wurde aktualisiert.",
+      "managed_in_yaml": "\"{name}\" ist in configuration.yaml eingerichtet. Ändere Namen oder URL dort und starte Home Assistant neu, oder verschiebe den Feed zuerst über seine Optionen in die Benutzeroberfläche."
     }
   },
   "options": {

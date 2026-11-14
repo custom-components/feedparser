@@ -370,6 +370,67 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
             self.async_create_entry(title=name, data=data, options=options),
         )
 
+    async def async_step_reconfigure(
+        self,
+        user_input: Mapping[str, object] | None = None,
+    ) -> ConfigFlowResult:
+        """Change the name and feed URL of an existing feed."""
+        entry = self._get_reconfigure_entry()
+        if is_yaml_managed(entry):
+            # configuration.yaml would overwrite the change on the next start
+            return cast(
+                "ConfigFlowResult",
+                self.async_abort(
+                    reason="managed_in_yaml",
+                    description_placeholders={"name": entry.title},
+                ),
+            )
+        errors: dict[str, str] = {}
+
+        if user_input is not None:
+            feed_url = str(user_input[CONF_FEED_URL]).strip()
+            name = str(user_input[CONF_NAME]).strip()
+
+            if not _is_supported_url(feed_url):
+                errors[CONF_FEED_URL] = "invalid_url"
+            elif self._is_configured(feed_url, name, exclude_entry_id=entry.entry_id):
+                errors[CONF_NAME] = "already_configured"
+
+            if not errors:
+                errors = await self._async_validate_feed(
+                    feed_url,
+                    str(entry.options.get(CONF_USER_AGENT) or "") or USER_AGENT,
+                )
+            if not errors:
+                # The sensor's unique ID is the entry ID, so the entity ID and
+                # history are kept; only its name and source change.
+                return cast(
+                    "ConfigFlowResult",
+                    self.async_update_reload_and_abort(
+                        entry,
+                        title=name,
+                        data_updates={CONF_NAME: name, CONF_FEED_URL: feed_url},
+                    ),
+                )
+
+        data_schema = self.add_suggested_values_to_schema(
+            vol.Schema(
+                {
+                    vol.Required(CONF_NAME): str,
+                    vol.Required(CONF_FEED_URL): str,
+                },
+            ),
+            user_input or entry.data,
+        )
+        return cast(
+            "ConfigFlowResult",
+            self.async_show_form(
+                step_id="reconfigure",
+                data_schema=data_schema,
+                errors=errors,
+            ),
+        )
+
     def _yaml_entry(
         self,
         unique_id: str,
@@ -395,10 +456,17 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
                 return entry
         return None
 
-    def _is_configured(self, feed_url: str, name: str) -> bool:
-        """Return whether an entry with this feed URL and name already exists."""
+    def _is_configured(
+        self,
+        feed_url: str,
+        name: str,
+        *,
+        exclude_entry_id: str | None = None,
+    ) -> bool:
+        """Return whether another entry with this feed URL and name exists."""
         return any(
-            entry.data.get(CONF_FEED_URL) == feed_url
+            entry.entry_id != exclude_entry_id
+            and entry.data.get(CONF_FEED_URL) == feed_url
             and str(entry.data.get(CONF_NAME, "")).casefold() == name.casefold()
             for entry in self._async_current_entries(include_ignore=False)
         )
