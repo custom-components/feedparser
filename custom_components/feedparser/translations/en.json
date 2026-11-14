@@ -51,7 +51,9 @@
     },
     "abort": {
       "already_configured": "This feed is already configured.",
-      "reconfigure_successful": "The feed was updated."
+      "managed_in_ui": "This feed is managed in the UI.",
+      "reconfigure_successful": "The feed was updated.",
+      "managed_in_yaml": "\"{name}\" is set up in configuration.yaml. Change its name or URL there and restart Home Assistant, or first move it to the UI from its options."
     }
   },
   "options": {
@@ -79,6 +81,17 @@
           "exclusions": "Optional comma-separated fields to remove. Exclusions are applied after inclusions.",
           "user_agent": "Optional HTTP User-Agent sent when fetching the feed. Some servers block or stall unknown clients; set a browser User-Agent for those. Leave empty to use the default."
         }
+      },
+      "yaml": {
+        "title": "Managed in configuration.yaml",
+        "description": "\"{name}\" is set up in configuration.yaml. To change it, edit configuration.yaml and restart Home Assistant.\n\nYou can also manage this feed in the UI instead.",
+        "menu_options": {
+          "move_to_ui": "Manage this feed in the UI instead"
+        }
+      },
+      "move_to_ui": {
+        "title": "Manage in the UI",
+        "description": "From now on, \"{name}\" is edited here and its entry in configuration.yaml is ignored. The sensor and its entity ID stay the same.\n\nAfter submitting, remove \"{name}\" from configuration.yaml."
       }
     },
     "error": {
@@ -86,13 +99,13 @@
     }
   },
   "issues": {
-    "deprecated_yaml": {
-      "title": "Feedparser YAML configuration is deprecated",
-      "description": "Your `sensor:` entries with `platform: feedparser` have been imported into the UI automatically, keeping the same entity IDs.\n\nRemove them from configuration.yaml and restart Home Assistant to fix this issue. Changes to the YAML are no longer applied; edit the feeds under Settings > Devices & services > Feedparser instead."
-    },
     "yaml_import_failed": {
-      "title": "Feedparser YAML sensor \"{name}\" could not be imported",
-      "description": "The YAML sensor \"{name}\" could not be imported into the UI ({reason}), so it is not being created.\n\nAdd it manually under Settings > Devices & services > Add integration > Feedparser, then remove it from configuration.yaml."
+      "title": "Feedparser YAML sensor \"{name}\" could not be set up",
+      "description": "The YAML sensor \"{name}\" could not be set up ({reason}), so it is not being created.\n\nCheck its entry in configuration.yaml, or add it under Settings > Devices & services > Add integration > Feedparser instead."
+    },
+    "yaml_ignored": {
+      "title": "Feedparser sensor \"{name}\" is still in configuration.yaml",
+      "description": "\"{name}\" is managed in the UI, so its `platform: feedparser` entry in configuration.yaml is ignored.\n\nRemove it from configuration.yaml and restart Home Assistant to fix this issue."
     }
   }
 }

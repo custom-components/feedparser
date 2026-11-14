@@ -25,7 +25,9 @@ Alternatively, click on the button below to add the repository:
 
 ## Configuration
 
-### UI configuration (recommended)
+Feeds can be set up in the UI, in `configuration.yaml`, or both. Feeds from YAML show up in the UI too, so you can see all of them in one place.
+
+### UI configuration
 
 1. Go to **Settings** -> **Devices & Services** -> **Integrations**.
 2. Click **Add Integration** and search for **Feedparser**.
@@ -35,14 +37,23 @@ Alternatively, click on the button below to add the repository:
 
 To update refresh or parsing behavior later, open the Feedparser integration card and use **Configure** (options flow). Saved changes reload only that feed entry so the new settings take effect immediately.
 
-To fix the sensor name or feed URL, open the entry's menu (⋮) and choose **Reconfigure**. The new URL is checked like it is at setup, and the entity ID and history are kept.
+To fix the sensor name or feed URL, open the entry's menu (⋮) and choose **Reconfigure**. The new URL is checked like it is at setup, and the entity ID and history are kept. Feeds from `configuration.yaml` are renamed in the YAML instead (or move them to the UI first).
 
 - The same feed URL can be added more than once (for example, once with all fields and once with only titles), as long as each sensor has a different name.
 - If a feed cannot be reached when Home Assistant starts, the entry is retried automatically in the background. If a later refresh fails, the sensor becomes `unavailable` until the feed responds again.
 
-### YAML configuration (deprecated)
+### YAML configuration
 
-YAML configuration still works but is deprecated. On startup, each `sensor:` entry with `platform: feedparser` is **imported into the UI automatically** and keeps its entity ID (`sensor.<name>`), so dashboards and automations keep working. A Repairs notice then asks you to remove the YAML. After the import, changes to the YAML are ignored: edit the feed from the integration card instead. If a YAML sensor cannot be imported, a Repairs notice names it so you can add it manually.
+Add `sensor:` entries with `platform: feedparser` to `configuration.yaml` (example below) and restart Home Assistant. YAML is handy when you copy a setup between Home Assistant instances or keep it in version control.
+
+- **YAML feeds show up in the UI.** Each one appears on the Feedparser integration card like a feed added in the UI. Its entity ID is `sensor.<name>`.
+- **YAML is the source of truth for YAML feeds.** Edit `configuration.yaml` and restart to change one. Remove it from `configuration.yaml` and restart to remove it, along with its entity. **Configure** on a YAML feed explains this instead of showing the options form.
+- **Feeds added in the UI stay in the UI.** They are never written to `configuration.yaml`.
+- **Moving a feed to the UI is optional.** Open **Configure** on a YAML feed and choose **Manage this feed in the UI instead**. The sensor and its entity ID stay the same. From then on you edit it in the UI, and its YAML entry is ignored, so remove it from `configuration.yaml`. Until you do, a Repairs notice reminds you.
+- The name identifies a YAML feed. Changing a feed's URL or options in YAML updates the same sensor, but renaming it creates a new sensor (and removes the old one).
+- If a YAML sensor cannot be set up, a Repairs notice names it.
+
+**Upgrading from 1.0.0:** 1.0.0 deprecated YAML and copied YAML feeds into the UI. After upgrading, any of those feeds still in `configuration.yaml` follow the YAML again, and the deprecation notice goes away. Feeds you already removed from YAML stay in the UI as they are. If you changed a feed in the UI after 1.0.0 imported it, but left it in `configuration.yaml`, the YAML values replace your UI changes. To keep them, remove that feed from `configuration.yaml` before upgrading.
 
 **Example configuration.yaml:**
 
@@ -131,7 +142,7 @@ The custom [list-card](https://github.com/custom-cards/list-card) and [flex-tabl
 
 ### Configuration reference
 
-The integration supports both UI setup (recommended) and legacy YAML setup. Most options are the same in both paths.
+The integration supports both UI and YAML setup. Most options are the same in both paths.
 
 | Key | Required | Type | Default | Example | What it does |
 | :-- | :-- | :-- | :-- | :-- | :-- |

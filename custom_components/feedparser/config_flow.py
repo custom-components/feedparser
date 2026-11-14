@@ -9,6 +9,7 @@ from typing import Any, cast
 import feedparser  # type: ignore[import]
 import requests
 from homeassistant.config_entries import (
+    SOURCE_IMPORT,
     ConfigEntry,
     ConfigFlow,
     ConfigFlowResult,
@@ -26,6 +27,7 @@ from .const import (
     CONF_FEED_URL,
     CONF_INCLUSIONS,
     CONF_LOCAL_TIME,
+    CONF_MANAGED_BY_YAML,
     CONF_REMOVE_SUMMARY_IMAGE,
     CONF_SCAN_INTERVAL,
     CONF_SHOW_TOPN,
@@ -40,6 +42,12 @@ from .const import (
     ENTRY_VERSION,
 )
 from .fetch import USER_AGENT, fetch_feed
+from .yaml_import import (
+    REASON_MANAGED_IN_UI,
+    REASON_SYNCED,
+    is_yaml_managed,
+    yaml_unique_id,
+)
 
 
 class InvalidFeedError(Exception):
@@ -160,6 +168,26 @@ def _options_from_input(user_input: Mapping[str, object]) -> dict[str, object]:
         CONF_INCLUSIONS: _split_csv(str(user_input.get(CONF_INCLUSIONS) or "")),
         CONF_EXCLUSIONS: _split_csv(str(user_input.get(CONF_EXCLUSIONS) or "")),
         CONF_USER_AGENT: _user_agent_from_input(user_input),
+    }
+
+
+def _options_from_import(import_data: Mapping[str, Any]) -> dict[str, object]:
+    """Build stored options from a validated YAML sensor configuration."""
+    user_agent = str(import_data.get(CONF_USER_AGENT) or "").strip()
+    return {
+        CONF_DATE_FORMAT: str(import_data.get(CONF_DATE_FORMAT, DEFAULT_DATE_FORMAT)),
+        CONF_LOCAL_TIME: bool(import_data.get(CONF_LOCAL_TIME, DEFAULT_LOCAL_TIME)),
+        CONF_SCAN_INTERVAL: _scan_interval_to_dict(
+            import_data.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
+        ),
+        CONF_SHOW_TOPN: _to_int(import_data.get(CONF_SHOW_TOPN), DEFAULT_TOPN),
+        CONF_REMOVE_SUMMARY_IMAGE: bool(
+            import_data.get(CONF_REMOVE_SUMMARY_IMAGE, DEFAULT_REMOVE_SUMMARY_IMAGE),
+        ),
+        CONF_INCLUSIONS: _as_str_list(import_data.get(CONF_INCLUSIONS)),
+        CONF_EXCLUSIONS: _as_str_list(import_data.get(CONF_EXCLUSIONS)),
+        # the YAML schema fills in the default agent; store "" for "default"
+        CONF_USER_AGENT: "" if user_agent == USER_AGENT else user_agent,
     }
 
 
@@ -296,48 +324,50 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
         self,
         import_data: Mapping[str, Any],
     ) -> ConfigFlowResult:
-        """Import a legacy YAML `sensor: - platform: feedparser` configuration.
+        """Create or update the entry for a `sensor: - platform: feedparser` sensor.
 
-        The feed is not fetched here: a feed that is down at startup must not stop
-        the migration, and the entry setup retries on its own.
+        Runs on every start, so configuration.yaml stays the source of truth for
+        YAML feeds. The feed is not fetched here: a feed that is down at startup
+        must not stop the import, and the entry setup retries on its own.
         """
         name = str(import_data[CONF_NAME]).strip()
         feed_url = str(import_data[CONF_FEED_URL]).strip()
-        if self._is_configured(feed_url, name):
-            # already imported on a previous start
+        unique_id = yaml_unique_id(name)
+        data = {CONF_NAME: name, CONF_FEED_URL: feed_url, CONF_MANAGED_BY_YAML: True}
+        options = _options_from_import(import_data)
+
+        entry = self._yaml_entry(unique_id, feed_url, name)
+        if entry is not None:
+            if entry.data.get(CONF_MANAGED_BY_YAML) is False:
+                # moved to the UI by the user: the YAML no longer applies
+                return cast(
+                    "ConfigFlowResult",
+                    self.async_abort(reason=REASON_MANAGED_IN_UI),
+                )
             return cast(
                 "ConfigFlowResult",
-                self.async_abort(reason="already_configured"),
+                self.async_update_reload_and_abort(
+                    entry,
+                    unique_id=unique_id,
+                    title=name,
+                    data=data,
+                    options=options,
+                    reason=REASON_SYNCED,
+                    reload_even_if_entry_is_unchanged=False,
+                ),
             )
 
-        user_agent = str(import_data.get(CONF_USER_AGENT) or "").strip()
-        options = {
-            CONF_DATE_FORMAT: str(
-                import_data.get(CONF_DATE_FORMAT, DEFAULT_DATE_FORMAT),
-            ),
-            CONF_LOCAL_TIME: bool(import_data.get(CONF_LOCAL_TIME, DEFAULT_LOCAL_TIME)),
-            CONF_SCAN_INTERVAL: _scan_interval_to_dict(
-                import_data.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
-            ),
-            CONF_SHOW_TOPN: _to_int(import_data.get(CONF_SHOW_TOPN), DEFAULT_TOPN),
-            CONF_REMOVE_SUMMARY_IMAGE: bool(
-                import_data.get(
-                    CONF_REMOVE_SUMMARY_IMAGE,
-                    DEFAULT_REMOVE_SUMMARY_IMAGE,
-                ),
-            ),
-            CONF_INCLUSIONS: _as_str_list(import_data.get(CONF_INCLUSIONS)),
-            CONF_EXCLUSIONS: _as_str_list(import_data.get(CONF_EXCLUSIONS)),
-            # the YAML schema fills in the default agent; store "" for "default"
-            CONF_USER_AGENT: "" if user_agent == USER_AGENT else user_agent,
-        }
+        if self._is_configured(feed_url, name):
+            # the same feed and name were added in the UI
+            return cast(
+                "ConfigFlowResult",
+                self.async_abort(reason=REASON_MANAGED_IN_UI),
+            )
+
+        await self.async_set_unique_id(unique_id)
         return cast(
             "ConfigFlowResult",
-            self.async_create_entry(
-                title=name,
-                data={CONF_NAME: name, CONF_FEED_URL: feed_url},
-                options=options,
-            ),
+            self.async_create_entry(title=name, data=data, options=options),
         )
 
     async def async_step_reconfigure(
@@ -346,6 +376,15 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
     ) -> ConfigFlowResult:
         """Change the name and feed URL of an existing feed."""
         entry = self._get_reconfigure_entry()
+        if is_yaml_managed(entry):
+            # configuration.yaml would overwrite the change on the next start
+            return cast(
+                "ConfigFlowResult",
+                self.async_abort(
+                    reason="managed_in_yaml",
+                    description_placeholders={"name": entry.title},
+                ),
+            )
         errors: dict[str, str] = {}
 
         if user_input is not None:
@@ -391,6 +430,31 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
                 errors=errors,
             ),
         )
+
+    def _yaml_entry(
+        self,
+        unique_id: str,
+        feed_url: str,
+        name: str,
+    ) -> ConfigEntry | None:
+        """Return the entry that belongs to a YAML sensor, if there is one.
+
+        Entries imported by 1.0.0 have no unique ID; they are matched by feed URL
+        and name, then linked to the YAML again.
+        """
+        for entry in self._async_current_entries(include_ignore=False):
+            if entry.unique_id == unique_id:
+                return entry
+        for entry in self._async_current_entries(include_ignore=False):
+            if (
+                entry.source == SOURCE_IMPORT
+                and entry.unique_id is None
+                and CONF_MANAGED_BY_YAML not in entry.data
+                and entry.data.get(CONF_FEED_URL) == feed_url
+                and str(entry.data.get(CONF_NAME, "")).casefold() == name.casefold()
+            ):
+                return entry
+        return None
 
     def _is_configured(
         self,
@@ -447,6 +511,9 @@ class FeedparserOptionsFlow(OptionsFlowWithReload):
         user_input: Mapping[str, object] | None = None,
     ) -> ConfigFlowResult:
         """Manage Feedparser options."""
+        if is_yaml_managed(self.config_entry):
+            return await self.async_step_yaml()
+
         errors: dict[str, str] = {}
 
         if user_input is not None:
@@ -486,4 +553,42 @@ class FeedparserOptionsFlow(OptionsFlowWithReload):
                 data_schema=data_schema,
                 errors=errors,
             ),
+        )
+
+    async def async_step_yaml(
+        self,
+        _user_input: Mapping[str, object] | None = None,
+    ) -> ConfigFlowResult:
+        """Explain that the feed is managed in YAML and offer to move it to the UI."""
+        return cast(
+            "ConfigFlowResult",
+            self.async_show_menu(
+                step_id="yaml",
+                menu_options=["move_to_ui"],
+                description_placeholders={"name": self.config_entry.title},
+            ),
+        )
+
+    async def async_step_move_to_ui(
+        self,
+        user_input: Mapping[str, object] | None = None,
+    ) -> ConfigFlowResult:
+        """Stop following configuration.yaml for this feed."""
+        if user_input is None:
+            return cast(
+                "ConfigFlowResult",
+                self.async_show_form(
+                    step_id="move_to_ui",
+                    data_schema=vol.Schema({}),
+                    description_placeholders={"name": self.config_entry.title},
+                ),
+            )
+
+        self.hass.config_entries.async_update_entry(
+            self.config_entry,
+            data={**self.config_entry.data, CONF_MANAGED_BY_YAML: False},
+        )
+        return cast(
+            "ConfigFlowResult",
+            self.async_create_entry(title="", data=dict(self.config_entry.options)),
         )

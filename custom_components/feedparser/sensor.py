@@ -65,10 +65,10 @@ async def async_setup_platform(
     async_add_entities: AddEntitiesCallback,  # noqa: ARG001
     discovery_info: DiscoveryInfoType | None = None,  # noqa: ARG001
 ) -> None:
-    """Import a legacy YAML sensor into a config entry.
+    """Create or update the config entry backing a YAML sensor.
 
-    YAML configuration is deprecated: the sensor is created by the imported config
-    entry (keeping the same entity ID), not by this platform.
+    The sensor is created by that config entry (so it also shows in the UI), not
+    by this platform.
     """
     await async_import_yaml_sensor(hass, config)
 
@@ -98,8 +98,8 @@ class FeedParserSensor(CoordinatorEntity[FeedparserCoordinator], SensorEntity):
         """Initialize the sensor."""
         super().__init__(coordinator)
         entry = coordinator.config_entry
-        # Not has_entity_name: keep `sensor.<name>` so imported YAML sensors keep
-        # their entity IDs.
+        # Not has_entity_name: keep `sensor.<name>` so YAML sensors keep the entity
+        # IDs they had before they were backed by config entries.
         self._attr_name = entry.data[CONF_NAME]
         self._attr_unique_id = entry.entry_id
 
