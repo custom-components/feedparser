@@ -40,6 +40,7 @@ from .const import (
     DEFAULT_TOPN,
 )
 from .fetch import USER_AGENT, fetch_feed
+from .yaml_import import async_import_yaml_sensor
 
 if TYPE_CHECKING:
     from homeassistant.config_entries import ConfigEntry
@@ -111,29 +112,17 @@ def _scan_interval_to_timedelta(value: object) -> timedelta:
 
 
 async def async_setup_platform(
-    hass: HomeAssistant,  # noqa: ARG001
+    hass: HomeAssistant,
     config: ConfigType,
-    async_add_devices: AddEntitiesCallback,
+    async_add_entities: AddEntitiesCallback,  # noqa: ARG001
     discovery_info: DiscoveryInfoType | None = None,  # noqa: ARG001
 ) -> None:
-    """Set up the Feedparser sensor."""
-    async_add_devices(
-        [
-            FeedParserSensor(
-                feed=config[CONF_FEED_URL],
-                name=config[CONF_NAME],
-                date_format=config[CONF_DATE_FORMAT],
-                show_topn=config[CONF_SHOW_TOPN],
-                remove_summary_image=config[CONF_REMOVE_SUMMARY_IMAGE],
-                inclusions=config[CONF_INCLUSIONS],
-                exclusions=config[CONF_EXCLUSIONS],
-                scan_interval=config[CONF_SCAN_INTERVAL],
-                local_time=config[CONF_LOCAL_TIME],
-                user_agent=config[CONF_USER_AGENT],
-            ),
-        ],
-        update_before_add=True,
-    )
+    """Import a legacy YAML sensor into a config entry.
+
+    YAML configuration is deprecated: the sensor is created by the imported config
+    entry (keeping the same entity ID), not by this platform.
+    """
+    await async_import_yaml_sensor(hass, config)
 
 
 async def async_setup_entry(

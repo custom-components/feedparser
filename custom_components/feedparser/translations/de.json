@@ -31,7 +31,7 @@
       }
     },
     "error": {
-      "already_configured": "Dieser Feed ist bereits konfiguriert.",
+      "already_configured": "Für diesen Feed gibt es bereits einen Sensor mit diesem Namen. Wähle einen anderen Namen.",
       "cannot_connect": "Der Feed konnte nicht heruntergeladen werden.",
       "invalid_url": "Die URL ist ungültig.",
       "invalid_feed": "Die URL wurde geladen, scheint aber kein RSS- oder Atom-Feed zu sein.",
@@ -70,6 +70,16 @@
     },
     "error": {
       "scan_interval_too_short": "Das Aktualisierungsintervall muss mindestens 1 Minute betragen."
+    }
+  },
+  "issues": {
+    "deprecated_yaml": {
+      "title": "Feedparser-YAML-Konfiguration ist veraltet",
+      "description": "Deine `sensor:`-Einträge mit `platform: feedparser` wurden automatisch in die Benutzeroberfläche übernommen; die Entitäts-IDs bleiben gleich.\n\nEntferne sie aus der configuration.yaml und starte Home Assistant neu, um dieses Problem zu beheben. Änderungen an der YAML werden nicht mehr übernommen; bearbeite die Feeds stattdessen unter Einstellungen > Geräte & Dienste > Feedparser."
+    },
+    "yaml_import_failed": {
+      "title": "Feedparser-YAML-Sensor \"{name}\" konnte nicht übernommen werden",
+      "description": "Der YAML-Sensor \"{name}\" konnte nicht in die Benutzeroberfläche übernommen werden ({reason}) und wird daher nicht angelegt.\n\nFüge ihn manuell unter Einstellungen > Geräte & Dienste > Integration hinzufügen > Feedparser hinzu und entferne ihn anschließend aus der configuration.yaml."
     }
   }
 }

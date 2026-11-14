@@ -127,6 +127,42 @@ def _scan_interval_from_input(user_input: Mapping[str, object]) -> dict[str, int
     }
 
 
+def _as_str_list(value: object) -> list[str]:
+    """Return a list of non-empty strings from a YAML list or a CSV string."""
+    if isinstance(value, str):
+        return _split_csv(value)
+    if isinstance(value, list):
+        return [
+            item.strip() for item in value if isinstance(item, str) and item.strip()
+        ]
+    return []
+
+
+def _is_supported_url(feed_url: str) -> bool:
+    """Return whether the URL is well-formed with a supported scheme."""
+    try:
+        return URL(feed_url).scheme in ("http", "https", "file")
+    except ValueError:
+        return False
+
+
+def _options_from_input(user_input: Mapping[str, object]) -> dict[str, object]:
+    """Build stored options from a setup/options form submission.
+
+    Raises ``vol.Invalid`` if the refresh interval is shorter than a minute.
+    """
+    return {
+        CONF_DATE_FORMAT: str(user_input[CONF_DATE_FORMAT]).strip(),
+        CONF_LOCAL_TIME: bool(user_input[CONF_LOCAL_TIME]),
+        CONF_SCAN_INTERVAL: _scan_interval_from_input(user_input),
+        CONF_SHOW_TOPN: _to_int(user_input[CONF_SHOW_TOPN], DEFAULT_TOPN),
+        CONF_REMOVE_SUMMARY_IMAGE: bool(user_input[CONF_REMOVE_SUMMARY_IMAGE]),
+        CONF_INCLUSIONS: _split_csv(str(user_input.get(CONF_INCLUSIONS) or "")),
+        CONF_EXCLUSIONS: _split_csv(str(user_input.get(CONF_EXCLUSIONS) or "")),
+        CONF_USER_AGENT: _user_agent_from_input(user_input),
+    }
+
+
 def _user_agent_from_input(user_input: Mapping[str, object]) -> str:
     """Return the configured User-Agent, or "" to use the integration default."""
     return str(user_input.get(CONF_USER_AGENT) or "").strip()
@@ -211,73 +247,41 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             feed_url = str(user_input[CONF_FEED_URL]).strip()
-            user_agent = _user_agent_from_input(user_input)
-            scan_interval: dict[str, int] | None = None
+            name = str(user_input[CONF_NAME]).strip()
+            options: dict[str, object] = {}
 
             try:
-                scan_interval = _scan_interval_from_input(user_input)
+                options = _options_from_input(user_input)
             except vol.Invalid:
                 errors[CONF_SCAN_INTERVAL] = "scan_interval_too_short"
-
-            try:
-                parsed_url = URL(feed_url)
-            except ValueError:
+            if not _is_supported_url(feed_url):
                 errors[CONF_FEED_URL] = "invalid_url"
-            else:
-                if parsed_url.scheme not in ("http", "https", "file"):
-                    errors[CONF_FEED_URL] = "invalid_url"
+            elif self._is_configured(feed_url, name):
+                # The same feed may be added more than once (e.g. with different
+                # filters) as long as each sensor has its own name.
+                errors[CONF_NAME] = "already_configured"
 
             if not errors:
-                await self.async_set_unique_id(feed_url)
-                self._abort_if_unique_id_configured(error="already_configured")
-
-                try:
-                    await self.hass.async_add_executor_job(
-                        self._validate_feed_url,
-                        feed_url,
-                        user_agent or USER_AGENT,
-                    )
-                except requests.RequestException:
-                    errors["base"] = "cannot_connect"
-                except InvalidFeedError:
-                    errors[CONF_FEED_URL] = "invalid_feed"
-                else:
-                    assert scan_interval is not None
-                    data = {
-                        CONF_NAME: str(user_input[CONF_NAME]).strip(),
-                        CONF_FEED_URL: feed_url,
-                    }
-                    options = {
-                        CONF_DATE_FORMAT: str(user_input[CONF_DATE_FORMAT]).strip(),
-                        CONF_LOCAL_TIME: bool(user_input[CONF_LOCAL_TIME]),
-                        CONF_SCAN_INTERVAL: scan_interval,
-                        CONF_SHOW_TOPN: _to_int(
-                            user_input[CONF_SHOW_TOPN],
-                            DEFAULT_TOPN,
-                        ),
-                        CONF_REMOVE_SUMMARY_IMAGE: bool(
-                            user_input[CONF_REMOVE_SUMMARY_IMAGE],
-                        ),
-                        CONF_INCLUSIONS: _split_csv(
-                            str(user_input[CONF_INCLUSIONS]).strip(),
-                        ),
-                        CONF_EXCLUSIONS: _split_csv(
-                            str(user_input[CONF_EXCLUSIONS]).strip(),
-                        ),
-                        CONF_USER_AGENT: user_agent,
-                    }
-                    return cast(
-                        "ConfigFlowResult",
-                        self.async_create_entry(
-                            title=data[CONF_NAME],
-                            data=data,
-                            options=options,
-                        ),
-                    )
+                errors = await self._async_validate_feed(
+                    feed_url,
+                    str(options[CONF_USER_AGENT]) or USER_AGENT,
+                )
+            if not errors:
+                return cast(
+                    "ConfigFlowResult",
+                    self.async_create_entry(
+                        title=name,
+                        data={CONF_NAME: name, CONF_FEED_URL: feed_url},
+                        options=options,
+                    ),
+                )
 
         data_schema = _schema_with_defaults(
             include_feed_identity=True,
         )
+        if user_input is not None:
+            # keep what the user typed when showing errors
+            data_schema = self.add_suggested_values_to_schema(data_schema, user_input)
 
         return cast(
             "ConfigFlowResult",
@@ -287,6 +291,80 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
                 errors=errors,
             ),
         )
+
+    async def async_step_import(
+        self,
+        import_data: Mapping[str, Any],
+    ) -> ConfigFlowResult:
+        """Import a legacy YAML `sensor: - platform: feedparser` configuration.
+
+        The feed is not fetched here: a feed that is down at startup must not stop
+        the migration, and the entry setup retries on its own.
+        """
+        name = str(import_data[CONF_NAME]).strip()
+        feed_url = str(import_data[CONF_FEED_URL]).strip()
+        if self._is_configured(feed_url, name):
+            # already imported on a previous start
+            return cast(
+                "ConfigFlowResult",
+                self.async_abort(reason="already_configured"),
+            )
+
+        user_agent = str(import_data.get(CONF_USER_AGENT) or "").strip()
+        options = {
+            CONF_DATE_FORMAT: str(
+                import_data.get(CONF_DATE_FORMAT, DEFAULT_DATE_FORMAT),
+            ),
+            CONF_LOCAL_TIME: bool(import_data.get(CONF_LOCAL_TIME, DEFAULT_LOCAL_TIME)),
+            CONF_SCAN_INTERVAL: _scan_interval_to_dict(
+                import_data.get(CONF_SCAN_INTERVAL, DEFAULT_SCAN_INTERVAL),
+            ),
+            CONF_SHOW_TOPN: _to_int(import_data.get(CONF_SHOW_TOPN), DEFAULT_TOPN),
+            CONF_REMOVE_SUMMARY_IMAGE: bool(
+                import_data.get(
+                    CONF_REMOVE_SUMMARY_IMAGE,
+                    DEFAULT_REMOVE_SUMMARY_IMAGE,
+                ),
+            ),
+            CONF_INCLUSIONS: _as_str_list(import_data.get(CONF_INCLUSIONS)),
+            CONF_EXCLUSIONS: _as_str_list(import_data.get(CONF_EXCLUSIONS)),
+            # the YAML schema fills in the default agent; store "" for "default"
+            CONF_USER_AGENT: "" if user_agent == USER_AGENT else user_agent,
+        }
+        return cast(
+            "ConfigFlowResult",
+            self.async_create_entry(
+                title=name,
+                data={CONF_NAME: name, CONF_FEED_URL: feed_url},
+                options=options,
+            ),
+        )
+
+    def _is_configured(self, feed_url: str, name: str) -> bool:
+        """Return whether an entry with this feed URL and name already exists."""
+        return any(
+            entry.data.get(CONF_FEED_URL) == feed_url
+            and str(entry.data.get(CONF_NAME, "")).casefold() == name.casefold()
+            for entry in self._async_current_entries(include_ignore=False)
+        )
+
+    async def _async_validate_feed(
+        self,
+        feed_url: str,
+        user_agent: str,
+    ) -> dict[str, str]:
+        """Fetch the feed and return form errors (empty if it is usable)."""
+        try:
+            await self.hass.async_add_executor_job(
+                self._validate_feed_url,
+                feed_url,
+                user_agent,
+            )
+        except requests.RequestException:
+            return {"base": "cannot_connect"}
+        except InvalidFeedError:
+            return {CONF_FEED_URL: "invalid_feed"}
+        return {}
 
     @staticmethod
     def _validate_feed_url(feed_url: str, user_agent: str = USER_AGENT) -> None:
@@ -314,26 +392,10 @@ class FeedparserOptionsFlow(OptionsFlowWithReload):
 
         if user_input is not None:
             try:
-                scan_interval = _scan_interval_from_input(user_input)
+                options = _options_from_input(user_input)
             except vol.Invalid:
                 errors[CONF_SCAN_INTERVAL] = "scan_interval_too_short"
             else:
-                options = {
-                    CONF_DATE_FORMAT: str(user_input[CONF_DATE_FORMAT]).strip(),
-                    CONF_LOCAL_TIME: bool(user_input[CONF_LOCAL_TIME]),
-                    CONF_SCAN_INTERVAL: scan_interval,
-                    CONF_SHOW_TOPN: _to_int(user_input[CONF_SHOW_TOPN], DEFAULT_TOPN),
-                    CONF_REMOVE_SUMMARY_IMAGE: bool(
-                        user_input[CONF_REMOVE_SUMMARY_IMAGE],
-                    ),
-                    CONF_INCLUSIONS: _split_csv(
-                        str(user_input[CONF_INCLUSIONS]).strip(),
-                    ),
-                    CONF_EXCLUSIONS: _split_csv(
-                        str(user_input[CONF_EXCLUSIONS]).strip(),
-                    ),
-                    CONF_USER_AGENT: _user_agent_from_input(user_input),
-                }
                 return cast(
                     "ConfigFlowResult",
                     self.async_create_entry(title="", data=options),
