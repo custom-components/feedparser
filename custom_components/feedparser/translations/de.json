@@ -38,7 +38,8 @@
       "scan_interval_too_short": "Das Aktualisierungsintervall muss mindestens 1 Minute betragen."
     },
     "abort": {
-      "already_configured": "Dieser Feed ist bereits konfiguriert."
+      "already_configured": "Dieser Feed ist bereits konfiguriert.",
+      "managed_in_ui": "Dieser Feed wird in der Benutzeroberfläche verwaltet."
     }
   },
   "options": {
@@ -66,6 +67,17 @@
           "exclusions": "Optionale, durch Kommas getrennte Felder, die entfernt werden sollen. Ausschlüsse werden nach den Einschlüssen angewendet.",
           "user_agent": "Optionaler HTTP-User-Agent, der beim Abrufen des Feeds gesendet wird. Manche Server blockieren unbekannte Clients oder antworten nicht; verwende dafür einen Browser-User-Agent. Leer lassen für den Standardwert."
         }
+      },
+      "yaml": {
+        "title": "In configuration.yaml verwaltet",
+        "description": "„{name}“ ist in der configuration.yaml eingerichtet. Um ihn zu ändern, bearbeite die configuration.yaml und starte Home Assistant neu.\n\nDu kannst diesen Feed stattdessen auch in der Benutzeroberfläche verwalten.",
+        "menu_options": {
+          "move_to_ui": "Diesen Feed stattdessen in der Benutzeroberfläche verwalten"
+        }
+      },
+      "move_to_ui": {
+        "title": "In der Benutzeroberfläche verwalten",
+        "description": "Ab jetzt wird „{name}“ hier bearbeitet und sein Eintrag in der configuration.yaml ignoriert. Der Sensor und seine Entitäts-ID bleiben gleich.\n\nEntferne „{name}“ nach dem Absenden aus der configuration.yaml."
       }
     },
     "error": {
@@ -73,13 +85,13 @@
     }
   },
   "issues": {
-    "deprecated_yaml": {
-      "title": "Feedparser-YAML-Konfiguration ist veraltet",
-      "description": "Deine `sensor:`-Einträge mit `platform: feedparser` wurden automatisch in die Benutzeroberfläche übernommen; die Entitäts-IDs bleiben gleich.\n\nEntferne sie aus der configuration.yaml und starte Home Assistant neu, um dieses Problem zu beheben. Änderungen an der YAML werden nicht mehr übernommen; bearbeite die Feeds stattdessen unter Einstellungen > Geräte & Dienste > Feedparser."
-    },
     "yaml_import_failed": {
-      "title": "Feedparser-YAML-Sensor \"{name}\" konnte nicht übernommen werden",
-      "description": "Der YAML-Sensor \"{name}\" konnte nicht in die Benutzeroberfläche übernommen werden ({reason}) und wird daher nicht angelegt.\n\nFüge ihn manuell unter Einstellungen > Geräte & Dienste > Integration hinzufügen > Feedparser hinzu und entferne ihn anschließend aus der configuration.yaml."
+      "title": "Feedparser-YAML-Sensor „{name}“ konnte nicht eingerichtet werden",
+      "description": "Der YAML-Sensor „{name}“ konnte nicht eingerichtet werden ({reason}) und wird daher nicht erstellt.\n\nPrüfe seinen Eintrag in der configuration.yaml oder füge ihn stattdessen unter Einstellungen > Geräte & Dienste > Integration hinzufügen > Feedparser hinzu."
+    },
+    "yaml_ignored": {
+      "title": "Feedparser-Sensor „{name}“ steht noch in der configuration.yaml",
+      "description": "„{name}“ wird in der Benutzeroberfläche verwaltet, daher wird sein `platform: feedparser`-Eintrag in der configuration.yaml ignoriert.\n\nEntferne ihn aus der configuration.yaml und starte Home Assistant neu, um dieses Problem zu beheben."
     }
   }
 }

@@ -18,6 +18,10 @@ CONF_SCAN_INTERVAL = "scan_interval"
 CONF_REMOVE_SUMMARY_IMAGE = "remove_summary_image"
 CONF_USER_AGENT = "user_agent"
 
+# Entry data flag: True while the entry follows configuration.yaml, False once the
+# user moved it to the UI. Missing on UI entries and on entries imported by 1.0.0.
+CONF_MANAGED_BY_YAML = "managed_by_yaml"
+
 DEFAULT_DATE_FORMAT = "%a, %b %d %I:%M %p"
 DEFAULT_SCAN_INTERVAL = timedelta(hours=1)
 DEFAULT_TOPN = 9999

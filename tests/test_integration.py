@@ -25,6 +25,7 @@ from custom_components.feedparser.const import (
     CONF_FEED_URL,
     CONF_INCLUSIONS,
     CONF_LOCAL_TIME,
+    CONF_MANAGED_BY_YAML,
     CONF_REMOVE_SUMMARY_IMAGE,
     CONF_SCAN_INTERVAL,
     CONF_SHOW_TOPN,
@@ -33,7 +34,10 @@ from custom_components.feedparser.const import (
     ENTRY_VERSION,
 )
 from custom_components.feedparser.sensor import PLATFORM_SCHEMA
-from custom_components.feedparser.yaml_import import async_import_yaml_sensor
+from custom_components.feedparser.yaml_import import (
+    async_import_yaml_sensor,
+    async_remove_stale_yaml_entries,
+)
 
 if TYPE_CHECKING:
     from freezegun.api import FrozenDateTimeFactory
@@ -271,9 +275,10 @@ async def test_yaml_is_imported(hass: HomeAssistant, tmp_path: Path) -> None:
     assert state.state == "2"
     assert [e["title"] for e in state.attributes["entries"]] == ["one", "two"]
 
-    issue = ir.async_get(hass).async_get_issue(DOMAIN, "deprecated_yaml")
-    assert issue is not None
-    assert issue.severity is ir.IssueSeverity.WARNING
+    # managed by YAML, shown in the UI, and no longer deprecated
+    assert entry.data[CONF_MANAGED_BY_YAML] is True
+    assert entry.unique_id == "yaml_yaml_feed"
+    assert not [domain for domain, _ in ir.async_get(hass).issues if domain == DOMAIN]
 
 
 async def test_yaml_import_is_idempotent(hass: HomeAssistant, tmp_path: Path) -> None:
@@ -286,7 +291,6 @@ async def test_yaml_import_is_idempotent(hass: HomeAssistant, tmp_path: Path) ->
     await hass.async_block_till_done()
 
     assert len(hass.config_entries.async_entries(DOMAIN)) == 1
-    assert ir.async_get(hass).async_get_issue(DOMAIN, "deprecated_yaml") is not None
 
 
 async def test_yaml_same_feed_twice(hass: HomeAssistant, tmp_path: Path) -> None:
@@ -302,6 +306,157 @@ async def test_yaml_same_feed_twice(hass: HomeAssistant, tmp_path: Path) -> None
     assert titles == ["All Fields", "Titles Only"]
     assert get_state(hass, "sensor.all_fields").state == "2"
     assert get_state(hass, "sensor.titles_only").state == "2"
+
+
+async def import_yaml(hass: HomeAssistant, **sensor: Any) -> None:  # noqa: ANN401
+    """Run the YAML import for one sensor, as happens on every start."""
+    config = PLATFORM_SCHEMA({"platform": DOMAIN, **sensor})
+    await async_import_yaml_sensor(hass, config)
+    await hass.async_block_till_done()
+
+
+def yaml_issues(hass: HomeAssistant, translation_key: str) -> list[ir.IssueEntry]:
+    """Return this integration's Repairs issues with a translation key."""
+    return [
+        issue
+        for (domain, _), issue in ir.async_get(hass).issues.items()
+        if domain == DOMAIN and issue.translation_key == translation_key
+    ]
+
+
+async def test_yaml_changes_are_applied(hass: HomeAssistant, tmp_path: Path) -> None:
+    """Changing a YAML sensor updates and reloads its entry on the next start."""
+    url = write_feed(tmp_path / "feed.xml", ["one", "two", "three"])
+    other_url = write_feed(tmp_path / "other.xml", ["four"])
+    await setup_yaml(hass, {"name": "Yaml Feed", "feed_url": url})
+    assert get_state(hass, "sensor.yaml_feed").state == "3"
+    entry_id = hass.config_entries.async_entries(DOMAIN)[0].entry_id
+
+    await import_yaml(hass, name="Yaml Feed", feed_url=url, show_topn=TOP_N)
+    assert get_state(hass, "sensor.yaml_feed").state == "2"
+
+    # the name identifies the sensor, so a new URL updates the same entry
+    await import_yaml(hass, name="Yaml Feed", feed_url=other_url)
+    entries = hass.config_entries.async_entries(DOMAIN)
+    assert [e.entry_id for e in entries] == [entry_id]
+    assert entries[0].data[CONF_FEED_URL] == other_url
+    assert get_state(hass, "sensor.yaml_feed").state == "1"
+
+
+async def test_yaml_removed_removes_entry(hass: HomeAssistant, tmp_path: Path) -> None:
+    """A YAML sensor removed from configuration.yaml is removed from the UI too."""
+    url = write_feed(tmp_path / "feed.xml", ["one"])
+    await setup_yaml(
+        hass,
+        {"name": "Kept", "feed_url": url},
+        {"name": "Removed", "feed_url": url},
+    )
+    ui_entry = await add_entry(hass, "Ui Feed", url)
+    assert len(hass.config_entries.async_entries(DOMAIN)) == 3  # noqa: PLR2004
+
+    # the next start, with only "Kept" left in the YAML
+    await async_remove_stale_yaml_entries(
+        hass,
+        {"sensor": [{"platform": DOMAIN, "name": "Kept", "feed_url": url}]},
+    )
+    await hass.async_block_till_done()
+
+    titles = sorted(e.title for e in hass.config_entries.async_entries(DOMAIN))
+    assert titles == ["Kept", ui_entry.title]
+    assert hass.states.get("sensor.removed") is None
+
+
+async def test_yaml_entry_options_offer_moving_to_ui(
+    hass: HomeAssistant,
+    tmp_path: Path,
+) -> None:
+    """A YAML feed can be moved to the UI; after that the YAML is ignored."""
+    url = write_feed(tmp_path / "feed.xml", ["one", "two", "three"])
+    await setup_yaml(hass, {"name": "Yaml Feed", "feed_url": url})
+    entry = hass.config_entries.async_entries(DOMAIN)[0]
+
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+    assert result["type"] is FlowResultType.MENU
+    assert result["step_id"] == "yaml"
+    result = await hass.config_entries.options.async_configure(
+        result["flow_id"],
+        {"next_step_id": "move_to_ui"},
+    )
+    assert result["type"] is FlowResultType.FORM
+    result = await hass.config_entries.options.async_configure(result["flow_id"], {})
+    assert result["type"] is FlowResultType.CREATE_ENTRY
+    assert entry.data[CONF_MANAGED_BY_YAML] is False
+
+    # now it opens the normal options form
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+    assert result["type"] is FlowResultType.FORM
+    assert result["step_id"] == "init"
+    hass.config_entries.options.async_abort(result["flow_id"])
+
+    # YAML still present on the next start: ignored, with a Repairs notice
+    await async_remove_stale_yaml_entries(hass, {})
+    await import_yaml(hass, name="Yaml Feed", feed_url=url, show_topn=TOP_N)
+    assert hass.config_entries.async_entries(DOMAIN) == [entry]
+    assert entry.options[CONF_SHOW_TOPN] != TOP_N
+    issues = yaml_issues(hass, "yaml_ignored")
+    assert len(issues) == 1
+    assert issues[0].translation_placeholders == {"name": "Yaml Feed"}
+
+
+async def test_yaml_relinks_entries_imported_by_1_0_0(
+    hass: HomeAssistant,
+    tmp_path: Path,
+) -> None:
+    """Entries imported by 1.0.0 follow the YAML again after upgrading."""
+    url = write_feed(tmp_path / "feed.xml", ["one", "two", "three"])
+    old = MockConfigEntry(
+        domain=DOMAIN,
+        version=ENTRY_VERSION,
+        source=config_entries.SOURCE_IMPORT,
+        title="Yaml Feed",
+        data={CONF_NAME: "Yaml Feed", CONF_FEED_URL: url},
+        options={**options(), CONF_INCLUSIONS: [], CONF_EXCLUSIONS: []},
+    )
+    old.add_to_hass(hass)
+    # a 1.0.0 entry is not removed just because it is not linked yet
+    await async_remove_stale_yaml_entries(hass, {})
+    assert hass.config_entries.async_entries(DOMAIN) == [old]
+
+    await setup_yaml(hass, {"name": "Yaml Feed", "feed_url": url, "show_topn": TOP_N})
+
+    assert hass.config_entries.async_entries(DOMAIN) == [old]
+    assert old.unique_id == "yaml_yaml_feed"
+    assert old.data[CONF_MANAGED_BY_YAML] is True
+    assert old.options[CONF_SHOW_TOPN] == TOP_N
+
+
+async def test_yaml_duplicate_of_ui_entry_is_ignored(
+    hass: HomeAssistant,
+    tmp_path: Path,
+) -> None:
+    """YAML never takes over a feed that was added in the UI."""
+    url = write_feed(tmp_path / "feed.xml", ["one"])
+    ui_entry = await add_entry(hass, "Same Feed", url)
+
+    await import_yaml(hass, name="Same Feed", feed_url=url, show_topn=TOP_N)
+
+    assert hass.config_entries.async_entries(DOMAIN) == [ui_entry]
+    assert CONF_MANAGED_BY_YAML not in ui_entry.data
+    assert len(yaml_issues(hass, "yaml_ignored")) == 1
+
+
+async def test_deprecation_issue_from_1_0_0_is_cleared(hass: HomeAssistant) -> None:
+    """The Repairs notice raised by 1.0.0 goes away after upgrading."""
+    ir.async_create_issue(
+        hass,
+        DOMAIN,
+        "deprecated_yaml",
+        is_fixable=False,
+        severity=ir.IssueSeverity.WARNING,
+        translation_key="deprecated_yaml",
+    )
+    assert await async_setup_component(hass, DOMAIN, {})
+    assert ir.async_get(hass).async_get_issue(DOMAIN, "deprecated_yaml") is None
 
 
 async def test_yaml_import_failure_raises_issue(
