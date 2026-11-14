@@ -13,7 +13,8 @@
           "show_topn": "Maximale Einträge",
           "remove_summary_image": "Bild-Tags aus der Zusammenfassung entfernen",
           "inclusions": "Einbezogene Felder",
-          "exclusions": "Ausgeschlossene Felder"
+          "exclusions": "Ausgeschlossene Felder",
+          "user_agent": "User-Agent"
         },
         "data_description": {
           "name": "Anzeigename für den Sensor.",
@@ -24,7 +25,8 @@
           "show_topn": "Maximale Anzahl von Einträgen im Attribut `entries`. Große Werte erhöhen die Zustandsgröße.",
           "remove_summary_image": "Entfernt Bild-Tags aus dem Feld `summary`. Ein separates Feld `image` wird nicht entfernt.",
           "inclusions": "Optionale, durch Kommas getrennte Positivliste, zum Beispiel `title, link, published`. Leer lassen, um alle Felder außer den ausgeschlossenen beizubehalten.",
-          "exclusions": "Optionale, durch Kommas getrennte Felder, die entfernt werden sollen. Ausschlüsse werden nach den Einschlüssen angewendet."
+          "exclusions": "Optionale, durch Kommas getrennte Felder, die entfernt werden sollen. Ausschlüsse werden nach den Einschlüssen angewendet.",
+          "user_agent": "Optionaler HTTP-User-Agent, der beim Abrufen des Feeds gesendet wird. Manche Server blockieren unbekannte Clients oder antworten nicht; verwende dafür einen Browser-User-Agent. Leer lassen für den Standardwert."
         }
       }
     },
@@ -51,7 +53,8 @@
           "show_topn": "Maximale Einträge",
           "remove_summary_image": "Bild-Tags aus der Zusammenfassung entfernen",
           "inclusions": "Einbezogene Felder",
-          "exclusions": "Ausgeschlossene Felder"
+          "exclusions": "Ausgeschlossene Felder",
+          "user_agent": "User-Agent"
         },
         "data_description": {
           "date_format": "Python-strftime-Format für Feed-Datumswerte, zum Beispiel `%a, %d %b %Y %H:%M:%S %Z`.",
@@ -60,7 +63,8 @@
           "show_topn": "Maximale Anzahl von Einträgen im Attribut `entries`. Große Werte erhöhen die Zustandsgröße.",
           "remove_summary_image": "Entfernt Bild-Tags aus dem Feld `summary`. Ein separates Feld `image` wird nicht entfernt.",
           "inclusions": "Optionale, durch Kommas getrennte Positivliste, zum Beispiel `title, link, published`. Leer lassen, um alle Felder außer den ausgeschlossenen beizubehalten.",
-          "exclusions": "Optionale, durch Kommas getrennte Felder, die entfernt werden sollen. Ausschlüsse werden nach den Einschlüssen angewendet."
+          "exclusions": "Optionale, durch Kommas getrennte Felder, die entfernt werden sollen. Ausschlüsse werden nach den Einschlüssen angewendet.",
+          "user_agent": "Optionaler HTTP-User-Agent, der beim Abrufen des Feeds gesendet wird. Manche Server blockieren unbekannte Clients oder antworten nicht; verwende dafür einen Browser-User-Agent. Leer lassen für den Standardwert."
         }
       }
     },

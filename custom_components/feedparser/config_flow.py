@@ -29,6 +29,7 @@ from .const import (
     CONF_REMOVE_SUMMARY_IMAGE,
     CONF_SCAN_INTERVAL,
     CONF_SHOW_TOPN,
+    CONF_USER_AGENT,
     DEFAULT_DATE_FORMAT,
     DEFAULT_LOCAL_TIME,
     DEFAULT_NAME,
@@ -38,7 +39,7 @@ from .const import (
     DOMAIN,
     ENTRY_VERSION,
 )
-from .fetch import fetch_feed
+from .fetch import USER_AGENT, fetch_feed
 
 
 class InvalidFeedError(Exception):
@@ -126,6 +127,11 @@ def _scan_interval_from_input(user_input: Mapping[str, object]) -> dict[str, int
     }
 
 
+def _user_agent_from_input(user_input: Mapping[str, object]) -> str:
+    """Return the configured User-Agent, or "" to use the integration default."""
+    return str(user_input.get(CONF_USER_AGENT) or "").strip()
+
+
 def _schema_with_defaults(
     *,
     name: str = DEFAULT_NAME,
@@ -137,6 +143,7 @@ def _schema_with_defaults(
     remove_summary_image: bool = DEFAULT_REMOVE_SUMMARY_IMAGE,
     inclusions: str = "",
     exclusions: str = "",
+    user_agent: str = "",
     include_feed_identity: bool,
 ) -> vol.Schema:
     """Build schema for user/options forms."""
@@ -172,6 +179,7 @@ def _schema_with_defaults(
         ): bool,
         vol.Optional(CONF_INCLUSIONS, default=inclusions): str,
         vol.Optional(CONF_EXCLUSIONS, default=exclusions): str,
+        vol.Optional(CONF_USER_AGENT, default=user_agent): str,
     }
 
     if include_feed_identity:
@@ -203,6 +211,7 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
 
         if user_input is not None:
             feed_url = str(user_input[CONF_FEED_URL]).strip()
+            user_agent = _user_agent_from_input(user_input)
             scan_interval: dict[str, int] | None = None
 
             try:
@@ -226,6 +235,7 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
                     await self.hass.async_add_executor_job(
                         self._validate_feed_url,
                         feed_url,
+                        user_agent or USER_AGENT,
                     )
                 except requests.RequestException:
                     errors["base"] = "cannot_connect"
@@ -254,6 +264,7 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
                         CONF_EXCLUSIONS: _split_csv(
                             str(user_input[CONF_EXCLUSIONS]).strip(),
                         ),
+                        CONF_USER_AGENT: user_agent,
                     }
                     return cast(
                         "ConfigFlowResult",
@@ -278,13 +289,13 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
         )
 
     @staticmethod
-    def _validate_feed_url(feed_url: str) -> None:
+    def _validate_feed_url(feed_url: str, user_agent: str = USER_AGENT) -> None:
         """Validate that the URL can be fetched and parses as a feed.
 
         Uses the same request (User-Agent, timeouts) as the sensor so a feed that
         passes here also works at runtime.
         """
-        parsed = feedparser.parse(fetch_feed(feed_url))
+        parsed = feedparser.parse(fetch_feed(feed_url, user_agent))
         # A real feed exposes a version (rss20, atom10, ...) even when it currently
         # has no entries; an HTML page or random document does not.
         if not parsed.get("version") and not parsed.get("entries"):
@@ -321,6 +332,7 @@ class FeedparserOptionsFlow(OptionsFlowWithReload):
                     CONF_EXCLUSIONS: _split_csv(
                         str(user_input[CONF_EXCLUSIONS]).strip(),
                     ),
+                    CONF_USER_AGENT: _user_agent_from_input(user_input),
                 }
                 return cast(
                     "ConfigFlowResult",
@@ -344,6 +356,7 @@ class FeedparserOptionsFlow(OptionsFlowWithReload):
             ),
             inclusions=_join_csv(merged.get(CONF_INCLUSIONS, [])),
             exclusions=_join_csv(merged.get(CONF_EXCLUSIONS, [])),
+            user_agent=str(merged.get(CONF_USER_AGENT) or ""),
         )
         return cast(
             "ConfigFlowResult",

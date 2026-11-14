@@ -62,6 +62,12 @@ sensor:
     feed_url: https://www.nu.nl/rss/Algemeen
     local_time: true
     show_topn: 1
+
+  # Some servers block or stall unknown clients; send a browser User-Agent instead
+  - platform: feedparser
+    name: Picky Server Feed
+    feed_url: https://example.com/rss
+    user_agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36'
 ```
 
 If you wish the integration to look for enclosures in the feed entries, add `image` to the `inclusions` list. Do not use `enclosure`.
@@ -85,12 +91,14 @@ The integration supports both UI setup (recommended) and legacy YAML setup. Most
 | `remove_summary_image` | No | boolean | `false` | `true` | Strips `<img ...>` tags from the `summary` field. |
 | `inclusions` | No | list of strings (YAML) / comma-separated string (UI) | all fields | `title, link, published, image` | If set, only listed fields are kept for each entry. |
 | `exclusions` | No | list of strings (YAML) / comma-separated string (UI) | none | `summary, language` | Fields to remove from each entry after parsing. |
+| `user_agent` | No | string | `Home Assistant Feed-parser Integration <version>` | `Mozilla/5.0 (compatible; MyFeedReader/1.0)` | User-Agent header sent when fetching the feed (and when validating it during UI setup). Leave empty in the UI to use the default. |
 
 ### Notes and behavior details
 
 - **`inclusions` vs `exclusions`**: If `inclusions` is set, only those fields are considered. `exclusions` then removes fields from that resulting set.
 - **When neither `inclusions` nor `exclusions` is set**: all available feed fields are returned.
-- **`image` extraction**: adding `image` to `inclusions` enables image URL extraction from enclosures or summary HTML.
+- **`image` extraction**: adding `image` to `inclusions` enables image URL extraction from image enclosures, Media RSS (`media:content`, `media:thumbnail`), or the first image in the summary HTML.
+- **`user_agent`**: some servers reject or never answer requests from unknown clients. If a feed works in a browser but fails in Home Assistant, try a browser User-Agent.
 - **UI vs YAML input format**:
   - UI uses comma-separated text for `inclusions` and `exclusions`.
   - YAML uses proper lists.
