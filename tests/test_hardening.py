@@ -38,7 +38,7 @@ def _rss(items: str, encoding: str = "UTF-8", extra_ns: str = "") -> str:
 
 def _sensor(
     path: Path,
-    inclusions: list[str] | None = None,
+    inclusions: list[str | None] | None = None,
     *,
     remove_summary_image: bool = False,
 ) -> FeedParserSensor:
