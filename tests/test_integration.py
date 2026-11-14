@@ -41,6 +41,7 @@ from custom_components.feedparser.yaml_import import (
 
 if TYPE_CHECKING:
     from freezegun.api import FrozenDateTimeFactory
+    from homeassistant.config_entries import ConfigFlowResult
     from homeassistant.core import HomeAssistant, State
 
 pytestmark = pytest.mark.usefixtures("enable_custom_integrations")
@@ -239,7 +240,7 @@ async def test_same_feed_with_different_name_is_allowed(
 async def start_reconfigure(
     hass: HomeAssistant,
     entry: MockConfigEntry,
-) -> dict[str, Any]:
+) -> ConfigFlowResult:
     """Start a reconfigure flow for an entry and return its first form."""
     result = await hass.config_entries.flow.async_init(
         DOMAIN,
@@ -250,7 +251,7 @@ async def start_reconfigure(
     )
     assert result["type"] is FlowResultType.FORM
     assert result["step_id"] == "reconfigure"
-    return dict(result)
+    return result
 
 
 async def test_reconfigure_changes_name_and_url(
