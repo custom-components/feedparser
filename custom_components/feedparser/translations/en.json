@@ -3,25 +3,36 @@
     "step": {
       "user": {
         "title": "Feedparser",
-        "description": "Create a sensor from an RSS/Atom feed.",
+        "description": "Create a sensor from an RSS/Atom feed. Refresh and parsing options can be changed later.",
         "data": {
           "name": "Name",
           "feed_url": "Feed URL",
           "date_format": "Date format",
           "local_time": "Convert dates to local time",
-          "scan_interval_hours": "Scan interval hours",
-          "scan_interval_minutes": "Scan interval minutes",
-          "show_topn": "Number of entries",
+          "scan_interval": "Refresh interval",
+          "show_topn": "Maximum entries",
           "remove_summary_image": "Remove image tags from summary",
-          "inclusions": "Included fields (comma-separated)",
-          "exclusions": "Excluded fields (comma-separated)"
+          "inclusions": "Included fields",
+          "exclusions": "Excluded fields"
+        },
+        "data_description": {
+          "name": "Friendly name for the sensor.",
+          "feed_url": "RSS or Atom feed URL. HTTP, HTTPS, and local file URLs are supported.",
+          "date_format": "Python strftime format used for feed dates, for example `%a, %d %b %Y %H:%M:%S %Z`.",
+          "local_time": "Convert feed timestamps to Home Assistant's configured local time before formatting.",
+          "scan_interval": "How often to refresh the feed. The minimum interval is 1 minute.",
+          "show_topn": "Maximum number of entries exposed in the `entries` attribute. Large values increase state size.",
+          "remove_summary_image": "Strip `<img>` tags from the `summary` field. This does not remove a separate `image` field.",
+          "inclusions": "Optional comma-separated allowlist, for example `title, link, published`. Leave empty to keep all fields except exclusions.",
+          "exclusions": "Optional comma-separated fields to remove. Exclusions are applied after inclusions."
         }
       }
     },
     "error": {
       "already_configured": "This feed is already configured.",
       "cannot_connect": "Failed to download the feed.",
-      "invalid_url": "URL is invalid."
+      "invalid_url": "URL is invalid.",
+      "scan_interval_too_short": "Refresh interval must be at least 1 minute."
     },
     "abort": {
       "already_configured": "This feed is already configured."
@@ -31,18 +42,29 @@
     "step": {
       "init": {
         "title": "Feedparser options",
-        "description": "Update feed parsing behavior.",
+        "description": "Update feed refresh and parsing behavior. Changes are applied immediately by reloading this feed.",
         "data": {
           "date_format": "Date format",
           "local_time": "Convert dates to local time",
-          "scan_interval_hours": "Scan interval hours",
-          "scan_interval_minutes": "Scan interval minutes",
-          "show_topn": "Number of entries",
+          "scan_interval": "Refresh interval",
+          "show_topn": "Maximum entries",
           "remove_summary_image": "Remove image tags from summary",
-          "inclusions": "Included fields (comma-separated)",
-          "exclusions": "Excluded fields (comma-separated)"
+          "inclusions": "Included fields",
+          "exclusions": "Excluded fields"
+        },
+        "data_description": {
+          "date_format": "Python strftime format used for feed dates, for example `%a, %d %b %Y %H:%M:%S %Z`.",
+          "local_time": "Convert feed timestamps to Home Assistant's configured local time before formatting.",
+          "scan_interval": "How often to refresh the feed. The minimum interval is 1 minute.",
+          "show_topn": "Maximum number of entries exposed in the `entries` attribute. Large values increase state size.",
+          "remove_summary_image": "Strip `<img>` tags from the `summary` field. This does not remove a separate `image` field.",
+          "inclusions": "Optional comma-separated allowlist, for example `title, link, published`. Leave empty to keep all fields except exclusions.",
+          "exclusions": "Optional comma-separated fields to remove. Exclusions are applied after inclusions."
         }
       }
+    },
+    "error": {
+      "scan_interval_too_short": "Refresh interval must be at least 1 minute."
     }
   }
 }
