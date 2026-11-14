@@ -145,7 +145,10 @@ def test_broken_entry_is_skipped(tmp_path: Path) -> None:
 
 # --- images -------------------------------------------------------------------
 
-MEDIA_NS = 'xmlns:media="http://search.yahoo.com/mrss/"'
+MEDIA_NS = (
+    'xmlns:media="http://search.yahoo.com/mrss/" '
+    'xmlns:content="http://purl.org/rss/1.0/modules/content/"'
+)
 
 
 @pytest.mark.parametrize(
@@ -172,6 +175,14 @@ MEDIA_NS = 'xmlns:media="http://search.yahoo.com/mrss/"'
             " src='https://e.x/s.png'>]]></description>",
             "https://e.x/s.png",
             id="summary_single_quotes_multiline",  # (#147)
+        ),
+        pytest.param(
+            "<description>no image here</description>"
+            "<content:encoded><![CDATA[<p>x</p>"
+            '<img class="wp-image" src="https://e.x/wp.jpg" width="300" />'
+            "]]></content:encoded>",
+            "https://e.x/wp.jpg",
+            id="content_encoded",  # WordPress (#64)
         ),
         pytest.param(
             '<enclosure url="https://e.x/a.mp3" length="1" type="audio/mpeg"/>',

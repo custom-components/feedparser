@@ -283,8 +283,9 @@ class FeedReader:
         """Return the best image URL for an entry, or the default thumbnail.
 
         Sources, in order: image enclosures, Media RSS ``media:content`` and
-        ``media:thumbnail`` (BBC, Mastodon, many news sites), then the first
-        ``<img>`` in the summary.
+        ``media:thumbnail`` (BBC, Mastodon, many news sites), the first ``<img>``
+        in the summary, then the first ``<img>`` in the full content
+        (``content:encoded``, used by WordPress feeds).
         """
         for source, untyped_is_image in (
             ("enclosures", False),
@@ -297,6 +298,13 @@ class FeedReader:
         summary = feed_entry.get("summary")
         if isinstance(summary, str) and (match := re.search(IMAGE_REGEX, summary)):
             return match.group(1)
+
+        content = feed_entry.get("content")
+        if isinstance(content, list):
+            for part in content:
+                value = part.get("value") if isinstance(part, Mapping) else None
+                if isinstance(value, str) and (match := re.search(IMAGE_REGEX, value)):
+                    return match.group(1)
 
         _LOGGER.debug(
             "Feed %s: Image is in inclusions, but no image was found for %s",

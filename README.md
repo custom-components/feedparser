@@ -78,7 +78,7 @@ sensor:
 If you wish the integration to look for enclosures in the feed entries, add `image` to the `inclusions` list. Do not use `enclosure`.
 The integration tries to extract an image URL and stores it under the `image` attribute. If no image can be found, it uses the Home Assistant logo as a fallback.
 
-Note that the original `pubDate` field is available under `published`. Other date-like fields that may be present are `updated`, `created`, and `expired`. Refer to the original [feedparser date parsing documentation](https://feedparser.readthedocs.io/en/latest/date-parsing.html) for feed-specific details.
+Note that the original `pubDate` field is available under `published`. Other date-like fields that may be present are `updated`, `created`, and `expired`. Refer to the original [feedparser date parsing documentation](https://feedparser.readthedocs.io/en/latest/date-parsing/) for feed-specific details.
 
 ### Configuration reference
 
@@ -102,7 +102,7 @@ The integration supports both UI setup (recommended) and legacy YAML setup. Most
 
 - **`inclusions` vs `exclusions`**: If `inclusions` is set, only those fields are considered. `exclusions` then removes fields from that resulting set.
 - **When neither `inclusions` nor `exclusions` is set**: all available feed fields are returned.
-- **`image` extraction**: adding `image` to `inclusions` enables image URL extraction from image enclosures, Media RSS (`media:content`, `media:thumbnail`), or the first image in the summary HTML.
+- **`image` extraction**: adding `image` to `inclusions` enables image URL extraction from image enclosures, Media RSS (`media:content`, `media:thumbnail`), the first image in the summary HTML, or the first image in the full content (`content:encoded`, used by WordPress feeds).
 - **`user_agent`**: some servers reject or never answer requests from unknown clients. If a feed works in a browser but fails in Home Assistant, try a browser User-Agent.
 - **UI vs YAML input format**:
   - UI uses comma-separated text for `inclusions` and `exclusions`.
