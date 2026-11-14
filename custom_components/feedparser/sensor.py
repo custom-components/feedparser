@@ -32,13 +32,14 @@ from .const import (
     CONF_REMOVE_SUMMARY_IMAGE,
     CONF_SCAN_INTERVAL,
     CONF_SHOW_TOPN,
+    CONF_USER_AGENT,
     DEFAULT_DATE_FORMAT,
     DEFAULT_LOCAL_TIME,
     DEFAULT_REMOVE_SUMMARY_IMAGE,
     DEFAULT_SCAN_INTERVAL,
     DEFAULT_TOPN,
 )
-from .fetch import fetch_feed
+from .fetch import USER_AGENT, fetch_feed
 
 if TYPE_CHECKING:
     from homeassistant.config_entries import ConfigEntry
@@ -73,6 +74,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
         vol.Optional(CONF_INCLUSIONS, default=[]): vol.All(cv.ensure_list, [cv.string]),
         vol.Optional(CONF_EXCLUSIONS, default=[]): vol.All(cv.ensure_list, [cv.string]),
         vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): cv.time_period,
+        vol.Optional(CONF_USER_AGENT, default=USER_AGENT): cv.string,
     },
 )
 
@@ -127,6 +129,7 @@ async def async_setup_platform(
                 exclusions=config[CONF_EXCLUSIONS],
                 scan_interval=config[CONF_SCAN_INTERVAL],
                 local_time=config[CONF_LOCAL_TIME],
+                user_agent=config[CONF_USER_AGENT],
             ),
         ],
         update_before_add=True,
@@ -164,6 +167,8 @@ async def async_setup_entry(
                 scan_interval=scan_interval,
                 local_time=data.get(CONF_LOCAL_TIME, DEFAULT_LOCAL_TIME),
                 unique_id=entry.entry_id,
+                # an empty value means "use the integration default"
+                user_agent=data.get(CONF_USER_AGENT) or USER_AGENT,
             ),
         ],
         update_before_add=True,
@@ -228,6 +233,7 @@ class FeedParserSensor(SensorEntity):
         scan_interval: timedelta,
         local_time: bool,
         unique_id: str | None = None,
+        user_agent: str = USER_AGENT,
     ) -> None:
         """Initialize the Feedparser sensor."""
         self._feed = feed
@@ -241,6 +247,7 @@ class FeedParserSensor(SensorEntity):
         self._exclusions = exclusions
         self._scan_interval = scan_interval
         self._local_time = local_time
+        self._user_agent = user_agent
         self._entries: list[dict[str, object]] = []
         self._attr_attribution = "Data retrieved using RSS feedparser"
         _LOGGER.debug("Feed %s: FeedParserSensor initialized - %s", self.name, self)
@@ -258,14 +265,15 @@ class FeedParserSensor(SensorEntity):
             f"remove_summary_image={self._remove_summary_image}, "
             f"inclusions={self._inclusions}, "
             f"exclusions={self._exclusions}, scan_interval={self._scan_interval}, "
-            f'local_time={self._local_time}, date_format="{self._date_format}")'
+            f'local_time={self._local_time}, date_format="{self._date_format}", '
+            f'user_agent="{self._user_agent}")'
         )
 
     def update(self: FeedParserSensor) -> None:
         """Parse the feed and update the state of the sensor."""
         _LOGGER.debug("Feed %s: Polling feed data from %s", self.name, self._feed)
         try:
-            content = fetch_feed(self._feed)
+            content = fetch_feed(self._feed, self._user_agent)
         except requests.RequestException as err:
             if self._attr_available:
                 _LOGGER.warning(

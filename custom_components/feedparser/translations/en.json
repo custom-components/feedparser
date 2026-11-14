@@ -13,7 +13,8 @@
           "show_topn": "Maximum entries",
           "remove_summary_image": "Remove image tags from summary",
           "inclusions": "Included fields",
-          "exclusions": "Excluded fields"
+          "exclusions": "Excluded fields",
+          "user_agent": "User-Agent"
         },
         "data_description": {
           "name": "Friendly name for the sensor.",
@@ -24,7 +25,8 @@
           "show_topn": "Maximum number of entries exposed in the `entries` attribute. Large values increase state size.",
           "remove_summary_image": "Strip image tags from the `summary` field. This does not remove a separate `image` field.",
           "inclusions": "Optional comma-separated allowlist, for example `title, link, published`. Leave empty to keep all fields except exclusions.",
-          "exclusions": "Optional comma-separated fields to remove. Exclusions are applied after inclusions."
+          "exclusions": "Optional comma-separated fields to remove. Exclusions are applied after inclusions.",
+          "user_agent": "Optional HTTP User-Agent sent when fetching the feed. Some servers block or stall unknown clients; set a browser User-Agent for those. Leave empty to use the default."
         }
       }
     },
@@ -51,7 +53,8 @@
           "show_topn": "Maximum entries",
           "remove_summary_image": "Remove image tags from summary",
           "inclusions": "Included fields",
-          "exclusions": "Excluded fields"
+          "exclusions": "Excluded fields",
+          "user_agent": "User-Agent"
         },
         "data_description": {
           "date_format": "Python strftime format used for feed dates, for example `%a, %d %b %Y %H:%M:%S %Z`.",
@@ -60,7 +63,8 @@
           "show_topn": "Maximum number of entries exposed in the `entries` attribute. Large values increase state size.",
           "remove_summary_image": "Strip image tags from the `summary` field. This does not remove a separate `image` field.",
           "inclusions": "Optional comma-separated allowlist, for example `title, link, published`. Leave empty to keep all fields except exclusions.",
-          "exclusions": "Optional comma-separated fields to remove. Exclusions are applied after inclusions."
+          "exclusions": "Optional comma-separated fields to remove. Exclusions are applied after inclusions.",
+          "user_agent": "Optional HTTP User-Agent sent when fetching the feed. Some servers block or stall unknown clients; set a browser User-Agent for those. Leave empty to use the default."
         }
       }
     },

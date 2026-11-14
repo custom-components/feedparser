@@ -143,7 +143,7 @@ dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
 "tests/**" = ["S101"]
 
 [tool.ruff.lint.pylint]
-max-args = 10
+max-args = 11
 
 [[tool.mypy.overrides]]
 module = "feedparser.*"

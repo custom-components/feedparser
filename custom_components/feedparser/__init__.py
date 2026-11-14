@@ -15,6 +15,7 @@ from .const import (
     CONF_REMOVE_SUMMARY_IMAGE,
     CONF_SCAN_INTERVAL,
     CONF_SHOW_TOPN,
+    CONF_USER_AGENT,
     DEFAULT_DATE_FORMAT,
     DEFAULT_LOCAL_TIME,
     DEFAULT_REMOVE_SUMMARY_IMAGE,
@@ -112,6 +113,7 @@ async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
             ),
             CONF_INCLUSIONS: _normalize_list(merged.get(CONF_INCLUSIONS, [])),
             CONF_EXCLUSIONS: _normalize_list(merged.get(CONF_EXCLUSIONS, [])),
+            CONF_USER_AGENT: str(merged.get(CONF_USER_AGENT) or "").strip(),
         }
 
         for key in OPTION_KEYS:
