@@ -11,23 +11,19 @@ import pytest
 import requests
 from constants import DATE_FORMAT, URLS_HEADERS_REQUIRED
 from feedsource import FeedSource
+from reader_harness import ReaderHarness
 
-from custom_components.feedparser.sensor import (
-    CONF_USER_AGENT,
-    DEFAULT_SCAN_INTERVAL,
-    DEFAULT_THUMBNAIL,
-    IMAGE_REGEX,
-    PLATFORM_SCHEMA,
-    USER_AGENT,
-    FeedParserSensor,
-)
+from custom_components.feedparser.const import CONF_USER_AGENT, DEFAULT_SCAN_INTERVAL
+from custom_components.feedparser.fetch import USER_AGENT
+from custom_components.feedparser.reader import DEFAULT_THUMBNAIL, IMAGE_REGEX
+from custom_components.feedparser.sensor import PLATFORM_SCHEMA
 
 if TYPE_CHECKING:
     import time
     from collections.abc import Callable
 
 
-def test_simple(feed_sensor: FeedParserSensor) -> None:
+def test_simple(feed_sensor: ReaderHarness) -> None:
     """Test simple."""
     feed_sensor.update()
     assert feed_sensor.feed_entries
@@ -35,7 +31,7 @@ def test_simple(feed_sensor: FeedParserSensor) -> None:
 
 def test_update_sensor(feed: FeedSource) -> None:
     """Test instantiate sensor."""
-    feed_sensor = FeedParserSensor(
+    feed_sensor = ReaderHarness(
         feed=feed.path.absolute().as_uri(),
         name=feed.name,
         date_format=feed.sensor_config.date_format,
@@ -100,7 +96,7 @@ def test_update_sensor(feed: FeedSource) -> None:
 def test_update_sensor_with_topn(feed: FeedSource) -> None:
     """Test that the sensor stores only the topn entries."""
     show_topn = 1
-    feed_sensor = FeedParserSensor(
+    feed_sensor = ReaderHarness(
         feed=feed.path.absolute().as_uri(),
         name=feed.name,
         date_format=DATE_FORMAT,
@@ -126,7 +122,7 @@ def test_update_sensor_with_topn(feed: FeedSource) -> None:
 )
 def test_update_sensor_entries_time(
     feed: FeedSource,
-    feed_sensor: FeedParserSensor,
+    feed_sensor: ReaderHarness,
     local_time: bool,
 ) -> None:
     """Test that the sensor converts the published date to local time."""
@@ -185,7 +181,7 @@ def test_update_preserves_previous_attribute_snapshot(tmp_path: Path) -> None:
             encoding="utf-8",
         )
 
-    feed_sensor = FeedParserSensor(
+    feed_sensor = ReaderHarness(
         feed=feed_path.absolute().as_uri(),
         name="snapshot",
         date_format=DATE_FORMAT,
@@ -199,22 +195,21 @@ def test_update_preserves_previous_attribute_snapshot(tmp_path: Path) -> None:
 
     write_feed("Old title")
     feed_sensor.update()
-    old_attributes = feed_sensor.extra_state_attributes
-    old_entries = old_attributes["entries"]
+    old_entries = feed_sensor.feed_entries
 
     write_feed("New title")
     feed_sensor.update()
-    new_entries = feed_sensor.extra_state_attributes["entries"]
+    new_entries = feed_sensor.feed_entries
 
     assert old_entries is not new_entries
     assert old_entries[0]["title"] == "Old title"
     assert new_entries[0]["title"] == "New title"
 
 
-def test_check_duplicates(feed_sensor: FeedParserSensor) -> None:
+def test_check_duplicates(feed_sensor: ReaderHarness) -> None:
     """Test that the sensor stores only unique entries."""
     feed_sensor.update()
-    assert feed_sensor.extra_state_attributes["entries"]
+    assert feed_sensor.feed_entries
     after_first_update = len(feed_sensor.feed_entries)
     feed_sensor.update()
     after_second_update = len(feed_sensor.feed_entries)
@@ -229,7 +224,7 @@ def test_check_duplicates(feed_sensor: FeedParserSensor) -> None:
 )
 def test_fetch_data_headers_required(online_feed: dict) -> None:
     """Test fetching feed from remote server that requires request with headers."""
-    feed_sensor = FeedParserSensor(
+    feed_sensor = ReaderHarness(
         feed=online_feed["url"],
         name=online_feed["name"],
         date_format=DATE_FORMAT,
@@ -249,7 +244,7 @@ def test_remove_summary_image(
 ) -> None:
     """Test that the sensor removes the image from the summary."""
     feed = feed_with_image_in_summary
-    feed_sensor = FeedParserSensor(
+    feed_sensor = ReaderHarness(
         **feed.sensor_config_local_feed | {"remove_summary_image": False},
     )
     feed_sensor.update()
@@ -262,7 +257,7 @@ def test_remove_summary_image(
         for summary in [e.get("summary")]
     )
 
-    feed_sensor = FeedParserSensor(
+    feed_sensor = ReaderHarness(
         **feed.sensor_config_local_feed | {"remove_summary_image": True},
     )
     feed_sensor.update()
@@ -279,7 +274,7 @@ def test_remove_summary_image(
 def test_image_not_in_entries(feed: FeedSource) -> None:
     """Test that the sensor does not include the image in any feed entry."""
     # keep only the title in the inclusions
-    feed_sensor = FeedParserSensor(
+    feed_sensor = ReaderHarness(
         **feed.sensor_config_local_feed | {"inclusions": ["title"]},
     )
     feed_sensor.update()
@@ -313,7 +308,7 @@ def test_default_user_agent(
     sent_user_agents: list[str | bytes | None],
 ) -> None:
     """Test that the integration's User-Agent is sent when none is configured."""
-    feed_sensor = FeedParserSensor(**feed.sensor_config_local_feed)
+    feed_sensor = ReaderHarness(**feed.sensor_config_local_feed)
     feed_sensor.update()
     assert sent_user_agents == [USER_AGENT]
 
@@ -324,7 +319,7 @@ def test_custom_user_agent(
 ) -> None:
     """Test that a configured User-Agent replaces the default one."""
     custom_user_agent = "Mozilla/5.0 (compatible; FeedTest/1.0)"
-    feed_sensor = FeedParserSensor(
+    feed_sensor = ReaderHarness(
         **feed.sensor_config_local_feed | {"user_agent": custom_user_agent},
     )
     feed_sensor.update()

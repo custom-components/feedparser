@@ -8,17 +8,15 @@ from unittest.mock import patch
 
 import pytest
 import requests
+from reader_harness import ReaderHarness
 
 from custom_components.feedparser import fetch
 from custom_components.feedparser.config_flow import (
     FeedparserConfigFlow,
     InvalidFeedError,
 )
-from custom_components.feedparser.sensor import (
-    DEFAULT_SCAN_INTERVAL,
-    DEFAULT_THUMBNAIL,
-    FeedParserSensor,
-)
+from custom_components.feedparser.reader import DEFAULT_THUMBNAIL
+from custom_components.feedparser.sensor import FeedParserSensor
 
 DATE_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
 
@@ -41,8 +39,8 @@ def _sensor(
     inclusions: list[str | None] | None = None,
     *,
     remove_summary_image: bool = False,
-) -> FeedParserSensor:
-    return FeedParserSensor(
+) -> ReaderHarness:
+    return ReaderHarness(
         feed=path.absolute().as_uri(),
         name="test",
         date_format=DATE_FORMAT,
@@ -51,7 +49,6 @@ def _sensor(
         remove_summary_image=remove_summary_image,
         inclusions=inclusions or [],
         exclusions=[],
-        scan_interval=DEFAULT_SCAN_INTERVAL,
     )
 
 
@@ -66,24 +63,6 @@ def test_fetch_sends_timeout_and_user_agent() -> None:
 
     _, kwargs = get.call_args
     assert kwargs["timeout"] == fetch.REQUEST_TIMEOUT
-
-
-def test_fetch_error_marks_unavailable_and_recovers(tmp_path: Path) -> None:
-    """A network error must not raise out of update() and must recover."""
-    feed = tmp_path / "feed.xml"
-    feed.write_text(_rss("<item><title>a</title></item>"), encoding="utf-8")
-    sensor = _sensor(feed)
-
-    with patch(
-        "custom_components.feedparser.sensor.fetch_feed",
-        side_effect=requests.ConnectTimeout("boom"),
-    ):
-        sensor.update()
-    assert sensor.available is False
-
-    sensor.update()
-    assert sensor.available is True
-    assert sensor.native_value == 1
 
 
 def test_non_utf8_feed_is_decoded_from_xml_prolog(tmp_path: Path) -> None:
@@ -152,14 +131,14 @@ def test_broken_entry_is_skipped(tmp_path: Path) -> None:
         encoding="utf-8",
     )
     sensor = _sensor(feed, ["title"])
-    original = sensor._generate_sensor_entry  # noqa: SLF001
+    original = sensor.reader._generate_sensor_entry  # noqa: SLF001
 
     def flaky(entry: dict) -> dict:
         if entry["title"] == "one":
             raise RuntimeError
         return original(entry)
 
-    with patch.object(sensor, "_generate_sensor_entry", side_effect=flaky):
+    with patch.object(sensor.reader, "_generate_sensor_entry", side_effect=flaky):
         sensor.update()
     assert [e["title"] for e in sensor.feed_entries] == ["two"]
 

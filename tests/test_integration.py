@@ -2,17 +2,22 @@
 
 from __future__ import annotations
 
+from datetime import timedelta
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 from unittest.mock import patch
 
 import pytest
+import requests
 from homeassistant import config_entries
 from homeassistant.const import CONF_NAME
 from homeassistant.data_entry_flow import FlowResultType
 from homeassistant.helpers import issue_registry as ir
 from homeassistant.setup import async_setup_component
-from pytest_homeassistant_custom_component.common import MockConfigEntry
+from pytest_homeassistant_custom_component.common import (
+    MockConfigEntry,
+    async_fire_time_changed,
+)
 
 from custom_components.feedparser.const import (
     CONF_DATE_FORMAT,
@@ -31,6 +36,7 @@ from custom_components.feedparser.sensor import PLATFORM_SCHEMA
 from custom_components.feedparser.yaml_import import async_import_yaml_sensor
 
 if TYPE_CHECKING:
+    from freezegun.api import FrozenDateTimeFactory
     from homeassistant.core import HomeAssistant, State
 
 pytestmark = pytest.mark.usefixtures("enable_custom_integrations")
@@ -322,3 +328,73 @@ async def test_yaml_import_failure_raises_issue(
     assert issues[0].severity is ir.IssueSeverity.ERROR
     assert issues[0].translation_placeholders == {"name": "Broken", "reason": "unknown"}
     assert not hass.config_entries.async_entries(DOMAIN)
+
+
+async def test_feed_down_at_setup_retries(hass: HomeAssistant, tmp_path: Path) -> None:
+    """If the first fetch fails, the entry is retried instead of failing setup."""
+    url = (tmp_path / "missing.xml").as_uri()
+    entry = MockConfigEntry(
+        domain=DOMAIN,
+        version=ENTRY_VERSION,
+        title="Test Feed",
+        data={CONF_NAME: "Test Feed", CONF_FEED_URL: url},
+        options={**options(), CONF_INCLUSIONS: ["title"], CONF_EXCLUSIONS: []},
+    )
+    entry.add_to_hass(hass)
+    await hass.config_entries.async_setup(entry.entry_id)
+    await hass.async_block_till_done()
+
+    assert entry.state is config_entries.ConfigEntryState.SETUP_RETRY
+
+
+async def test_fetch_failure_marks_unavailable_and_recovers(
+    hass: HomeAssistant,
+    tmp_path: Path,
+) -> None:
+    """A failed poll makes the sensor unavailable; the next success restores it."""
+    url = write_feed(tmp_path / "feed.xml", ["one"])
+    entry = await add_entry(hass, "Test Feed", url)
+    coordinator = entry.runtime_data
+
+    with patch(
+        "custom_components.feedparser.reader.fetch_feed",
+        side_effect=requests.ConnectTimeout("boom"),
+    ):
+        await coordinator.async_refresh()
+        await hass.async_block_till_done()
+    assert get_state(hass).state == "unavailable"
+
+    await coordinator.async_refresh()
+    await hass.async_block_till_done()
+    assert get_state(hass).state == "1"
+
+
+async def test_polls_on_configured_interval(
+    hass: HomeAssistant,
+    tmp_path: Path,
+    freezer: FrozenDateTimeFactory,
+) -> None:
+    """The coordinator uses the entry's interval and picks up feed changes."""
+    path = tmp_path / "feed.xml"
+    url = write_feed(path, ["one"])
+    entry = await add_entry(hass, "Test Feed", url)
+    interval = timedelta(hours=1)
+    assert entry.runtime_data.update_interval == interval
+
+    write_feed(path, ["new", "old"])
+    freezer.tick(interval)
+    async_fire_time_changed(hass)
+    # scheduled refreshes run as background tasks
+    await hass.async_block_till_done(wait_background_tasks=True)
+
+    state = get_state(hass)
+    assert state.state == "2"
+    assert [e["title"] for e in state.attributes["entries"]] == ["new", "old"]
+
+
+async def test_entries_not_recorded(hass: HomeAssistant, tmp_path: Path) -> None:
+    """The entries attribute is excluded from the recorder."""
+    url = write_feed(tmp_path / "feed.xml", ["one"])
+    await add_entry(hass, "Test Feed", url)
+    entity = hass.data["entity_components"]["sensor"].get_entity("sensor.test_feed")
+    assert "entries" in entity._state_info["unrecorded_attributes"]  # noqa: SLF001

@@ -26,6 +26,7 @@ from .const import (
     OPTION_KEYS,
     PLATFORMS,
 )
+from .coordinator import FeedparserConfigEntry, FeedparserCoordinator
 
 if TYPE_CHECKING:
     from homeassistant.config_entries import ConfigEntry
@@ -77,13 +78,20 @@ async def async_setup(hass: HomeAssistant, config: dict) -> bool:  # noqa: ARG00
     return True
 
 
-async def async_setup_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
-    """Set up Feedparser from a config entry."""
+async def async_setup_entry(hass: HomeAssistant, entry: FeedparserConfigEntry) -> bool:
+    """Set up Feedparser from a config entry.
+
+    The first refresh raises ConfigEntryNotReady if the feed cannot be fetched, so
+    Home Assistant retries with backoff instead of slowing down startup.
+    """
+    coordinator = FeedparserCoordinator(hass, entry)
+    await coordinator.async_config_entry_first_refresh()
+    entry.runtime_data = coordinator
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True
 
 
-async def async_unload_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
+async def async_unload_entry(hass: HomeAssistant, entry: FeedparserConfigEntry) -> bool:
     """Unload a config entry."""
     return await hass.config_entries.async_unload_platforms(entry, PLATFORMS)
 
