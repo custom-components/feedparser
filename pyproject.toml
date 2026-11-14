@@ -20,11 +20,11 @@ classifiers = [
   "Intended Audience :: Developers",
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
-  "Programming Language :: Python :: 3.11"
+  "Programming Language :: Python :: 3.14"
 ]
-requires-python = ">=3.11.0"
+requires-python = ">=3.14"
 dependencies = [
-  "feedparser==6.0.12",
+  "feedparser==6.0.14",
   "homeassistant",
   "python-dateutil",
   "requests-file",
@@ -56,7 +56,7 @@ py-modules = ["custom_components.feedparser"]
 [tool.black]
 line-length = 88
 # skip-string-normalization = true
-target-version = ["py311"]
+target-version = ["py313"]
 include = '\.pyi?$'
 exclude = '''
 /(
@@ -96,8 +96,8 @@ exclude = [
 ]
 # Same as Black.
 line-length = 88
-# Assume Python 3.11.
-target-version = "py311"
+# Home Assistant requires Python 3.14.
+target-version = "py314"
 
 [tool.ruff.lint]
 select = [
@@ -157,7 +157,7 @@ filterwarnings = [
 ]
 
 [tool.bumpver]
-current_version = "0.1.11"
+current_version = "1.0.0"
 version_pattern = "MAJOR.MINOR.PATCH[PYTAGNUM]"
 commit_message = "bump version {old_version} -> {new_version}"
 tag_message = "{new_version}"
@@ -171,4 +171,4 @@ push = true
 [tool.bumpver.file_patterns]
 "pyproject.toml" = ['current_version = "{version}"', 'version = "{version}"']
 "custom_components/feedparser/manifest.json" = ['version": "{version}"']
-"custom_components/feedparser/sensor.py" = ['__version__ = "{version}"']
+"custom_components/feedparser/const.py" = ['VERSION = "{version}"']

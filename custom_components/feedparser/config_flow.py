@@ -6,20 +6,20 @@ from collections.abc import Mapping
 from datetime import timedelta
 from typing import Any, cast
 
+import feedparser  # type: ignore[import]
 import requests
-import voluptuous as vol
 from homeassistant.config_entries import (
     ConfigEntry,
     ConfigFlow,
-    FlowResult,
+    ConfigFlowResult,
     OptionsFlow,
     OptionsFlowWithReload,
 )
 from homeassistant.const import CONF_NAME
 from homeassistant.helpers import selector
-from requests_file import FileAdapter
 from yarl import URL
 
+from .compat import vol
 from .const import (
     CONF_DATE_FORMAT,
     CONF_EXCLUSIONS,
@@ -38,6 +38,11 @@ from .const import (
     DOMAIN,
     ENTRY_VERSION,
 )
+from .fetch import fetch_feed
+
+
+class InvalidFeedError(Exception):
+    """Raised when a URL downloads fine but is not an RSS/Atom feed."""
 
 
 def _split_csv(value: str) -> list[str]:
@@ -192,7 +197,7 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
     async def async_step_user(
         self,
         user_input: Mapping[str, object] | None = None,
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Handle the initial step."""
         errors: dict[str, str] = {}
 
@@ -224,6 +229,8 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
                     )
                 except requests.RequestException:
                     errors["base"] = "cannot_connect"
+                except InvalidFeedError:
+                    errors[CONF_FEED_URL] = "invalid_feed"
                 else:
                     assert scan_interval is not None
                     data = {
@@ -249,7 +256,7 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
                         ),
                     }
                     return cast(
-                        "FlowResult",
+                        "ConfigFlowResult",
                         self.async_create_entry(
                             title=data[CONF_NAME],
                             data=data,
@@ -262,7 +269,7 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
         )
 
         return cast(
-            "FlowResult",
+            "ConfigFlowResult",
             self.async_show_form(
                 step_id="user",
                 data_schema=data_schema,
@@ -272,11 +279,16 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
 
     @staticmethod
     def _validate_feed_url(feed_url: str) -> None:
-        """Validate that the URL can be fetched."""
-        session = requests.Session()
-        session.mount("file://", FileAdapter())
-        response = session.get(feed_url, timeout=20)
-        response.raise_for_status()
+        """Validate that the URL can be fetched and parses as a feed.
+
+        Uses the same request (User-Agent, timeouts) as the sensor so a feed that
+        passes here also works at runtime.
+        """
+        parsed = feedparser.parse(fetch_feed(feed_url))
+        # A real feed exposes a version (rss20, atom10, ...) even when it currently
+        # has no entries; an HTML page or random document does not.
+        if not parsed.get("version") and not parsed.get("entries"):
+            raise InvalidFeedError
 
 
 class FeedparserOptionsFlow(OptionsFlowWithReload):
@@ -285,7 +297,7 @@ class FeedparserOptionsFlow(OptionsFlowWithReload):
     async def async_step_init(
         self,
         user_input: Mapping[str, object] | None = None,
-    ) -> FlowResult:
+    ) -> ConfigFlowResult:
         """Manage Feedparser options."""
         errors: dict[str, str] = {}
 
@@ -311,7 +323,7 @@ class FeedparserOptionsFlow(OptionsFlowWithReload):
                     ),
                 }
                 return cast(
-                    "FlowResult",
+                    "ConfigFlowResult",
                     self.async_create_entry(title="", data=options),
                 )
 
@@ -334,7 +346,7 @@ class FeedparserOptionsFlow(OptionsFlowWithReload):
             exclusions=_join_csv(merged.get(CONF_EXCLUSIONS, [])),
         )
         return cast(
-            "FlowResult",
+            "ConfigFlowResult",
             self.async_show_form(
                 step_id="init",
                 data_schema=data_schema,

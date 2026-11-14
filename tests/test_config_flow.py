@@ -3,9 +3,9 @@
 from datetime import timedelta
 
 import pytest
-import voluptuous as vol
 from homeassistant.config_entries import OptionsFlowWithReload
 
+from custom_components.feedparser.compat import vol
 from custom_components.feedparser.config_flow import (
     FeedparserOptionsFlow,
     _scan_interval_from_input,

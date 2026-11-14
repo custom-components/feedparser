@@ -32,6 +32,7 @@
       "already_configured": "Dieser Feed ist bereits konfiguriert.",
       "cannot_connect": "Der Feed konnte nicht heruntergeladen werden.",
       "invalid_url": "Die URL ist ungültig.",
+      "invalid_feed": "Die URL wurde geladen, scheint aber kein RSS- oder Atom-Feed zu sein.",
       "scan_interval_too_short": "Das Aktualisierungsintervall muss mindestens 1 Minute betragen."
     },
     "abort": {

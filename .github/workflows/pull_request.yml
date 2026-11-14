@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: ["3.11"]
+        python-version: ["3.14"]
     steps:
       - name: Install xmllint
         run: sudo apt -y install libxml2-utils

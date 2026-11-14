@@ -2,24 +2,27 @@
 
 from __future__ import annotations
 
+import calendar
+import contextlib
 import email.utils
 import logging
 import re
+import time
+import warnings
 from collections.abc import Mapping
-from datetime import datetime, timedelta, timezone
+from datetime import UTC, datetime, timedelta, timezone
 from typing import TYPE_CHECKING, Protocol, cast
 
 import feedparser  # type: ignore[import]
 import homeassistant.helpers.config_validation as cv
 import requests
-import voluptuous as vol
 from dateutil import parser
 from homeassistant.components.sensor import PLATFORM_SCHEMA, SensorEntity
 from homeassistant.const import CONF_NAME
 from homeassistant.helpers.entity_platform import async_get_current_platform
 from homeassistant.util import dt
-from requests_file import FileAdapter
 
+from .compat import vol
 from .const import (
     CONF_DATE_FORMAT,
     CONF_EXCLUSIONS,
@@ -35,22 +38,26 @@ from .const import (
     DEFAULT_SCAN_INTERVAL,
     DEFAULT_TOPN,
 )
+from .fetch import fetch_feed
 
 if TYPE_CHECKING:
     from homeassistant.config_entries import ConfigEntry
     from homeassistant.core import HomeAssistant
-    from homeassistant.helpers.entity_platform import AddEntitiesCallback
+    from homeassistant.helpers.entity_platform import (
+        AddConfigEntryEntitiesCallback,
+        AddEntitiesCallback,
+    )
     from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
-__version__ = "1.0.0"
 
 COMPONENT_REPO = "https://github.com/custom-components/feedparser/"
 
-REQUIREMENTS = ["feedparser"]
-
 DEFAULT_THUMBNAIL = "https://www.home-assistant.io/images/favicon-192x192-full.png"
-USER_AGENT = f"Home Assistant Feed-parser Integration {__version__}"
-IMAGE_REGEX = r"<img.+?src=\"(.+?)\".+?>"
+# Matches a whole <img> tag (so it can be stripped from summaries) and captures its
+# src. Handles single or double quotes, any attribute order and tags spanning lines.
+IMAGE_REGEX = r"""(?is)<img\b[^>]*?\bsrc\s*=\s*["']([^"']+)["'][^>]*>"""
+IMAGE_EXTENSIONS = (".jpg", ".jpeg", ".png", ".gif", ".webp", ".avif", ".svg")
+DATE_KEYS = ("published", "updated", "created", "expired")
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
@@ -129,7 +136,7 @@ async def async_setup_platform(
 async def async_setup_entry(
     hass: HomeAssistant,  # noqa: ARG001
     entry: ConfigEntry,
-    async_add_entities: AddEntitiesCallback,
+    async_add_entities: AddConfigEntryEntitiesCallback,
 ) -> None:
     """Set up Feedparser sensor from a config entry."""
     data = {**entry.data, **entry.options}
@@ -163,12 +170,51 @@ async def async_setup_entry(
     )
 
 
+def _first_image(items: object, untyped_is_image: bool) -> str | None:
+    """Return the first image URL from a list of enclosure/media dicts.
+
+    Items with a MIME ``type`` or Media RSS ``medium`` are judged by it. Items with
+    neither are accepted if ``untyped_is_image`` (``media:thumbnail`` is always an
+    image) or if the URL has an image file extension.
+    """
+    if not isinstance(items, list):
+        return None
+    for item in items:
+        if not isinstance(item, Mapping):
+            continue
+        url = item.get("href") or item.get("url")
+        if not isinstance(url, str) or not url:
+            continue
+        mime = item.get("type")
+        medium = item.get("medium")
+        if isinstance(mime, str) and mime:
+            if mime.lower().startswith("image/"):
+                return url
+            continue
+        if isinstance(medium, str) and medium:
+            if medium.lower() == "image":
+                return url
+            continue
+        if untyped_is_image or _looks_like_image(url):
+            return url
+    return None
+
+
+def _looks_like_image(url: str) -> bool:
+    """Return whether a URL path ends in a known image extension."""
+    path = url.split("?", 1)[0].split("#", 1)[0].lower()
+    return path.endswith(IMAGE_EXTENSIONS)
+
+
 class FeedParserSensor(SensorEntity):
     """Representation of a Feedparser sensor."""
 
     # force update the entity since the number of feed entries does not necessarily
     # change, but we still want to update the extra_state_attributes
     _attr_force_update = True
+    # The entries attribute regularly exceeds the recorder's 16 KiB attribute limit
+    # and changes on every poll; keep it out of the database.
+    _unrecorded_attributes = frozenset({"entries"})
 
     def __init__(
         self: FeedParserSensor,
@@ -218,12 +264,23 @@ class FeedParserSensor(SensorEntity):
     def update(self: FeedParserSensor) -> None:
         """Parse the feed and update the state of the sensor."""
         _LOGGER.debug("Feed %s: Polling feed data from %s", self.name, self._feed)
-        s: requests.Session = requests.Session()
-        s.mount("file://", FileAdapter())
-        s.headers.update({"User-Agent": USER_AGENT})
-        res: requests.Response = s.get(self._feed)
-        res.raise_for_status()
-        parsed_feed = cast("ParsedFeed", feedparser.parse(res.text))
+        try:
+            content = fetch_feed(self._feed)
+        except requests.RequestException as err:
+            if self._attr_available:
+                _LOGGER.warning(
+                    "Feed %s: Unable to fetch %s: %s",
+                    self.name,
+                    self._feed,
+                    err,
+                )
+            self._attr_available = False
+            return
+
+        if not self._attr_available:
+            _LOGGER.info("Feed %s: Feed is reachable again", self.name)
+        self._attr_available = True
+        parsed_feed = cast("ParsedFeed", feedparser.parse(content))
 
         if not parsed_feed.entries:
             self._attr_native_value = None
@@ -257,12 +314,18 @@ class FeedParserSensor(SensorEntity):
         self: FeedParserSensor,
         parsed_feed: ParsedFeed,
     ) -> list[dict[str, object]]:
-        return [
-            self._generate_sensor_entry(feed_entry)
-            for feed_entry in parsed_feed.entries[
-                : self.native_value  # type: ignore[misc]
-            ]
-        ]
+        entries: list[dict[str, object]] = []
+        for feed_entry in parsed_feed.entries[: self.native_value]:  # type: ignore[misc]
+            try:
+                entries.append(self._generate_sensor_entry(feed_entry))
+            except Exception:
+                # One malformed entry must not take down the whole sensor.
+                _LOGGER.exception(
+                    "Feed %s: Skipping entry that could not be processed: %s",
+                    self.name,
+                    feed_entry.get("id") or feed_entry.get("link"),
+                )
+        return entries
 
     def _generate_sensor_entry(
         self: FeedParserSensor,
@@ -273,7 +336,7 @@ class FeedParserSensor(SensorEntity):
         for key, value in feed_entry.items():
             if not isinstance(key, str) or self._should_skip_key(key):
                 continue
-            self._store_sensor_entry_value(sensor_entry, key, value)
+            self._store_sensor_entry_value(sensor_entry, key, value, feed_entry)
 
         self._add_derived_values(sensor_entry, feed_entry)
         _LOGGER.debug("Feed %s: Generated sensor entry: %s", self.name, sensor_entry)
@@ -292,12 +355,16 @@ class FeedParserSensor(SensorEntity):
         sensor_entry: dict[str, object],
         key: str,
         value: object,
+        feed_entry: Mapping[str, object],
     ) -> None:
         """Store a normalized entry value."""
-        if key in ["published", "updated", "created", "expired"]:
+        if key in DATE_KEYS:
             if isinstance(value, str):
-                parsed_date: datetime = self._parse_date(value)
-                sensor_entry[key] = parsed_date.strftime(self._date_format)
+                parsed_date = self._parse_date(value, feed_entry.get(f"{key}_parsed"))
+                # keep the raw value if the date could not be understood at all
+                sensor_entry[key] = (
+                    parsed_date.strftime(self._date_format) if parsed_date else value
+                )
             return
 
         if key == "image":
@@ -332,31 +399,29 @@ class FeedParserSensor(SensorEntity):
                     summary,
                 )
 
-    def _parse_date(self: FeedParserSensor, date: str) -> datetime:
-        try:
-            parsed_time: datetime = email.utils.parsedate_to_datetime(date)
-        except ValueError:
-            _LOGGER.warning(
-                (
-                    "Feed %s: Unable to parse RFC-822 date from %s. "
-                    "This could be caused by incorrect pubDate format "
-                    "in the RSS feed or due to a leapp second"
-                ),
+    def _parse_date(
+        self: FeedParserSensor,
+        date: str,
+        parsed: object = None,
+    ) -> datetime | None:
+        """Parse a feed date into an aware datetime, or None if impossible.
+
+        Tried in order, keeping the feed's own UTC offset where possible:
+        RFC 822 (RSS), ISO 8601 / W3CDTF (Atom), feedparser's own normalized UTC
+        ``*_parsed`` value, and finally dateutil as a best effort.
+        """
+        parsed_time = self._parse_date_string(date)
+        if parsed_time is None and isinstance(parsed, time.struct_time):
+            parsed_time = datetime.fromtimestamp(calendar.timegm(parsed), tz=UTC)
+
+        if parsed_time is None:
+            _LOGGER.debug(
+                "Feed %s: Unable to parse date %s, keeping the raw value",
                 self.name,
                 date,
             )
-            # best effort to parse the date using dateutil
-            parsed_time = parser.parse(date)
+            return None
 
-        if not parsed_time.tzinfo:
-            # best effort to parse the date using dateutil
-            parsed_time = parser.parse(date)
-            if not parsed_time.tzinfo:
-                msg = (
-                    f"Feed {self.name}: Unable to parse date {date}, "
-                    "caused by an incorrect date format"
-                )
-                raise ValueError(msg)
         if not parsed_time.tzname():
             # replace tzinfo with UTC offset if tzinfo does not contain a TZ name
             parsed_time = parsed_time.replace(
@@ -368,30 +433,47 @@ class FeedParserSensor(SensorEntity):
         _LOGGER.debug("Feed %s: Parsed date: %s", self.name, parsed_time)
         return parsed_time
 
+    @staticmethod
+    def _parse_date_string(date: str) -> datetime | None:
+        """Parse a date string with the stdlib, then dateutil. Return aware or None."""
+        candidates = []
+        with contextlib.suppress(TypeError, ValueError, IndexError):
+            candidates.append(email.utils.parsedate_to_datetime(date))
+        with contextlib.suppress(ValueError):
+            candidates.append(datetime.fromisoformat(date.strip()))
+        for candidate in candidates:
+            if candidate.tzinfo is not None:
+                return candidate
+
+        # dateutil warns (UnknownTimezoneWarning) on abbreviations such as EDT and
+        # returns a naive datetime; a naive result is treated as unparseable.
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            try:
+                fallback = parser.parse(date)
+            except (ValueError, OverflowError):
+                return None
+        return fallback if fallback.tzinfo is not None else None
+
     def _process_image(self: FeedParserSensor, feed_entry: Mapping[str, object]) -> str:
-        enclosures = feed_entry.get("enclosures")
-        if isinstance(enclosures, list):
-            for enclosure in enclosures:
-                if not isinstance(enclosure, dict):
-                    continue
-                enclosure_type = enclosure.get("type")
-                href = enclosure.get("href")
-                if (
-                    isinstance(enclosure_type, str)
-                    and enclosure_type.startswith("image/")
-                    and isinstance(href, str)
-                ):
-                    return href
+        """Return the best image URL for an entry, or the default thumbnail.
+
+        Sources, in order: image enclosures, Media RSS ``media:content`` and
+        ``media:thumbnail`` (BBC, Mastodon, many news sites), then the first
+        ``<img>`` in the summary.
+        """
+        for source, untyped_is_image in (
+            ("enclosures", False),
+            ("media_content", False),
+            ("media_thumbnail", True),
+        ):
+            if url := _first_image(feed_entry.get(source), untyped_is_image):
+                return url
 
         summary = feed_entry.get("summary")
-        if isinstance(summary, str):
-            images = re.findall(
-                IMAGE_REGEX,
-                summary,
-            )
-            if images:
-                # pick the first image found
-                return images[0]
+        if isinstance(summary, str) and (match := re.search(IMAGE_REGEX, summary)):
+            return match.group(1)
+
         _LOGGER.debug(
             "Feed %s: Image is in inclusions, but no image was found for %s",
             self.name,

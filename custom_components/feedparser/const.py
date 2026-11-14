@@ -5,6 +5,7 @@ from datetime import timedelta
 from homeassistant.const import Platform
 
 DOMAIN = "feedparser"
+VERSION = "1.0.0"
 PLATFORMS: list[Platform] = [Platform.SENSOR]
 
 CONF_FEED_URL = "feed_url"
