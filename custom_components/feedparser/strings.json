@@ -22,7 +22,7 @@
           "local_time": "Convert feed timestamps to Home Assistant's configured local time before formatting.",
           "scan_interval": "How often to refresh the feed. The minimum interval is 1 minute.",
           "show_topn": "Maximum number of entries exposed in the `entries` attribute. Large values increase state size.",
-          "remove_summary_image": "Strip `<img>` tags from the `summary` field. This does not remove a separate `image` field.",
+          "remove_summary_image": "Strip image tags from the `summary` field. This does not remove a separate `image` field.",
           "inclusions": "Optional comma-separated allowlist, for example `title, link, published`. Leave empty to keep all fields except exclusions.",
           "exclusions": "Optional comma-separated fields to remove. Exclusions are applied after inclusions."
         }
@@ -58,7 +58,7 @@
           "local_time": "Convert feed timestamps to Home Assistant's configured local time before formatting.",
           "scan_interval": "How often to refresh the feed. The minimum interval is 1 minute.",
           "show_topn": "Maximum number of entries exposed in the `entries` attribute. Large values increase state size.",
-          "remove_summary_image": "Strip `<img>` tags from the `summary` field. This does not remove a separate `image` field.",
+          "remove_summary_image": "Strip image tags from the `summary` field. This does not remove a separate `image` field.",
           "inclusions": "Optional comma-separated allowlist, for example `title, link, published`. Leave empty to keep all fields except exclusions.",
           "exclusions": "Optional comma-separated fields to remove. Exclusions are applied after inclusions."
         }

@@ -22,7 +22,7 @@
           "local_time": "Feed-Zeitstempel vor der Formatierung in die in Home Assistant konfigurierte lokale Zeit umwandeln.",
           "scan_interval": "Wie oft der Feed aktualisiert wird. Das Mindestintervall beträgt 1 Minute.",
           "show_topn": "Maximale Anzahl von Einträgen im Attribut `entries`. Große Werte erhöhen die Zustandsgröße.",
-          "remove_summary_image": "Entfernt `<img>`-Tags aus dem Feld `summary`. Ein separates Feld `image` wird nicht entfernt.",
+          "remove_summary_image": "Entfernt Bild-Tags aus dem Feld `summary`. Ein separates Feld `image` wird nicht entfernt.",
           "inclusions": "Optionale, durch Kommas getrennte Positivliste, zum Beispiel `title, link, published`. Leer lassen, um alle Felder außer den ausgeschlossenen beizubehalten.",
           "exclusions": "Optionale, durch Kommas getrennte Felder, die entfernt werden sollen. Ausschlüsse werden nach den Einschlüssen angewendet."
         }
@@ -58,7 +58,7 @@
           "local_time": "Feed-Zeitstempel vor der Formatierung in die in Home Assistant konfigurierte lokale Zeit umwandeln.",
           "scan_interval": "Wie oft der Feed aktualisiert wird. Das Mindestintervall beträgt 1 Minute.",
           "show_topn": "Maximale Anzahl von Einträgen im Attribut `entries`. Große Werte erhöhen die Zustandsgröße.",
-          "remove_summary_image": "Entfernt `<img>`-Tags aus dem Feld `summary`. Ein separates Feld `image` wird nicht entfernt.",
+          "remove_summary_image": "Entfernt Bild-Tags aus dem Feld `summary`. Ein separates Feld `image` wird nicht entfernt.",
           "inclusions": "Optionale, durch Kommas getrennte Positivliste, zum Beispiel `title, link, published`. Leer lassen, um alle Felder außer den ausgeschlossenen beizubehalten.",
           "exclusions": "Optionale, durch Kommas getrennte Felder, die entfernt werden sollen. Ausschlüsse werden nach den Einschlüssen angewendet."
         }
