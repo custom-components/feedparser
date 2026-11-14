@@ -35,7 +35,12 @@ Alternatively, click on the button below to add the repository:
 
 To update refresh or parsing behavior later, open the Feedparser integration card and use **Configure** (options flow). Saved changes reload only that feed entry so the new settings take effect immediately.
 
-### YAML configuration (legacy)
+- The same feed URL can be added more than once (for example, once with all fields and once with only titles), as long as each sensor has a different name.
+- If a feed cannot be reached when Home Assistant starts, the entry is retried automatically in the background. If a later refresh fails, the sensor becomes `unavailable` until the feed responds again.
+
+### YAML configuration (deprecated)
+
+YAML configuration still works but is deprecated. On startup, each `sensor:` entry with `platform: feedparser` is **imported into the UI automatically** and keeps its entity ID (`sensor.<name>`), so dashboards and automations keep working. A Repairs notice then asks you to remove the YAML. After the import, changes to the YAML are ignored: edit the feed from the integration card instead. If a YAML sensor cannot be imported, a Repairs notice names it so you can add it manually.
 
 **Example configuration.yaml:**
 
@@ -103,7 +108,7 @@ The integration supports both UI setup (recommended) and legacy YAML setup. Most
   - UI uses comma-separated text for `inclusions` and `exclusions`.
   - YAML uses proper lists.
   - UI uses a single duration control for `scan_interval`; YAML uses `scan_interval` object keys such as `hours` and `minutes`.
-- **Date parsing**: if a feed date is malformed, parser behavior depends on feed content and fallback parsing.
+- **Date parsing**: RSS (RFC 822) and Atom (ISO 8601) dates are both supported, including US timezone abbreviations such as `EDT`. If a date cannot be parsed at all, the original text is kept.
 
 Due to how `custom_components` are loaded, it is normal to see a `ModuleNotFoundError` error on first boot after adding this, to resolve it, restart Home-Assistant.
 
@@ -114,6 +119,19 @@ This repository includes a devcontainer inspired by the `custom-components/readm
 1. Open the repo in VS Code.
 2. Run **Dev Containers: Reopen in Container**.
 3. After dependencies install, run `bash scripts/develop` to start Home Assistant with `test_hass`.
+
+### Running tests
+
+```bash
+pip install -e ".[dev]"
+pytest tests/
+```
+
+The suite uses [`pytest-homeassistant-custom-component`](https://github.com/MatthewFlamm/pytest-homeassistant-custom-component), which blocks network access. Tests that need the internet are marked `online` and run separately:
+
+```bash
+pytest -p no:homeassistant -m online tests/
+```
 
 [commits-shield]: https://img.shields.io/github/commit-activity/y/custom-components/feedparser.svg?style=for-the-badge
 [commits]: https://github.com/custom-components/feedparser/commits/master
