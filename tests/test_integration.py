@@ -21,11 +21,13 @@ from pytest_homeassistant_custom_component.common import (
 
 from custom_components.feedparser.const import (
     CONF_DATE_FORMAT,
+    CONF_EXCLUDE_MATCH,
     CONF_EXCLUSIONS,
     CONF_FEED_URL,
     CONF_INCLUSIONS,
     CONF_LOCAL_TIME,
     CONF_MANAGED_BY_YAML,
+    CONF_MATCH,
     CONF_REMOVE_SUMMARY_IMAGE,
     CONF_SCAN_INTERVAL,
     CONF_SHOW_TOPN,
@@ -169,6 +171,98 @@ async def test_user_flow_errors(
     )
     assert result["type"] is FlowResultType.FORM
     assert result["errors"] == {field: error}
+
+
+async def test_user_flow_filters_entries(
+    hass: HomeAssistant,
+    tmp_path: Path,
+) -> None:
+    """The setup form stores the filters and the sensor counts matching entries."""
+    url = write_feed(tmp_path / "feed.xml", ["rain one", "snow", "rain two", "fog"])
+
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN,
+        context={"source": config_entries.SOURCE_USER},
+    )
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        user_input(
+            "Test Feed",
+            url,
+            **{CONF_MATCH: "rain|fog", CONF_EXCLUDE_MATCH: "two"},
+        ),
+    )
+    assert result["type"] is FlowResultType.CREATE_ENTRY
+    assert result["options"][CONF_MATCH] == "rain|fog"
+    assert result["options"][CONF_EXCLUDE_MATCH] == "two"
+    await hass.async_block_till_done()
+
+    state = get_state(hass)
+    assert state.state == "2"
+    assert [e["title"] for e in state.attributes["entries"]] == ["rain one", "fog"]
+
+
+@pytest.mark.parametrize("key", [CONF_MATCH, CONF_EXCLUDE_MATCH])
+async def test_user_flow_rejects_invalid_pattern(
+    hass: HomeAssistant,
+    tmp_path: Path,
+    key: str,
+) -> None:
+    """An invalid regular expression is reported on its field."""
+    url = write_feed(tmp_path / "feed.xml", ["one"])
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN,
+        context={"source": config_entries.SOURCE_USER},
+    )
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        user_input("Test Feed", url, **{key: "(unclosed"}),
+    )
+    assert result["type"] is FlowResultType.FORM
+    assert result["errors"] == {key: "invalid_pattern"}
+
+
+async def test_options_set_and_validate_filter(
+    hass: HomeAssistant,
+    tmp_path: Path,
+) -> None:
+    """Options reject an invalid pattern, then apply a valid one on reload."""
+    url = write_feed(tmp_path / "feed.xml", ["rain", "snow", "fog"])
+    entry = await add_entry(hass, "Test Feed", url)
+    assert get_state(hass).state == "3"
+
+    result = await hass.config_entries.options.async_init(entry.entry_id)
+    result = await hass.config_entries.options.async_configure(
+        result["flow_id"],
+        options(**{CONF_MATCH: "[bad"}),
+    )
+    assert result["type"] is FlowResultType.FORM
+    assert result["errors"] == {CONF_MATCH: "invalid_pattern"}
+
+    result = await hass.config_entries.options.async_configure(
+        result["flow_id"],
+        options(**{CONF_MATCH: "SNOW"}),
+    )
+    assert result["type"] is FlowResultType.CREATE_ENTRY
+    await hass.async_block_till_done()
+
+    assert entry.options[CONF_MATCH] == "SNOW"
+    state = get_state(hass)
+    assert state.state == "1"
+    assert [e["title"] for e in state.attributes["entries"]] == ["snow"]
+
+
+async def test_yaml_filter_is_imported(hass: HomeAssistant, tmp_path: Path) -> None:
+    """`match` and `exclude_match` from YAML are applied to the sensor."""
+    url = write_feed(tmp_path / "feed.xml", ["rain", "snow", "fog"])
+    await setup_yaml(
+        hass,
+        {"name": "Yaml Feed", "feed_url": url, "exclude_match": "rain|fog"},
+    )
+    entry = hass.config_entries.async_entries(DOMAIN)[0]
+    assert entry.options[CONF_MATCH] == ""
+    assert entry.options[CONF_EXCLUDE_MATCH] == "rain|fog"
+    assert get_state(hass, "sensor.yaml_feed").state == "1"
 
 
 async def test_options_change_reloads_entry(

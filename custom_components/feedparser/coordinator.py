@@ -14,10 +14,12 @@ from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, Upda
 
 from .const import (
     CONF_DATE_FORMAT,
+    CONF_EXCLUDE_MATCH,
     CONF_EXCLUSIONS,
     CONF_FEED_URL,
     CONF_INCLUSIONS,
     CONF_LOCAL_TIME,
+    CONF_MATCH,
     CONF_REMOVE_SUMMARY_IMAGE,
     CONF_SCAN_INTERVAL,
     CONF_SHOW_TOPN,
@@ -77,6 +79,8 @@ class FeedparserCoordinator(DataUpdateCoordinator[FeedEntries]):
             local_time=config.get(CONF_LOCAL_TIME, DEFAULT_LOCAL_TIME),
             # an empty value means "use the integration default"
             user_agent=config.get(CONF_USER_AGENT) or USER_AGENT,
+            match=config.get(CONF_MATCH) or "",
+            exclude_match=config.get(CONF_EXCLUDE_MATCH) or "",
         )
         super().__init__(
             hass,

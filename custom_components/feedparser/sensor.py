@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from typing import TYPE_CHECKING
 
 import homeassistant.helpers.config_validation as cv
@@ -12,10 +13,12 @@ from homeassistant.helpers.update_coordinator import CoordinatorEntity
 from .compat import vol
 from .const import (
     CONF_DATE_FORMAT,
+    CONF_EXCLUDE_MATCH,
     CONF_EXCLUSIONS,
     CONF_FEED_URL,
     CONF_INCLUSIONS,
     CONF_LOCAL_TIME,
+    CONF_MATCH,
     CONF_REMOVE_SUMMARY_IMAGE,
     CONF_SCAN_INTERVAL,
     CONF_SHOW_TOPN,
@@ -28,6 +31,7 @@ from .const import (
 )
 from .coordinator import FeedEntries, FeedparserConfigEntry, FeedparserCoordinator
 from .fetch import USER_AGENT
+from .reader import compile_filter
 from .yaml_import import async_import_yaml_sensor
 
 if TYPE_CHECKING:
@@ -39,6 +43,17 @@ if TYPE_CHECKING:
     from homeassistant.helpers.typing import ConfigType, DiscoveryInfoType
 
 COMPONENT_REPO = "https://github.com/custom-components/feedparser/"
+
+
+def _valid_pattern(value: str) -> str:
+    """Validate an entry filter pattern from YAML."""
+    try:
+        compile_filter(value)
+    except re.error as err:
+        msg = f"invalid regular expression: {err}"
+        raise vol.Invalid(msg) from err
+    return value
+
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
@@ -55,6 +70,11 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
         vol.Optional(CONF_EXCLUSIONS, default=[]): vol.All(cv.ensure_list, [cv.string]),
         vol.Optional(CONF_SCAN_INTERVAL, default=DEFAULT_SCAN_INTERVAL): cv.time_period,
         vol.Optional(CONF_USER_AGENT, default=USER_AGENT): cv.string,
+        vol.Optional(CONF_MATCH, default=""): vol.All(cv.string, _valid_pattern),
+        vol.Optional(CONF_EXCLUDE_MATCH, default=""): vol.All(
+            cv.string,
+            _valid_pattern,
+        ),
     },
 )
 

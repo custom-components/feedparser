@@ -12,6 +12,8 @@
           "scan_interval": "Refresh interval",
           "show_topn": "Maximum entries",
           "remove_summary_image": "Remove image tags from summary",
+          "match": "Only entries matching",
+          "exclude_match": "Skip entries matching",
           "inclusions": "Included fields",
           "exclusions": "Excluded fields",
           "user_agent": "User-Agent"
@@ -24,6 +26,8 @@
           "scan_interval": "How often to refresh the feed. The minimum interval is 1 minute.",
           "show_topn": "Maximum number of entries exposed in the `entries` attribute. Large values increase state size.",
           "remove_summary_image": "Strip image tags from the `summary` field. This does not remove a separate `image` field.",
+          "match": "Optional regular expression. Only entries whose title or summary contains a match are kept, ignoring case, for example `Leicester` or `rain|snow`. Leave empty to keep all entries.",
+          "exclude_match": "Optional regular expression. Entries whose title or summary contains a match are removed, ignoring case. Applied together with the filter above.",
           "inclusions": "Optional comma-separated allowlist, for example `title, link, published`. Leave empty to keep all fields except exclusions.",
           "exclusions": "Optional comma-separated fields to remove. Exclusions are applied after inclusions.",
           "user_agent": "Optional HTTP User-Agent sent when fetching the feed. Some servers block or stall unknown clients; set a browser User-Agent for those. Leave empty to use the default."
@@ -47,7 +51,8 @@
       "cannot_connect": "Failed to download the feed.",
       "invalid_url": "URL is invalid.",
       "invalid_feed": "The URL was downloaded but does not look like an RSS or Atom feed.",
-      "scan_interval_too_short": "Refresh interval must be at least 1 minute."
+      "scan_interval_too_short": "Refresh interval must be at least 1 minute.",
+      "invalid_pattern": "Not a valid regular expression."
     },
     "abort": {
       "already_configured": "This feed is already configured.",
@@ -67,6 +72,8 @@
           "scan_interval": "Refresh interval",
           "show_topn": "Maximum entries",
           "remove_summary_image": "Remove image tags from summary",
+          "match": "Only entries matching",
+          "exclude_match": "Skip entries matching",
           "inclusions": "Included fields",
           "exclusions": "Excluded fields",
           "user_agent": "User-Agent"
@@ -77,6 +84,8 @@
           "scan_interval": "How often to refresh the feed. The minimum interval is 1 minute.",
           "show_topn": "Maximum number of entries exposed in the `entries` attribute. Large values increase state size.",
           "remove_summary_image": "Strip image tags from the `summary` field. This does not remove a separate `image` field.",
+          "match": "Optional regular expression. Only entries whose title or summary contains a match are kept, ignoring case, for example `Leicester` or `rain|snow`. Leave empty to keep all entries.",
+          "exclude_match": "Optional regular expression. Entries whose title or summary contains a match are removed, ignoring case. Applied together with the filter above.",
           "inclusions": "Optional comma-separated allowlist, for example `title, link, published`. Leave empty to keep all fields except exclusions.",
           "exclusions": "Optional comma-separated fields to remove. Exclusions are applied after inclusions.",
           "user_agent": "Optional HTTP User-Agent sent when fetching the feed. Some servers block or stall unknown clients; set a browser User-Agent for those. Leave empty to use the default."
@@ -95,7 +104,8 @@
       }
     },
     "error": {
-      "scan_interval_too_short": "Refresh interval must be at least 1 minute."
+      "scan_interval_too_short": "Refresh interval must be at least 1 minute.",
+      "invalid_pattern": "Not a valid regular expression."
     }
   },
   "issues": {

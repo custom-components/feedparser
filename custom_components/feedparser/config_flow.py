@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from collections.abc import Mapping
 from datetime import timedelta
 from typing import Any, cast
@@ -23,11 +24,13 @@ from yarl import URL
 from .compat import vol
 from .const import (
     CONF_DATE_FORMAT,
+    CONF_EXCLUDE_MATCH,
     CONF_EXCLUSIONS,
     CONF_FEED_URL,
     CONF_INCLUSIONS,
     CONF_LOCAL_TIME,
     CONF_MANAGED_BY_YAML,
+    CONF_MATCH,
     CONF_REMOVE_SUMMARY_IMAGE,
     CONF_SCAN_INTERVAL,
     CONF_SHOW_TOPN,
@@ -42,6 +45,7 @@ from .const import (
     ENTRY_VERSION,
 )
 from .fetch import USER_AGENT, fetch_feed
+from .reader import compile_filter
 from .yaml_import import (
     REASON_MANAGED_IN_UI,
     REASON_SYNCED,
@@ -168,7 +172,28 @@ def _options_from_input(user_input: Mapping[str, object]) -> dict[str, object]:
         CONF_INCLUSIONS: _split_csv(str(user_input.get(CONF_INCLUSIONS) or "")),
         CONF_EXCLUSIONS: _split_csv(str(user_input.get(CONF_EXCLUSIONS) or "")),
         CONF_USER_AGENT: _user_agent_from_input(user_input),
+        CONF_MATCH: _pattern(user_input.get(CONF_MATCH)),
+        CONF_EXCLUDE_MATCH: _pattern(user_input.get(CONF_EXCLUDE_MATCH)),
     }
+
+
+def _pattern(value: object) -> str:
+    """Return a filter pattern as typed, or "" if it is missing or blank.
+
+    Inner and surrounding spaces can be part of a pattern, so they are kept.
+    """
+    return value if isinstance(value, str) and value.strip() else ""
+
+
+def _pattern_errors(options: Mapping[str, object]) -> dict[str, str]:
+    """Return form errors for filter patterns that are not valid regexes."""
+    errors: dict[str, str] = {}
+    for key in (CONF_MATCH, CONF_EXCLUDE_MATCH):
+        try:
+            compile_filter(str(options.get(key) or ""))
+        except re.error:
+            errors[key] = "invalid_pattern"
+    return errors
 
 
 def _options_from_import(import_data: Mapping[str, Any]) -> dict[str, object]:
@@ -188,6 +213,8 @@ def _options_from_import(import_data: Mapping[str, Any]) -> dict[str, object]:
         CONF_EXCLUSIONS: _as_str_list(import_data.get(CONF_EXCLUSIONS)),
         # the YAML schema fills in the default agent; store "" for "default"
         CONF_USER_AGENT: "" if user_agent == USER_AGENT else user_agent,
+        CONF_MATCH: _pattern(import_data.get(CONF_MATCH)),
+        CONF_EXCLUDE_MATCH: _pattern(import_data.get(CONF_EXCLUDE_MATCH)),
     }
 
 
@@ -196,7 +223,7 @@ def _user_agent_from_input(user_input: Mapping[str, object]) -> str:
     return str(user_input.get(CONF_USER_AGENT) or "").strip()
 
 
-def _schema_with_defaults(
+def _schema_with_defaults(  # noqa: PLR0913 - one keyword per form field
     *,
     name: str = DEFAULT_NAME,
     feed_url: str = "",
@@ -208,6 +235,8 @@ def _schema_with_defaults(
     inclusions: str = "",
     exclusions: str = "",
     user_agent: str = "",
+    match: str = "",
+    exclude_match: str = "",
     include_feed_identity: bool,
 ) -> vol.Schema:
     """Build schema for user/options forms."""
@@ -242,6 +271,8 @@ def _schema_with_defaults(
             default=remove_summary_image,
         ): bool,
         vol.Optional(CONF_INCLUSIONS, default=inclusions): str,
+        vol.Optional(CONF_MATCH, default=match): str,
+        vol.Optional(CONF_EXCLUDE_MATCH, default=exclude_match): str,
         vol.Optional(CONF_EXCLUSIONS, default=exclusions): str,
         vol.Optional(CONF_USER_AGENT, default=user_agent): str,
     }
@@ -282,6 +313,8 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
                 options = _options_from_input(user_input)
             except vol.Invalid:
                 errors[CONF_SCAN_INTERVAL] = "scan_interval_too_short"
+            else:
+                errors.update(_pattern_errors(options))
             if not _is_supported_url(feed_url):
                 errors[CONF_FEED_URL] = "invalid_url"
             elif self._is_configured(feed_url, name):
@@ -522,6 +555,8 @@ class FeedparserOptionsFlow(OptionsFlowWithReload):
             except vol.Invalid:
                 errors[CONF_SCAN_INTERVAL] = "scan_interval_too_short"
             else:
+                errors = _pattern_errors(options)
+            if not errors:
                 return cast(
                     "ConfigFlowResult",
                     self.async_create_entry(title="", data=options),
@@ -545,7 +580,12 @@ class FeedparserOptionsFlow(OptionsFlowWithReload):
             inclusions=_join_csv(merged.get(CONF_INCLUSIONS, [])),
             exclusions=_join_csv(merged.get(CONF_EXCLUSIONS, [])),
             user_agent=str(merged.get(CONF_USER_AGENT) or ""),
+            match=str(merged.get(CONF_MATCH) or ""),
+            exclude_match=str(merged.get(CONF_EXCLUDE_MATCH) or ""),
         )
+        if user_input is not None:
+            # keep what the user typed when showing errors
+            data_schema = self.add_suggested_values_to_schema(data_schema, user_input)
         return cast(
             "ConfigFlowResult",
             self.async_show_form(
