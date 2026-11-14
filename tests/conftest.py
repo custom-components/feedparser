@@ -3,8 +3,7 @@
 import pytest
 from constants import TEST_FEEDS
 from feedsource import FeedSource
-
-from custom_components.feedparser.sensor import FeedParserSensor
+from reader_harness import ReaderHarness
 
 
 def get_feeds() -> list[FeedSource]:
@@ -40,9 +39,9 @@ def feed(request: pytest.FixtureRequest) -> FeedSource:
 
 
 @pytest.fixture
-def feed_sensor(feed: FeedSource) -> FeedParserSensor:
+def feed_sensor(feed: FeedSource) -> ReaderHarness:
     """Return feed sensor initialized with the local RSS feed."""
-    return FeedParserSensor(**feed.sensor_config_local_feed)
+    return ReaderHarness(**feed.sensor_config_local_feed)
 
 
 @pytest.fixture

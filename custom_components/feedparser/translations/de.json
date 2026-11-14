@@ -1,0 +1,85 @@
+{
+  "config": {
+    "step": {
+      "user": {
+        "title": "Feedparser",
+        "description": "Erstelle einen Sensor aus einem RSS-/Atom-Feed. Aktualisierungs- und Verarbeitungsoptionen können später geändert werden.",
+        "data": {
+          "name": "Name",
+          "feed_url": "Feed-URL",
+          "date_format": "Datumsformat",
+          "local_time": "Datumsangaben in lokale Zeit umwandeln",
+          "scan_interval": "Aktualisierungsintervall",
+          "show_topn": "Maximale Einträge",
+          "remove_summary_image": "Bild-Tags aus der Zusammenfassung entfernen",
+          "inclusions": "Einbezogene Felder",
+          "exclusions": "Ausgeschlossene Felder",
+          "user_agent": "User-Agent"
+        },
+        "data_description": {
+          "name": "Anzeigename für den Sensor.",
+          "feed_url": "URL eines RSS- oder Atom-Feeds. HTTP, HTTPS und lokale Datei-URLs werden unterstützt.",
+          "date_format": "Python-strftime-Format für Feed-Datumswerte, zum Beispiel `%a, %d %b %Y %H:%M:%S %Z`.",
+          "local_time": "Feed-Zeitstempel vor der Formatierung in die in Home Assistant konfigurierte lokale Zeit umwandeln.",
+          "scan_interval": "Wie oft der Feed aktualisiert wird. Das Mindestintervall beträgt 1 Minute.",
+          "show_topn": "Maximale Anzahl von Einträgen im Attribut `entries`. Große Werte erhöhen die Zustandsgröße.",
+          "remove_summary_image": "Entfernt Bild-Tags aus dem Feld `summary`. Ein separates Feld `image` wird nicht entfernt.",
+          "inclusions": "Optionale, durch Kommas getrennte Positivliste, zum Beispiel `title, link, published`. Leer lassen, um alle Felder außer den ausgeschlossenen beizubehalten.",
+          "exclusions": "Optionale, durch Kommas getrennte Felder, die entfernt werden sollen. Ausschlüsse werden nach den Einschlüssen angewendet.",
+          "user_agent": "Optionaler HTTP-User-Agent, der beim Abrufen des Feeds gesendet wird. Manche Server blockieren unbekannte Clients oder antworten nicht; verwende dafür einen Browser-User-Agent. Leer lassen für den Standardwert."
+        }
+      }
+    },
+    "error": {
+      "already_configured": "Für diesen Feed gibt es bereits einen Sensor mit diesem Namen. Wähle einen anderen Namen.",
+      "cannot_connect": "Der Feed konnte nicht heruntergeladen werden.",
+      "invalid_url": "Die URL ist ungültig.",
+      "invalid_feed": "Die URL wurde geladen, scheint aber kein RSS- oder Atom-Feed zu sein.",
+      "scan_interval_too_short": "Das Aktualisierungsintervall muss mindestens 1 Minute betragen."
+    },
+    "abort": {
+      "already_configured": "Dieser Feed ist bereits konfiguriert."
+    }
+  },
+  "options": {
+    "step": {
+      "init": {
+        "title": "Feedparser-Optionen",
+        "description": "Passe die Feed-Aktualisierung und -Verarbeitung an. Änderungen werden sofort angewendet, indem dieser Feed neu geladen wird.",
+        "data": {
+          "date_format": "Datumsformat",
+          "local_time": "Datumsangaben in lokale Zeit umwandeln",
+          "scan_interval": "Aktualisierungsintervall",
+          "show_topn": "Maximale Einträge",
+          "remove_summary_image": "Bild-Tags aus der Zusammenfassung entfernen",
+          "inclusions": "Einbezogene Felder",
+          "exclusions": "Ausgeschlossene Felder",
+          "user_agent": "User-Agent"
+        },
+        "data_description": {
+          "date_format": "Python-strftime-Format für Feed-Datumswerte, zum Beispiel `%a, %d %b %Y %H:%M:%S %Z`.",
+          "local_time": "Feed-Zeitstempel vor der Formatierung in die in Home Assistant konfigurierte lokale Zeit umwandeln.",
+          "scan_interval": "Wie oft der Feed aktualisiert wird. Das Mindestintervall beträgt 1 Minute.",
+          "show_topn": "Maximale Anzahl von Einträgen im Attribut `entries`. Große Werte erhöhen die Zustandsgröße.",
+          "remove_summary_image": "Entfernt Bild-Tags aus dem Feld `summary`. Ein separates Feld `image` wird nicht entfernt.",
+          "inclusions": "Optionale, durch Kommas getrennte Positivliste, zum Beispiel `title, link, published`. Leer lassen, um alle Felder außer den ausgeschlossenen beizubehalten.",
+          "exclusions": "Optionale, durch Kommas getrennte Felder, die entfernt werden sollen. Ausschlüsse werden nach den Einschlüssen angewendet.",
+          "user_agent": "Optionaler HTTP-User-Agent, der beim Abrufen des Feeds gesendet wird. Manche Server blockieren unbekannte Clients oder antworten nicht; verwende dafür einen Browser-User-Agent. Leer lassen für den Standardwert."
+        }
+      }
+    },
+    "error": {
+      "scan_interval_too_short": "Das Aktualisierungsintervall muss mindestens 1 Minute betragen."
+    }
+  },
+  "issues": {
+    "deprecated_yaml": {
+      "title": "Feedparser-YAML-Konfiguration ist veraltet",
+      "description": "Deine `sensor:`-Einträge mit `platform: feedparser` wurden automatisch in die Benutzeroberfläche übernommen; die Entitäts-IDs bleiben gleich.\n\nEntferne sie aus der configuration.yaml und starte Home Assistant neu, um dieses Problem zu beheben. Änderungen an der YAML werden nicht mehr übernommen; bearbeite die Feeds stattdessen unter Einstellungen > Geräte & Dienste > Feedparser."
+    },
+    "yaml_import_failed": {
+      "title": "Feedparser-YAML-Sensor \"{name}\" konnte nicht übernommen werden",
+      "description": "Der YAML-Sensor \"{name}\" konnte nicht in die Benutzeroberfläche übernommen werden ({reason}) und wird daher nicht angelegt.\n\nFüge ihn manuell unter Einstellungen > Geräte & Dienste > Integration hinzufügen > Feedparser hinzu und entferne ihn anschließend aus der configuration.yaml."
+    }
+  }
+}

@@ -30,11 +30,17 @@ Alternatively, click on the button below to add the repository:
 1. Go to **Settings** -> **Devices & Services** -> **Integrations**.
 2. Click **Add Integration** and search for **Feedparser**.
 3. Fill in at least `Name` and `Feed URL`.
-4. Optional include/exclude fields are entered as comma-separated values.
+4. Set the refresh interval with the duration field (minimum 1 minute).
+5. Optional include/exclude fields are entered as comma-separated values.
 
-To update parsing behavior later, open the Feedparser integration card and use **Configure** (options flow).
+To update refresh or parsing behavior later, open the Feedparser integration card and use **Configure** (options flow). Saved changes reload only that feed entry so the new settings take effect immediately.
 
-### YAML configuration (legacy)
+- The same feed URL can be added more than once (for example, once with all fields and once with only titles), as long as each sensor has a different name.
+- If a feed cannot be reached when Home Assistant starts, the entry is retried automatically in the background. If a later refresh fails, the sensor becomes `unavailable` until the feed responds again.
+
+### YAML configuration (deprecated)
+
+YAML configuration still works but is deprecated. On startup, each `sensor:` entry with `platform: feedparser` is **imported into the UI automatically** and keeps its entity ID (`sensor.<name>`), so dashboards and automations keep working. A Repairs notice then asks you to remove the YAML. After the import, changes to the YAML are ignored: edit the feed from the integration card instead. If a YAML sensor cannot be imported, a Repairs notice names it so you can add it manually.
 
 **Example configuration.yaml:**
 
@@ -61,6 +67,12 @@ sensor:
     feed_url: https://www.nu.nl/rss/Algemeen
     local_time: true
     show_topn: 1
+
+  # Some servers block or stall unknown clients; send a browser User-Agent instead
+  - platform: feedparser
+    name: Picky Server Feed
+    feed_url: https://example.com/rss
+    user_agent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0 Safari/537.36'
 ```
 
 If you wish the integration to look for enclosures in the feed entries, add `image` to the `inclusions` list. Do not use `enclosure`.
@@ -79,22 +91,24 @@ The integration supports both UI setup (recommended) and legacy YAML setup. Most
 | `feed_url` | Yes | URL string | - | `https://www.nu.nl/rss/Algemeen` | RSS/Atom feed URL to fetch and parse. Supports `http`, `https`, and `file` in dev/testing. |
 | `date_format` | No | string (`strftime`) | `%a, %b %d %I:%M %p` | `%a, %d %b %Y %H:%M:%S %Z` | Output format for date fields in feed entries. |
 | `local_time` | No | boolean | `false` | `true` | Converts parsed date values from feed timezone to Home Assistant local timezone. |
-| `scan_interval` | No | duration object | `1 hour` | `{ hours: 1, minutes: 30 }` | Polling interval for refreshing feed data. Minimum effective value is 1 minute. |
+| `scan_interval` | No | duration object | `1 hour` | `{ hours: 1, minutes: 30 }` | Polling interval for refreshing feed data. UI input must be at least 1 minute. |
 | `show_topn` | No | integer | `9999` | `10` | Maximum number of entries exposed in sensor attributes. |
 | `remove_summary_image` | No | boolean | `false` | `true` | Strips `<img ...>` tags from the `summary` field. |
 | `inclusions` | No | list of strings (YAML) / comma-separated string (UI) | all fields | `title, link, published, image` | If set, only listed fields are kept for each entry. |
 | `exclusions` | No | list of strings (YAML) / comma-separated string (UI) | none | `summary, language` | Fields to remove from each entry after parsing. |
+| `user_agent` | No | string | `Home Assistant Feed-parser Integration <version>` | `Mozilla/5.0 (compatible; MyFeedReader/1.0)` | User-Agent header sent when fetching the feed (and when validating it during UI setup). Leave empty in the UI to use the default. |
 
 ### Notes and behavior details
 
 - **`inclusions` vs `exclusions`**: If `inclusions` is set, only those fields are considered. `exclusions` then removes fields from that resulting set.
 - **When neither `inclusions` nor `exclusions` is set**: all available feed fields are returned.
-- **`image` extraction**: adding `image` to `inclusions` enables image URL extraction from enclosures or summary HTML.
+- **`image` extraction**: adding `image` to `inclusions` enables image URL extraction from image enclosures, Media RSS (`media:content`, `media:thumbnail`), or the first image in the summary HTML.
+- **`user_agent`**: some servers reject or never answer requests from unknown clients. If a feed works in a browser but fails in Home Assistant, try a browser User-Agent.
 - **UI vs YAML input format**:
   - UI uses comma-separated text for `inclusions` and `exclusions`.
   - YAML uses proper lists.
-  - UI config flow uses separate scan interval fields for hours/minutes; YAML uses `scan_interval` object keys (`hours`, `minutes`).
-- **Date parsing**: if a feed date is malformed, parser behavior depends on feed content and fallback parsing.
+  - UI uses a single duration control for `scan_interval`; YAML uses `scan_interval` object keys such as `hours` and `minutes`.
+- **Date parsing**: RSS (RFC 822) and Atom (ISO 8601) dates are both supported, including US timezone abbreviations such as `EDT`. If a date cannot be parsed at all, the original text is kept.
 
 Due to how `custom_components` are loaded, it is normal to see a `ModuleNotFoundError` error on first boot after adding this, to resolve it, restart Home-Assistant.
 
@@ -105,6 +119,19 @@ This repository includes a devcontainer inspired by the `custom-components/readm
 1. Open the repo in VS Code.
 2. Run **Dev Containers: Reopen in Container**.
 3. After dependencies install, run `bash scripts/develop` to start Home Assistant with `test_hass`.
+
+### Running tests
+
+```bash
+pip install -e ".[dev]"
+pytest tests/
+```
+
+The suite uses [`pytest-homeassistant-custom-component`](https://github.com/MatthewFlamm/pytest-homeassistant-custom-component), which blocks network access. Tests that need the internet are marked `online` and run separately:
+
+```bash
+pytest -p no:homeassistant -m online tests/
+```
 
 [commits-shield]: https://img.shields.io/github/commit-activity/y/custom-components/feedparser.svg?style=for-the-badge
 [commits]: https://github.com/custom-components/feedparser/commits/master

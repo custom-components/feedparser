@@ -5,6 +5,7 @@ from datetime import timedelta
 from homeassistant.const import Platform
 
 DOMAIN = "feedparser"
+VERSION = "1.0.0"
 PLATFORMS: list[Platform] = [Platform.SENSOR]
 
 CONF_FEED_URL = "feed_url"
@@ -15,6 +16,7 @@ CONF_EXCLUSIONS = "exclusions"
 CONF_SHOW_TOPN = "show_topn"
 CONF_SCAN_INTERVAL = "scan_interval"
 CONF_REMOVE_SUMMARY_IMAGE = "remove_summary_image"
+CONF_USER_AGENT = "user_agent"
 
 DEFAULT_DATE_FORMAT = "%a, %b %d %I:%M %p"
 DEFAULT_SCAN_INTERVAL = timedelta(hours=1)
@@ -34,4 +36,5 @@ OPTION_KEYS: list[str] = [
     CONF_REMOVE_SUMMARY_IMAGE,
     CONF_INCLUSIONS,
     CONF_EXCLUSIONS,
+    CONF_USER_AGENT,
 ]
