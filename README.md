@@ -55,7 +55,7 @@ sensor:
     inclusions:
       - title
       - link
-      - description
+      - summary
       - image
       - published
     exclusions:
@@ -79,6 +79,53 @@ If you wish the integration to look for enclosures in the feed entries, add `ima
 The integration tries to extract an image URL and stores it under the `image` attribute. If no image can be found, it uses the Home Assistant logo as a fallback.
 
 Note that the original `pubDate` field is available under `published`. Other date-like fields that may be present are `updated`, `created`, and `expired`. Refer to the original [feedparser date parsing documentation](https://feedparser.readthedocs.io/en/latest/date-parsing/) for feed-specific details.
+
+### Field names
+
+Entries use [feedparser](https://feedparser.readthedocs.io/)'s field names, which differ from the raw RSS element names. Use these names in `inclusions` and `exclusions`:
+
+| RSS / Atom element | Field |
+| :-- | :-- |
+| `<description>` | `summary` |
+| `<pubDate>` | `published` |
+| `<guid>` | `id` |
+| `<dc:creator>` | `author` |
+| `<content:encoded>` | `content` |
+| `<media:content>` | `media_content` |
+| `<enclosure>` | `enclosures` (add `image` to `inclusions` to get the image URL) |
+| Other namespaced elements, e.g. `<tv:show_name>` | prefix and name joined by `_`, e.g. `tv_show_name` |
+
+To see every field a feed provides, leave `inclusions` empty and look at the sensor's `entries` attribute under **Developer tools → States**.
+
+## Output
+
+The sensor's state is the number of entries. The entries themselves are in the `entries` attribute, in the order the feed lists them (usually newest first). With `inclusions: [title, link, published, summary, image]` an entry looks like this:
+
+```yaml
+entries:
+  - title: Example headline
+    link: https://example.com/news/1
+    summary: <p>Short teaser text.</p>
+    published: Fri, Nov 13 06:30 PM
+    image: https://example.com/img/1.jpg
+```
+
+`published` is formatted with `date_format`. `image` is only added when `image` is in `inclusions`; it falls back to the Home Assistant logo if the entry has no image. The `entries` attribute isn't stored in history.
+
+### Showing a feed on a dashboard
+
+A built-in Markdown card can list the entries:
+
+```yaml
+type: markdown
+title: News
+content: >
+  {% for entry in state_attr('sensor.engineering_feed', 'entries')[:5] %}
+  - [{{ entry.title }}]({{ entry.link }}) · {{ entry.published }}
+  {% endfor %}
+```
+
+The custom [list-card](https://github.com/custom-cards/list-card) and [flex-table-card](https://github.com/custom-cards/flex-table-card) can also show entries as a table, including images. Point them at the `entries` attribute.
 
 ### Configuration reference
 
