@@ -1,4 +1,5 @@
 """Feed source class to be used in tests."""
+
 import json
 from datetime import datetime, timedelta
 from functools import cached_property
@@ -14,7 +15,7 @@ from constants import (
     TEST_HASS_PATH,
 )
 
-yaml.Dumper.ignore_aliases = lambda *args: True  # type: ignore[method-assign] # noqa: ARG005, E501
+yaml.Dumper.ignore_aliases = lambda *args: True  # type: ignore[method-assign] # noqa: ARG005
 
 
 class FeedSource:
@@ -22,51 +23,51 @@ class FeedSource:
 
     feed_storage = DATA_PATH
 
-    def __init__(self: "FeedSource", data: dict) -> None:
+    def __init__(self: FeedSource, data: dict) -> None:
         """Initialize."""
         self.raw = data
 
-    def __repr__(self: "FeedSource") -> str:
+    def __repr__(self: FeedSource) -> str:
         """Return representation."""
         return f"<FeedSource {self.name}>"
 
     @property
-    def sensor_config(self: "FeedSource") -> "FeedConfig":
+    def sensor_config(self: FeedSource) -> FeedConfig:
         """Return sensor_config."""
         return FeedConfig(self.raw["sensor_config"])
 
     @property
-    def name(self: "FeedSource") -> str:
+    def name(self: FeedSource) -> str:
         """Return name."""
         return self.sensor_config.name
 
     @property
-    def url(self: "FeedSource") -> str:
+    def url(self: FeedSource) -> str:
         """Return url."""
         return self.sensor_config.url
 
     @property
-    def path(self: "FeedSource") -> Path:
+    def path(self: FeedSource) -> Path:
         """Return path of the RSS feed file in a XML format."""
         return self.feed_storage / f"{self.name}.xml"
 
     @property
-    def metadata_path(self: "FeedSource") -> Path:
+    def metadata_path(self: FeedSource) -> Path:
         """Return metadata path."""
         return self.feed_storage / f"{self.name}.json"
 
     @cached_property
-    def metadata(self: "FeedSource") -> dict:
+    def metadata(self: FeedSource) -> dict:
         """Return metadata."""
         return json.loads(self.metadata_path.read_text())
 
     @property
-    def text(self: "FeedSource") -> str:
+    def text(self: FeedSource) -> str:
         """Return text."""
         return self.path.read_text()
 
     @property
-    def download_date(self: "FeedSource") -> datetime:
+    def download_date(self: FeedSource) -> datetime:
         """Return download date."""
         try:
             return datetime.fromisoformat(self.metadata["download_date"])
@@ -80,47 +81,47 @@ class FeedSource:
             ) from ke
 
     @property
-    def has_images(self: "FeedSource") -> bool:
+    def has_images(self: FeedSource) -> bool:
         """Return has_images."""
         return self.metadata.get("has_images", False)
 
     @property
-    def all_entries_have_images(self: "FeedSource") -> bool:
+    def all_entries_have_images(self: FeedSource) -> bool:
         """Return all_entries_have_images."""
         return self.metadata.get("all_entries_have_images", True)
 
     @property
-    def all_entries_have_summary(self: "FeedSource") -> bool:
+    def all_entries_have_summary(self: FeedSource) -> bool:
         """Return all_entries_have_summary."""
         return self.metadata.get("all_entries_have_summary", True)
 
     @property
-    def has_unique_links(self: "FeedSource") -> bool:
+    def has_unique_links(self: FeedSource) -> bool:
         """Return has_unique_links."""
         return self.metadata.get("has_unique_links", True)
 
     @property
-    def has_unique_titles(self: "FeedSource") -> bool:
+    def has_unique_titles(self: FeedSource) -> bool:
         """Return has_unique_titles."""
         return self.metadata.get("has_unique_titles", True)
 
     @property
-    def has_unique_images(self: "FeedSource") -> bool:
+    def has_unique_images(self: FeedSource) -> bool:
         """Return has_unique_images."""
         return self.metadata.get("has_unique_images", True)
 
     @property
-    def has_unique_dates(self: "FeedSource") -> bool:
+    def has_unique_dates(self: FeedSource) -> bool:
         """Return has_unique_dates."""
         return self.metadata.get("has_unique_dates", True)
 
     @property
-    def has_images_in_summary(self: "FeedSource") -> bool:
+    def has_images_in_summary(self: FeedSource) -> bool:
         """Return has_images_in_summary."""
         return self.metadata.get("has_images_in_summary", False)
 
     @property
-    def _common_config(self: "FeedSource") -> dict[str, str | int | bool | list[str]]:
+    def _common_config(self: FeedSource) -> dict[str, str | int | bool | list[str]]:
         """Return common config."""
         return {
             "name": self.name,
@@ -134,7 +135,7 @@ class FeedSource:
 
     @property
     def feed_parser_sensor_config(
-        self: "FeedSource",
+        self: FeedSource,
     ) -> dict[str, str | int | bool | list[str]]:
         """Generate sensor config for the FeedParserSensor constructor."""
         return self._common_config | {
@@ -144,13 +145,13 @@ class FeedSource:
 
     @property
     def sensor_config_local_feed(
-        self: "FeedSource",
+        self: FeedSource,
     ) -> dict[str, str | int | bool | list[str]]:
         """Gen. sensor config for the FeedParserSensor constructor with local feed."""
         return self.feed_parser_sensor_config | {"feed": self.path.absolute().as_uri()}
 
     @property
-    def ha_config_entry(self: "FeedSource") -> dict[str, Any]:
+    def ha_config_entry(self: FeedSource) -> dict[str, Any]:
         """Generate HA config entry."""
         return self._common_config | {
             "platform": "feedparser",
@@ -160,16 +161,16 @@ class FeedSource:
 
     @classmethod
     def gen_ha_sensors_yml_config(
-        cls: type["FeedSource"],
-        sensors: list["FeedSource"],
+        cls: type[FeedSource],
+        sensors: list[FeedSource],
     ) -> str:
         """Generate HA "sensors" config."""
         return yaml.dump([s.ha_config_entry for s in sensors])
 
     @classmethod
     def create_ha_sensors_config_file(
-        cls: type["FeedSource"],
-        sensors: list["FeedSource"],
+        cls: type[FeedSource],
+        sensors: list[FeedSource],
     ) -> None:
         """Create HA "sensors" config file."""
         sensors_yml = TEST_HASS_PATH / "sensors.yaml"
@@ -179,46 +180,46 @@ class FeedSource:
 class FeedConfig:
     """Feed config class to be used in tests."""
 
-    def __init__(self: "FeedConfig", data: dict) -> None:
+    def __init__(self: FeedConfig, data: dict) -> None:
         """Initialize."""
         self.raw = data
 
-    def __repr__(self: "FeedConfig") -> str:
+    def __repr__(self: FeedConfig) -> str:
         """Return representation."""
         return f"<FeedConfig {self.name}>"
 
     @property
-    def name(self: "FeedConfig") -> str:
+    def name(self: FeedConfig) -> str:
         """Return name."""
         return self.raw["name"]
 
     @property
-    def url(self: "FeedConfig") -> str:
+    def url(self: FeedConfig) -> str:
         """Return url."""
         return self.raw["feed_url"]
 
     @property
-    def date_format(self: "FeedConfig") -> str:
+    def date_format(self: FeedConfig) -> str:
         """Return date_format."""
         return self.raw.get("date_format", DATE_FORMAT)
 
     @property
-    def show_topn(self: "FeedConfig") -> int:
+    def show_topn(self: FeedConfig) -> int:
         """Return show_topn."""
         return self.raw.get("show_topn", 9999)
 
     @property
-    def remove_summary_image(self: "FeedConfig") -> bool:
+    def remove_summary_image(self: FeedConfig) -> bool:
         """Return remove_summary_image."""
         return self.raw.get("remove_summary_image", False)
 
     @property
-    def scan_interval(self: "FeedConfig") -> int:
+    def scan_interval(self: FeedConfig) -> int:
         """Return scan_interval in seconds."""
         return int(self.scan_interval_timedelta.total_seconds())
 
     @property
-    def scan_interval_timedelta(self: "FeedConfig") -> timedelta:
+    def scan_interval_timedelta(self: FeedConfig) -> timedelta:
         """Return scan_interval as timedelta."""
         if scan_interval := self.raw.get("scan_interval"):
             td = timedelta(**scan_interval)
@@ -227,16 +228,16 @@ class FeedConfig:
         return td
 
     @property
-    def inclusions(self: "FeedConfig") -> list:
+    def inclusions(self: FeedConfig) -> list:
         """Return inclusions."""
         return self.raw.get("inclusions", DEFAULT_INCLUSIONS)
 
     @property
-    def exclusions(self: "FeedConfig") -> list:
+    def exclusions(self: FeedConfig) -> list:
         """Return exclusions."""
         return self.raw.get("exclusions", DEFAULT_EXCLUSIONS)
 
     @property
-    def local_time(self: "FeedConfig") -> bool:
+    def local_time(self: FeedConfig) -> bool:
         """Return local_time."""
         return self.raw.get("local_time", False)

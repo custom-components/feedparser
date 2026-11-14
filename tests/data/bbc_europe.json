@@ -1,5 +1,6 @@
 {
-    "has_images": false,
+    "has_images": true,
+    "has_unique_images": false,
     "has_unique_links": false,
     "has_unique_titles": false,
     "has_unique_dates": false,

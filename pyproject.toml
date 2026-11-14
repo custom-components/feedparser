@@ -1,10 +1,10 @@
 [project]
 name = "homeassistant.sensor.feedparser"
-version = "0.1.11"
+version = "1.0.0"
 description = "Home Assistant custom integration to parse RSS feeds"
 maintainers = [
-  {name = "Ian Richardson", email = "iantrich@gmail.com"},
-  {name = "Ondrej Gajdusek", email = "ondrej@gajdusek.dev"}
+  { name = "Ian Richardson", email = "iantrich@gmail.com" },
+  { name = "Ondrej Gajdusek", email = "ondrej@gajdusek.dev" }
 ]
 keywords = [
   "homeassistant",
@@ -20,11 +20,11 @@ classifiers = [
   "Intended Audience :: Developers",
   "License :: OSI Approved :: MIT License",
   "Operating System :: OS Independent",
-  "Programming Language :: Python :: 3.11"
+  "Programming Language :: Python :: 3.14"
 ]
-requires-python = ">=3.11.0"
+requires-python = ">=3.14"
 dependencies = [
-  "feedparser==6.0.11",
+  "feedparser>=6.0.12",
   "homeassistant",
   "python-dateutil",
   "requests-file",
@@ -34,8 +34,10 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
   "black",
-  "homeassistant-stubs",
-  "pytest==8.0.0",
+  # pytest-homeassistant-custom-component pins an exact Home Assistant (and
+  # pytest) version; keep homeassistant-stubs on the same Home Assistant release.
+  "homeassistant-stubs==2026.10.0",
+  "pytest-homeassistant-custom-component==0.13.375",
   "mypy",
   "ruff",
   "types-python-dateutil",
@@ -56,7 +58,7 @@ py-modules = ["custom_components.feedparser"]
 [tool.black]
 line-length = 88
 # skip-string-normalization = true
-target-version = ["py311"]
+target-version = ["py313"]
 include = '\.pyi?$'
 exclude = '''
 /(
@@ -74,6 +76,32 @@ exclude = '''
 # Enable the pycodestyle (`E`) and Pyflakes (`F`) rules by default.
 # Unlike Flake8, Ruff doesn't enable pycodestyle warnings (`W`) or
 # McCabe complexity (`C901`) by default.
+# Exclude a variety of commonly ignored directories.
+exclude = [
+  ".bzr",
+  ".direnv",
+  ".eggs",
+  ".git",
+  ".git-rewrite",
+  ".hg",
+  ".mypy_cache",
+  ".pytype",
+  ".ruff_cache",
+  ".tox",
+  ".venv",
+  "__pypackages__",
+  "_build",
+  "buck-out",
+  "build",
+  "dist",
+  "venv"
+]
+# Same as Black.
+line-length = 88
+# Home Assistant requires Python 3.14.
+target-version = "py314"
+
+[tool.ruff.lint]
 select = [
   "ANN",
   "ARG",
@@ -98,7 +126,6 @@ select = [
   "RUF",
   "SIM",
   "SLF",
-  "TCH",
   "TRY",
   "UP"
 ]
@@ -110,41 +137,15 @@ ignore = [
   "D213",  # Multi-line docstring summary should start at the first line
   "FBT001"  # Boolean positional argument in function definition
 ]
-# Allow autofix for all enabled rules (when `--fix`) is provided.
 fixable = ["ALL"]
 unfixable = []
-# Exclude a variety of commonly ignored directories.
-exclude = [
-  ".bzr",
-  ".direnv",
-  ".eggs",
-  ".git",
-  ".git-rewrite",
-  ".hg",
-  ".mypy_cache",
-  ".pytype",
-  ".ruff_cache",
-  ".tox",
-  ".venv",
-  "__pypackages__",
-  "_build",
-  "buck-out",
-  "build",
-  "dist",
-  "venv"
-]
-# Same as Black.
-line-length = 88
-# Allow unused variables when underscore-prefixed.
 dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
-# Assume Python 3.11.
-target-version = "py311"
 
-[tool.ruff.per-file-ignores]
+[tool.ruff.lint.per-file-ignores]
 "tests/**" = ["S101"]
 
-[tool.ruff.pylint]
-max-args = 10
+[tool.ruff.lint.pylint]
+max-args = 11
 
 [[tool.mypy.overrides]]
 module = "feedparser.*"
@@ -152,13 +153,19 @@ module = "feedparser.*"
 disable_error_code = ["attr-defined", "import"]
 
 [tool.pytest.ini_options]
+addopts = "-m 'not online'"
+asyncio_mode = "auto"
+asyncio_default_fixture_loop_scope = "function"
+markers = [
+  "online: needs internet access; run with `pytest -p no:homeassistant -m online` because the Home Assistant test plugin blocks DNS"
+]
 pythonpath = [".", "tests"]
 filterwarnings = [
   "ignore:Inheritance class HomeAssistantApplication from web.Application is discouraged:DeprecationWarning"
 ]
 
 [tool.bumpver]
-current_version = "0.1.11"
+current_version = "1.0.0"
 version_pattern = "MAJOR.MINOR.PATCH[PYTAGNUM]"
 commit_message = "bump version {old_version} -> {new_version}"
 tag_message = "{new_version}"
@@ -172,4 +179,4 @@ push = true
 [tool.bumpver.file_patterns]
 "pyproject.toml" = ['current_version = "{version}"', 'version = "{version}"']
 "custom_components/feedparser/manifest.json" = ['version": "{version}"']
-"custom_components/feedparser/sensor.py" = ['__version__ = "{version}"']
+"custom_components/feedparser/const.py" = ['VERSION = "{version}"']

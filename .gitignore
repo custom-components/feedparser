@@ -11,3 +11,5 @@ test_hass/home-assistant_v2.db*
 test_hass/home-assistant.log*
 test_hass/sensors.yaml
 test_hass/www/
+test_hass/known_devices.yaml
+test_hass/.ha_run.lock

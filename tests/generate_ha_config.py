@@ -1,4 +1,5 @@
 """Generate Home Assistant sensors config from test feeds."""
+
 from constants import TEST_FEEDS
 from feedsource import FeedSource
 
