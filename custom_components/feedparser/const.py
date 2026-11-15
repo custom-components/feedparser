@@ -9,6 +9,8 @@ VERSION = "1.3.0"
 PLATFORMS: list[Platform] = [Platform.SENSOR]
 
 CONF_FEED_URL = "feed_url"
+# entity whose state is the feed URL, used instead of CONF_FEED_URL
+CONF_FEED_URL_ENTITY = "feed_url_entity"
 CONF_DATE_FORMAT = "date_format"
 CONF_LOCAL_TIME = "local_time"
 CONF_INCLUSIONS = "inclusions"

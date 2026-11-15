@@ -7,6 +7,7 @@
         "data": {
           "name": "Name",
           "feed_url": "Feed-URL",
+          "feed_url_entity": "Entität mit Feed-URL",
           "date_format": "Datumsformat",
           "local_time": "Datumsangaben in lokale Zeit umwandeln",
           "scan_interval": "Aktualisierungsintervall",
@@ -21,7 +22,8 @@
         },
         "data_description": {
           "name": "Anzeigename für den Sensor.",
-          "feed_url": "URL eines RSS- oder Atom-Feeds. HTTP, HTTPS und lokale Datei-URLs werden unterstützt.",
+          "feed_url": "URL eines RSS- oder Atom-Feeds. HTTP, HTTPS und lokale Datei-URLs werden unterstützt. Leer lassen, um die URL stattdessen aus einer Entität zu übernehmen.",
+          "feed_url_entity": "Alternative zur Feed-URL: ein input_text, text oder Template-Sensor, dessen Zustand die Feed-URL ist. Mit einem Template-Sensor-Helfer lässt sich eine veränderliche URL bauen, z. B. mit dem heutigen Datum. Der Feed wird neu geladen, sobald sich der Wert ändert. Entitätszustände sind auf 255 Zeichen begrenzt.",
           "date_format": "Python-strftime-Format für Feed-Datumswerte, zum Beispiel `%a, %d %b %Y %H:%M:%S %Z`.",
           "local_time": "Feed-Zeitstempel vor der Formatierung in die in Home Assistant konfigurierte lokale Zeit umwandeln.",
           "scan_interval": "Wie oft der Feed aktualisiert wird. Das Mindestintervall beträgt 1 Minute.",
@@ -37,14 +39,16 @@
       },
       "reconfigure": {
         "title": "Feed ändern",
-        "description": "Ändere den Sensornamen oder die Feed-URL. Entitäts-ID und Verlauf bleiben erhalten.",
+        "description": "Ändere den Sensornamen oder die Quelle der Feed-URL. Entitäts-ID und Verlauf bleiben erhalten.",
         "data": {
           "name": "Name",
-          "feed_url": "Feed-URL"
+          "feed_url": "Feed-URL",
+          "feed_url_entity": "Entität mit Feed-URL"
         },
         "data_description": {
           "name": "Anzeigename für den Sensor.",
-          "feed_url": "URL eines RSS- oder Atom-Feeds. HTTP, HTTPS und lokale Datei-URLs werden unterstützt."
+          "feed_url": "URL eines RSS- oder Atom-Feeds. HTTP, HTTPS und lokale Datei-URLs werden unterstützt. Leer lassen, um die URL stattdessen aus einer Entität zu übernehmen.",
+          "feed_url_entity": "Alternative zur Feed-URL: ein input_text, text oder Template-Sensor, dessen Zustand die Feed-URL ist. Mit einem Template-Sensor-Helfer lässt sich eine veränderliche URL bauen, z. B. mit dem heutigen Datum. Der Feed wird neu geladen, sobald sich der Wert ändert. Entitätszustände sind auf 255 Zeichen begrenzt."
         }
       }
     },
@@ -55,7 +59,10 @@
       "invalid_feed": "Die URL wurde geladen, scheint aber kein RSS- oder Atom-Feed zu sein.",
       "scan_interval_too_short": "Das Aktualisierungsintervall muss mindestens 1 Minute betragen.",
       "invalid_pattern": "Kein gültiger regulärer Ausdruck.",
-      "invalid_proxy": "Keine gültige Proxy-URL. Verwende schema://host:port, z. B. socks5h://192.168.1.10:1080."
+      "invalid_proxy": "Keine gültige Proxy-URL. Verwende schema://host:port, z. B. socks5h://192.168.1.10:1080.",
+      "url_or_entity": "Gib eine Feed-URL ein oder wähle eine Entität, die sie enthält – nicht beides.",
+      "entity_no_url": "Diese Entität hat derzeit keinen Wert. Setze sie zuerst auf die Feed-URL.",
+      "entity_invalid_url": "Der Wert dieser Entität ist keine gültige HTTP-, HTTPS- oder Datei-URL."
     },
     "abort": {
       "already_configured": "Dieser Feed ist bereits konfiguriert.",

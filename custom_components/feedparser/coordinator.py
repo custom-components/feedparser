@@ -3,13 +3,15 @@
 from __future__ import annotations
 
 import logging
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from datetime import timedelta
 from typing import TYPE_CHECKING
 
 import requests
 from homeassistant.config_entries import ConfigEntry
-from homeassistant.const import CONF_NAME
+from homeassistant.const import CONF_NAME, STATE_UNAVAILABLE, STATE_UNKNOWN
+from homeassistant.core import Event, EventStateChangedData, callback
+from homeassistant.helpers.event import async_track_state_change_event
 from homeassistant.helpers.update_coordinator import DataUpdateCoordinator, UpdateFailed
 
 from .const import (
@@ -17,6 +19,7 @@ from .const import (
     CONF_EXCLUDE_MATCH,
     CONF_EXCLUSIONS,
     CONF_FEED_URL,
+    CONF_FEED_URL_ENTITY,
     CONF_INCLUSIONS,
     CONF_LOCAL_TIME,
     CONF_MATCH,
@@ -34,6 +37,7 @@ from .const import (
 )
 from .fetch import USER_AGENT, redact_text
 from .reader import FeedReader
+from .source import FeedUrlError, feed_url_from_entity
 
 if TYPE_CHECKING:
     from homeassistant.core import HomeAssistant
@@ -66,8 +70,10 @@ class FeedparserCoordinator(DataUpdateCoordinator[FeedEntries]):
     def __init__(self, hass: HomeAssistant, entry: FeedparserConfigEntry) -> None:
         """Initialize the coordinator from the entry's data and options."""
         config = {**entry.data, **entry.options}
+        # set when the feed URL is read from this entity's state on every poll
+        self.url_entity: str | None = config.get(CONF_FEED_URL_ENTITY) or None
         self.reader = FeedReader(
-            feed=config[CONF_FEED_URL],
+            feed=config.get(CONF_FEED_URL) or "",
             name=config[CONF_NAME],
             date_format=config.get(CONF_DATE_FORMAT, DEFAULT_DATE_FORMAT),
             show_topn=config.get(CONF_SHOW_TOPN, DEFAULT_TOPN),
@@ -94,12 +100,59 @@ class FeedparserCoordinator(DataUpdateCoordinator[FeedEntries]):
             ),
         )
 
+    def feed_url(self) -> str:
+        """Return the URL to fetch now, reading the URL entity if there is one.
+
+        Raises ``UpdateFailed`` if the URL entity has no usable URL.
+        """
+        if self.url_entity is None:
+            return self.reader.feed
+        try:
+            return feed_url_from_entity(self.hass, self.url_entity)
+        except FeedUrlError as err:
+            msg = f"No feed URL to fetch: {err}"
+            raise UpdateFailed(msg) from err
+
     async def _async_update_data(self) -> FeedEntries:
         """Fetch the feed in the executor and build its entries."""
+        url = self.feed_url()
         try:
-            return await self.hass.async_add_executor_job(self.reader.read)
+            return await self.hass.async_add_executor_job(self.reader.read, url)
         except requests.RequestException as err:
             # the error may quote the proxy URL; never log its password
             reason = redact_text(str(err), self.reader.proxy)
-            msg = f"Unable to fetch {self.reader.feed}: {reason}"
+            msg = f"Unable to fetch {url}: {reason}"
             raise UpdateFailed(msg) from err
+
+    @callback
+    def async_track_url_entity(self) -> Callable[[], None] | None:
+        """Refresh as soon as the URL entity's value changes.
+
+        Returns the function that stops tracking, or None without a URL entity.
+        """
+        if self.url_entity is None:
+            return None
+
+        @callback
+        def _url_changed(event: Event[EventStateChangedData]) -> None:
+            new_state = event.data["new_state"]
+            old_state = event.data["old_state"]
+            if new_state is None or new_state.state in (
+                STATE_UNKNOWN,
+                STATE_UNAVAILABLE,
+            ):
+                # e.g. the helper reloading; keep the entries until the next poll
+                return
+            if old_state is not None and old_state.state == new_state.state:
+                return  # only an attribute changed
+            self.config_entry.async_create_task(
+                self.hass,
+                self.async_request_refresh(),
+                f"{DOMAIN} feed URL changed",
+            )
+
+        return async_track_state_change_event(
+            self.hass,
+            self.url_entity,
+            _url_changed,
+        )

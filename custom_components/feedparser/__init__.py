@@ -94,6 +94,8 @@ async def async_setup_entry(hass: HomeAssistant, entry: FeedparserConfigEntry) -
     coordinator = FeedparserCoordinator(hass, entry)
     await coordinator.async_config_entry_first_refresh()
     entry.runtime_data = coordinator
+    if (stop_tracking := coordinator.async_track_url_entity()) is not None:
+        entry.async_on_unload(stop_tracking)
     await hass.config_entries.async_forward_entry_setups(entry, PLATFORMS)
     return True
 

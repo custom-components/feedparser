@@ -142,18 +142,22 @@ class FeedReader:
             f"proxy={redact_proxy(self.proxy) if self.proxy else None!r})"
         )
 
-    def read(self: FeedReader) -> list[dict[str, object]]:
+    def read(self: FeedReader, url: str | None = None) -> list[dict[str, object]]:
         """Fetch the feed and return a new list of at most `show_topn` entries.
+
+        `url` overrides the reader's `feed` for this call (used when the URL comes
+        from an entity and may change between polls).
 
         Raises ``requests.RequestException`` if the feed cannot be downloaded.
         A new list is returned on every call: Home Assistant keeps references to
         nested attribute values in previous states, so reusing (mutating) a list
         would hide `entries` changes from state triggers.
         """
-        _LOGGER.debug("Feed %s: Polling feed data from %s", self.name, self.feed)
+        url = url or self.feed
+        _LOGGER.debug("Feed %s: Polling feed data from %s", self.name, url)
         parsed_feed = cast(
             "ParsedFeed",
-            feedparser.parse(fetch_feed(self.feed, self._user_agent, self.proxy)),
+            feedparser.parse(fetch_feed(url, self._user_agent, self.proxy)),
         )
         if not parsed_feed.entries:
             _LOGGER.warning("Feed %s: No data received.", self.name)
