@@ -92,4 +92,4 @@ def test_validate_feed_url_sends_user_agent(
         return_value=feed.read_bytes(),
     ) as fetch:
         FeedparserConfigFlow._validate_feed_url(*args)  # noqa: SLF001
-    fetch.assert_called_once_with(feed.as_uri(), expected)
+    fetch.assert_called_once_with(feed.as_uri(), expected, "")

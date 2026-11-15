@@ -20,6 +20,7 @@ from .const import (
     CONF_INCLUSIONS,
     CONF_LOCAL_TIME,
     CONF_MATCH,
+    CONF_PROXY,
     CONF_REMOVE_SUMMARY_IMAGE,
     CONF_SCAN_INTERVAL,
     CONF_SHOW_TOPN,
@@ -31,7 +32,7 @@ from .const import (
     DEFAULT_TOPN,
     DOMAIN,
 )
-from .fetch import USER_AGENT
+from .fetch import USER_AGENT, redact_text
 from .reader import FeedReader
 
 if TYPE_CHECKING:
@@ -81,6 +82,7 @@ class FeedparserCoordinator(DataUpdateCoordinator[FeedEntries]):
             user_agent=config.get(CONF_USER_AGENT) or USER_AGENT,
             match=config.get(CONF_MATCH) or "",
             exclude_match=config.get(CONF_EXCLUDE_MATCH) or "",
+            proxy=config.get(CONF_PROXY) or "",
         )
         super().__init__(
             hass,
@@ -97,5 +99,7 @@ class FeedparserCoordinator(DataUpdateCoordinator[FeedEntries]):
         try:
             return await self.hass.async_add_executor_job(self.reader.read)
         except requests.RequestException as err:
-            msg = f"Unable to fetch {self.reader.feed}: {err}"
+            # the error may quote the proxy URL; never log its password
+            reason = redact_text(str(err), self.reader.proxy)
+            msg = f"Unable to fetch {self.reader.feed}: {reason}"
             raise UpdateFailed(msg) from err

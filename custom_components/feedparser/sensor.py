@@ -19,6 +19,7 @@ from .const import (
     CONF_INCLUSIONS,
     CONF_LOCAL_TIME,
     CONF_MATCH,
+    CONF_PROXY,
     CONF_REMOVE_SUMMARY_IMAGE,
     CONF_SCAN_INTERVAL,
     CONF_SHOW_TOPN,
@@ -30,7 +31,7 @@ from .const import (
     DEFAULT_TOPN,
 )
 from .coordinator import FeedEntries, FeedparserConfigEntry, FeedparserCoordinator
-from .fetch import USER_AGENT
+from .fetch import USER_AGENT, is_valid_proxy
 from .reader import compile_filter
 from .yaml_import import async_import_yaml_sensor
 
@@ -55,6 +56,15 @@ def _valid_pattern(value: str) -> str:
     return value
 
 
+def _valid_proxy(value: str) -> str:
+    """Validate a proxy URL from YAML ("" means no proxy)."""
+    value = value.strip()
+    if value and not is_valid_proxy(value):
+        msg = "invalid proxy URL, expected scheme://[user:password@]host:port"
+        raise vol.Invalid(msg)
+    return value
+
+
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
     {
         vol.Required(CONF_NAME): cv.string,
@@ -75,6 +85,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
             cv.string,
             _valid_pattern,
         ),
+        vol.Optional(CONF_PROXY, default=""): vol.All(cv.string, _valid_proxy),
     },
 )
 

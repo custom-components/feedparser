@@ -31,6 +31,7 @@ from .const import (
     CONF_LOCAL_TIME,
     CONF_MANAGED_BY_YAML,
     CONF_MATCH,
+    CONF_PROXY,
     CONF_REMOVE_SUMMARY_IMAGE,
     CONF_SCAN_INTERVAL,
     CONF_SHOW_TOPN,
@@ -44,7 +45,7 @@ from .const import (
     DOMAIN,
     ENTRY_VERSION,
 )
-from .fetch import USER_AGENT, fetch_feed
+from .fetch import USER_AGENT, fetch_feed, is_valid_proxy
 from .reader import compile_filter
 from .yaml_import import (
     REASON_MANAGED_IN_UI,
@@ -174,6 +175,7 @@ def _options_from_input(user_input: Mapping[str, object]) -> dict[str, object]:
         CONF_USER_AGENT: _user_agent_from_input(user_input),
         CONF_MATCH: _pattern(user_input.get(CONF_MATCH)),
         CONF_EXCLUDE_MATCH: _pattern(user_input.get(CONF_EXCLUDE_MATCH)),
+        CONF_PROXY: str(user_input.get(CONF_PROXY) or "").strip(),
     }
 
 
@@ -196,6 +198,15 @@ def _pattern_errors(options: Mapping[str, object]) -> dict[str, str]:
     return errors
 
 
+def _option_errors(options: Mapping[str, object]) -> dict[str, str]:
+    """Return form errors for the free-text options (patterns, proxy)."""
+    errors = _pattern_errors(options)
+    proxy = str(options.get(CONF_PROXY) or "")
+    if proxy and not is_valid_proxy(proxy):
+        errors[CONF_PROXY] = "invalid_proxy"
+    return errors
+
+
 def _options_from_import(import_data: Mapping[str, Any]) -> dict[str, object]:
     """Build stored options from a validated YAML sensor configuration."""
     user_agent = str(import_data.get(CONF_USER_AGENT) or "").strip()
@@ -215,6 +226,7 @@ def _options_from_import(import_data: Mapping[str, Any]) -> dict[str, object]:
         CONF_USER_AGENT: "" if user_agent == USER_AGENT else user_agent,
         CONF_MATCH: _pattern(import_data.get(CONF_MATCH)),
         CONF_EXCLUDE_MATCH: _pattern(import_data.get(CONF_EXCLUDE_MATCH)),
+        CONF_PROXY: str(import_data.get(CONF_PROXY) or "").strip(),
     }
 
 
@@ -237,6 +249,7 @@ def _schema_with_defaults(  # noqa: PLR0913 - one keyword per form field
     user_agent: str = "",
     match: str = "",
     exclude_match: str = "",
+    proxy: str = "",
     include_feed_identity: bool,
 ) -> vol.Schema:
     """Build schema for user/options forms."""
@@ -275,6 +288,7 @@ def _schema_with_defaults(  # noqa: PLR0913 - one keyword per form field
         vol.Optional(CONF_EXCLUDE_MATCH, default=exclude_match): str,
         vol.Optional(CONF_EXCLUSIONS, default=exclusions): str,
         vol.Optional(CONF_USER_AGENT, default=user_agent): str,
+        vol.Optional(CONF_PROXY, default=proxy): str,
     }
 
     if include_feed_identity:
@@ -314,7 +328,7 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
             except vol.Invalid:
                 errors[CONF_SCAN_INTERVAL] = "scan_interval_too_short"
             else:
-                errors.update(_pattern_errors(options))
+                errors.update(_option_errors(options))
             if not _is_supported_url(feed_url):
                 errors[CONF_FEED_URL] = "invalid_url"
             elif self._is_configured(feed_url, name):
@@ -326,6 +340,7 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
                 errors = await self._async_validate_feed(
                     feed_url,
                     str(options[CONF_USER_AGENT]) or USER_AGENT,
+                    str(options[CONF_PROXY]),
                 )
             if not errors:
                 return cast(
@@ -433,6 +448,7 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
                 errors = await self._async_validate_feed(
                     feed_url,
                     str(entry.options.get(CONF_USER_AGENT) or "") or USER_AGENT,
+                    str(entry.options.get(CONF_PROXY) or ""),
                 )
             if not errors:
                 # The sensor's unique ID is the entry ID, so the entity ID and
@@ -508,6 +524,7 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
         self,
         feed_url: str,
         user_agent: str,
+        proxy: str = "",
     ) -> dict[str, str]:
         """Fetch the feed and return form errors (empty if it is usable)."""
         try:
@@ -515,6 +532,7 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
                 self._validate_feed_url,
                 feed_url,
                 user_agent,
+                proxy,
             )
         except requests.RequestException:
             return {"base": "cannot_connect"}
@@ -523,13 +541,17 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
         return {}
 
     @staticmethod
-    def _validate_feed_url(feed_url: str, user_agent: str = USER_AGENT) -> None:
+    def _validate_feed_url(
+        feed_url: str,
+        user_agent: str = USER_AGENT,
+        proxy: str = "",
+    ) -> None:
         """Validate that the URL can be fetched and parses as a feed.
 
-        Uses the same request (User-Agent, timeouts) as the sensor so a feed that
-        passes here also works at runtime.
+        Uses the same request (User-Agent, proxy, timeouts) as the sensor so a feed
+        that passes here also works at runtime.
         """
-        parsed = feedparser.parse(fetch_feed(feed_url, user_agent))
+        parsed = feedparser.parse(fetch_feed(feed_url, user_agent, proxy))
         # A real feed exposes a version (rss20, atom10, ...) even when it currently
         # has no entries; an HTML page or random document does not.
         if not parsed.get("version") and not parsed.get("entries"):
@@ -555,7 +577,7 @@ class FeedparserOptionsFlow(OptionsFlowWithReload):
             except vol.Invalid:
                 errors[CONF_SCAN_INTERVAL] = "scan_interval_too_short"
             else:
-                errors = _pattern_errors(options)
+                errors = _option_errors(options)
             if not errors:
                 return cast(
                     "ConfigFlowResult",
@@ -582,6 +604,7 @@ class FeedparserOptionsFlow(OptionsFlowWithReload):
             user_agent=str(merged.get(CONF_USER_AGENT) or ""),
             match=str(merged.get(CONF_MATCH) or ""),
             exclude_match=str(merged.get(CONF_EXCLUDE_MATCH) or ""),
+            proxy=str(merged.get(CONF_PROXY) or ""),
         )
         if user_input is not None:
             # keep what the user typed when showing errors

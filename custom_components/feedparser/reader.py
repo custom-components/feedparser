@@ -21,7 +21,7 @@ import feedparser  # type: ignore[import]
 from dateutil import parser
 from homeassistant.util import dt
 
-from .fetch import USER_AGENT, fetch_feed
+from .fetch import USER_AGENT, fetch_feed, redact_proxy
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
@@ -93,7 +93,7 @@ def _looks_like_image(url: str) -> bool:
 class FeedReader:
     """Download one feed and build its entries according to the sensor options."""
 
-    def __init__(
+    def __init__(  # noqa: PLR0913 - one keyword per sensor option
         self: FeedReader,
         *,
         feed: str,
@@ -107,6 +107,7 @@ class FeedReader:
         user_agent: str = USER_AGENT,
         match: str = "",
         exclude_match: str = "",
+        proxy: str = "",
     ) -> None:
         """Initialize the reader.
 
@@ -122,6 +123,7 @@ class FeedReader:
         self._inclusions = inclusions
         self._exclusions = exclusions
         self._user_agent = user_agent
+        self.proxy = proxy
         self._match = compile_filter(match)
         self._exclude_match = compile_filter(exclude_match)
 
@@ -136,7 +138,8 @@ class FeedReader:
             f'user_agent="{self._user_agent}", '
             f"match={self._match.pattern if self._match else None!r}, "
             f"exclude_match="
-            f"{self._exclude_match.pattern if self._exclude_match else None!r})"
+            f"{self._exclude_match.pattern if self._exclude_match else None!r}, "
+            f"proxy={redact_proxy(self.proxy) if self.proxy else None!r})"
         )
 
     def read(self: FeedReader) -> list[dict[str, object]]:
@@ -150,7 +153,7 @@ class FeedReader:
         _LOGGER.debug("Feed %s: Polling feed data from %s", self.name, self.feed)
         parsed_feed = cast(
             "ParsedFeed",
-            feedparser.parse(fetch_feed(self.feed, self._user_agent)),
+            feedparser.parse(fetch_feed(self.feed, self._user_agent, self.proxy)),
         )
         if not parsed_feed.entries:
             _LOGGER.warning("Feed %s: No data received.", self.name)
@@ -319,7 +322,7 @@ class FeedReader:
             warnings.simplefilter("ignore")
             try:
                 fallback = parser.parse(date)
-            except (ValueError, OverflowError):
+            except ValueError, OverflowError:
                 return None
         return fallback if fallback.tzinfo is not None else None
 

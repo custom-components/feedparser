@@ -12,6 +12,7 @@
   "issue_tracker": "https://github.com/custom-components/feedparser/issues",
   "requirements": [
     "feedparser>=6.0.12",
+    "PySocks>=1.7.1",
     "python-dateutil",
     "requests-file"
   ],
