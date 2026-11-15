@@ -37,6 +37,7 @@ from custom_components.feedparser.const import (
 from custom_components.feedparser.reader import FeedReader
 
 if TYPE_CHECKING:
+    from homeassistant.config_entries import ConfigFlowResult
     from homeassistant.core import HomeAssistant
 
 FEED = (
@@ -273,7 +274,7 @@ def _options(**overrides: Any) -> dict[str, Any]:  # noqa: ANN401
     } | overrides
 
 
-async def _start_user_flow(hass: HomeAssistant, **overrides: Any) -> Any:  # noqa: ANN401
+async def _start_user_flow(hass: HomeAssistant, **overrides: str) -> ConfigFlowResult:
     result = await hass.config_entries.flow.async_init(
         DOMAIN,
         context={"source": config_entries.SOURCE_USER},
