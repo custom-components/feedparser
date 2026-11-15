@@ -19,6 +19,7 @@ CONF_REMOVE_SUMMARY_IMAGE = "remove_summary_image"
 CONF_USER_AGENT = "user_agent"
 CONF_MATCH = "match"
 CONF_EXCLUDE_MATCH = "exclude_match"
+CONF_PROXY = "proxy"
 
 # Entry data flag: True while the entry follows configuration.yaml, False once the
 # user moved it to the UI. Missing on UI entries and on entries imported by 1.0.0.
@@ -45,4 +46,5 @@ OPTION_KEYS: list[str] = [
     CONF_USER_AGENT,
     CONF_MATCH,
     CONF_EXCLUDE_MATCH,
+    CONF_PROXY,
 ]

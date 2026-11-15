@@ -16,7 +16,8 @@
           "exclude_match": "Skip entries matching",
           "inclusions": "Included fields",
           "exclusions": "Excluded fields",
-          "user_agent": "User-Agent"
+          "user_agent": "User-Agent",
+          "proxy": "Proxy URL"
         },
         "data_description": {
           "name": "Friendly name for the sensor.",
@@ -30,7 +31,8 @@
           "exclude_match": "Optional regular expression. Entries whose title or summary contains a match are removed, ignoring case. Applied together with the filter above.",
           "inclusions": "Optional comma-separated allowlist, for example `title, link, published`. Leave empty to keep all fields except exclusions.",
           "exclusions": "Optional comma-separated fields to remove. Exclusions are applied after inclusions.",
-          "user_agent": "Optional HTTP User-Agent sent when fetching the feed. Some servers block or stall unknown clients; set a browser User-Agent for those. Leave empty to use the default."
+          "user_agent": "Optional HTTP User-Agent sent when fetching the feed. Some servers block or stall unknown clients; set a browser User-Agent for those. Leave empty to use the default.",
+          "proxy": "Optional proxy for reaching feeds that are blocked on your network, e.g. socks5h://192.168.1.10:1080 or http://user:password@proxy.local:3128. Supported schemes: http, https, socks4, socks4a, socks5, socks5h (socks5h also resolves the feed's host name through the proxy). Leave empty to connect directly."
         }
       },
       "reconfigure": {
@@ -52,7 +54,8 @@
       "invalid_url": "URL is invalid.",
       "invalid_feed": "The URL was downloaded but does not look like an RSS or Atom feed.",
       "scan_interval_too_short": "Refresh interval must be at least 1 minute.",
-      "invalid_pattern": "Not a valid regular expression."
+      "invalid_pattern": "Not a valid regular expression.",
+      "invalid_proxy": "Not a valid proxy URL. Use scheme://host:port, e.g. socks5h://192.168.1.10:1080."
     },
     "abort": {
       "already_configured": "This feed is already configured.",
@@ -76,7 +79,8 @@
           "exclude_match": "Skip entries matching",
           "inclusions": "Included fields",
           "exclusions": "Excluded fields",
-          "user_agent": "User-Agent"
+          "user_agent": "User-Agent",
+          "proxy": "Proxy URL"
         },
         "data_description": {
           "date_format": "Python strftime format used for feed dates, for example `%a, %d %b %Y %H:%M:%S %Z`.",
@@ -88,7 +92,8 @@
           "exclude_match": "Optional regular expression. Entries whose title or summary contains a match are removed, ignoring case. Applied together with the filter above.",
           "inclusions": "Optional comma-separated allowlist, for example `title, link, published`. Leave empty to keep all fields except exclusions.",
           "exclusions": "Optional comma-separated fields to remove. Exclusions are applied after inclusions.",
-          "user_agent": "Optional HTTP User-Agent sent when fetching the feed. Some servers block or stall unknown clients; set a browser User-Agent for those. Leave empty to use the default."
+          "user_agent": "Optional HTTP User-Agent sent when fetching the feed. Some servers block or stall unknown clients; set a browser User-Agent for those. Leave empty to use the default.",
+          "proxy": "Optional proxy for reaching feeds that are blocked on your network, e.g. socks5h://192.168.1.10:1080 or http://user:password@proxy.local:3128. Supported schemes: http, https, socks4, socks4a, socks5, socks5h (socks5h also resolves the feed's host name through the proxy). Leave empty to connect directly."
         }
       },
       "yaml": {
@@ -105,7 +110,8 @@
     },
     "error": {
       "scan_interval_too_short": "Refresh interval must be at least 1 minute.",
-      "invalid_pattern": "Not a valid regular expression."
+      "invalid_pattern": "Not a valid regular expression.",
+      "invalid_proxy": "Not a valid proxy URL. Use scheme://host:port, e.g. socks5h://192.168.1.10:1080."
     }
   },
   "issues": {

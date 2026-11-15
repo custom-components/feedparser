@@ -16,7 +16,8 @@
           "exclude_match": "Passende Einträge überspringen",
           "inclusions": "Einbezogene Felder",
           "exclusions": "Ausgeschlossene Felder",
-          "user_agent": "User-Agent"
+          "user_agent": "User-Agent",
+          "proxy": "Proxy-URL"
         },
         "data_description": {
           "name": "Anzeigename für den Sensor.",
@@ -30,7 +31,8 @@
           "exclude_match": "Optionaler regulärer Ausdruck. Einträge, deren Titel oder Zusammenfassung einen Treffer enthält, werden entfernt (Groß-/Kleinschreibung egal). Wird zusammen mit dem Filter oben angewendet.",
           "inclusions": "Optionale, durch Kommas getrennte Positivliste, zum Beispiel `title, link, published`. Leer lassen, um alle Felder außer den ausgeschlossenen beizubehalten.",
           "exclusions": "Optionale, durch Kommas getrennte Felder, die entfernt werden sollen. Ausschlüsse werden nach den Einschlüssen angewendet.",
-          "user_agent": "Optionaler HTTP-User-Agent, der beim Abrufen des Feeds gesendet wird. Manche Server blockieren unbekannte Clients oder antworten nicht; verwende dafür einen Browser-User-Agent. Leer lassen für den Standardwert."
+          "user_agent": "Optionaler HTTP-User-Agent, der beim Abrufen des Feeds gesendet wird. Manche Server blockieren unbekannte Clients oder antworten nicht; verwende dafür einen Browser-User-Agent. Leer lassen für den Standardwert.",
+          "proxy": "Optionaler Proxy, um Feeds zu erreichen, die in deinem Netzwerk blockiert sind, z. B. socks5h://192.168.1.10:1080 oder http://benutzer:passwort@proxy.local:3128. Unterstützte Schemata: http, https, socks4, socks4a, socks5, socks5h (socks5h löst auch den Hostnamen des Feeds über den Proxy auf). Leer lassen für eine direkte Verbindung."
         }
       },
       "reconfigure": {
@@ -52,7 +54,8 @@
       "invalid_url": "Die URL ist ungültig.",
       "invalid_feed": "Die URL wurde geladen, scheint aber kein RSS- oder Atom-Feed zu sein.",
       "scan_interval_too_short": "Das Aktualisierungsintervall muss mindestens 1 Minute betragen.",
-      "invalid_pattern": "Kein gültiger regulärer Ausdruck."
+      "invalid_pattern": "Kein gültiger regulärer Ausdruck.",
+      "invalid_proxy": "Keine gültige Proxy-URL. Verwende schema://host:port, z. B. socks5h://192.168.1.10:1080."
     },
     "abort": {
       "already_configured": "Dieser Feed ist bereits konfiguriert.",
@@ -76,7 +79,8 @@
           "exclude_match": "Passende Einträge überspringen",
           "inclusions": "Einbezogene Felder",
           "exclusions": "Ausgeschlossene Felder",
-          "user_agent": "User-Agent"
+          "user_agent": "User-Agent",
+          "proxy": "Proxy-URL"
         },
         "data_description": {
           "date_format": "Python-strftime-Format für Feed-Datumswerte, zum Beispiel `%a, %d %b %Y %H:%M:%S %Z`.",
@@ -88,7 +92,8 @@
           "exclude_match": "Optionaler regulärer Ausdruck. Einträge, deren Titel oder Zusammenfassung einen Treffer enthält, werden entfernt (Groß-/Kleinschreibung egal). Wird zusammen mit dem Filter oben angewendet.",
           "inclusions": "Optionale, durch Kommas getrennte Positivliste, zum Beispiel `title, link, published`. Leer lassen, um alle Felder außer den ausgeschlossenen beizubehalten.",
           "exclusions": "Optionale, durch Kommas getrennte Felder, die entfernt werden sollen. Ausschlüsse werden nach den Einschlüssen angewendet.",
-          "user_agent": "Optionaler HTTP-User-Agent, der beim Abrufen des Feeds gesendet wird. Manche Server blockieren unbekannte Clients oder antworten nicht; verwende dafür einen Browser-User-Agent. Leer lassen für den Standardwert."
+          "user_agent": "Optionaler HTTP-User-Agent, der beim Abrufen des Feeds gesendet wird. Manche Server blockieren unbekannte Clients oder antworten nicht; verwende dafür einen Browser-User-Agent. Leer lassen für den Standardwert.",
+          "proxy": "Optionaler Proxy, um Feeds zu erreichen, die in deinem Netzwerk blockiert sind, z. B. socks5h://192.168.1.10:1080 oder http://benutzer:passwort@proxy.local:3128. Unterstützte Schemata: http, https, socks4, socks4a, socks5, socks5h (socks5h löst auch den Hostnamen des Feeds über den Proxy auf). Leer lassen für eine direkte Verbindung."
         }
       },
       "yaml": {
@@ -105,7 +110,8 @@
     },
     "error": {
       "scan_interval_too_short": "Das Aktualisierungsintervall muss mindestens 1 Minute betragen.",
-      "invalid_pattern": "Kein gültiger regulärer Ausdruck."
+      "invalid_pattern": "Kein gültiger regulärer Ausdruck.",
+      "invalid_proxy": "Keine gültige Proxy-URL. Verwende schema://host:port, z. B. socks5h://192.168.1.10:1080."
     }
   },
   "issues": {

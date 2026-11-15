@@ -92,6 +92,12 @@ sensor:
     name: Leicester Weather Warnings
     feed_url: http://www.metoffice.gov.uk/public/data/PWSCache/WarningsRSS/Region/em
     match: Leicester
+
+  # A feed that is blocked on this network, fetched through a SOCKS proxy
+  - platform: feedparser
+    name: Blocked Feed
+    feed_url: https://blocked.example.org/rss
+    proxy: socks5h://192.168.1.10:1080
 ```
 
 If you wish the integration to look for enclosures in the feed entries, add `image` to the `inclusions` list. Do not use `enclosure`.
@@ -165,6 +171,7 @@ The integration supports both UI and YAML setup. Most options are the same in bo
 | `match` | No | regular expression | none | `Leicester` or `rain\|snow` | Only entries whose title or summary contains a match are kept. Ignores case. |
 | `exclude_match` | No | regular expression | none | `sponsored\|advert` | Entries whose title or summary contains a match are removed. Ignores case. |
 | `user_agent` | No | string | `Home Assistant Feed-parser Integration <version>` | `Mozilla/5.0 (compatible; MyFeedReader/1.0)` | User-Agent header sent when fetching the feed (and when validating it during UI setup). Leave empty in the UI to use the default. |
+| `proxy` | No | URL | none | `socks5h://192.168.1.10:1080` or `http://user:password@proxy.local:3128` | Proxy used to fetch the feed (and to validate it during UI setup). Schemes: `http`, `https`, `socks4`, `socks4a`, `socks5`, `socks5h`. Leave empty to connect directly. |
 
 ### Notes and behavior details
 
@@ -173,6 +180,7 @@ The integration supports both UI and YAML setup. Most options are the same in bo
 - **Filtering entries with `match` and `exclude_match`**: these choose which *entries* are kept, while `inclusions` and `exclusions` choose which *fields* each entry keeps. They search the entry's `title` and `summary` (the RSS `<description>`), even if those fields are not in `inclusions`. Filtering runs before `show_topn`, so `show_topn` counts matching entries, and the sensor's state is the number of matching entries. To get several filtered sensors from one feed, add the feed more than once with different names and patterns. Patterns are [Python regular expressions](https://docs.python.org/3/library/re.html#regular-expression-syntax) and are found anywhere in the text, so `Leicester` matches "Leicester, Leicestershire". Use a template sensor only if you need to reshape entries, not just choose them.
 - **`image` extraction**: adding `image` to `inclusions` enables image URL extraction from image enclosures, Media RSS (`media:content`, `media:thumbnail`), the first image in the summary HTML, or the first image in the full content (`content:encoded`, used by WordPress feeds).
 - **`user_agent`**: some servers reject or never answer requests from unknown clients. If a feed works in a browser but fails in Home Assistant, try a browser User-Agent.
+- **`proxy`**: use it to reach feeds that are blocked on your network or in your country. Prefer `socks5h://` over `socks5://` for SOCKS proxies: it also looks up the feed's host name through the proxy, which matters when DNS is what blocks the site. A password in the proxy URL is hidden in logs and errors, but it is stored in plain text in Home Assistant's configuration like other settings. Only the feed itself goes through the proxy: images and links in the entries are opened by your browser, which does not use it. Without this option the integration still honors the standard `HTTP_PROXY`, `HTTPS_PROXY` and `ALL_PROXY` environment variables if they are set for Home Assistant.
 - **UI vs YAML input format**:
   - UI uses comma-separated text for `inclusions` and `exclusions`.
   - YAML uses proper lists.
