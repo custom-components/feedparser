@@ -137,8 +137,9 @@ def socks_proxy(socket_enabled: None) -> Iterator[_Server]:  # noqa: ARG001
 
 
 def _url(scheme: str, server: _Server) -> str:
-    host, port = server.server_address[:2]
-    return f"{scheme}://{host}:{port}"
+    # bound to 127.0.0.1 in _start, so only the port varies
+    port = server.server_address[1]
+    return f"{scheme}://127.0.0.1:{port}"
 
 
 # --- proxy URL helpers --------------------------------------------------------
