@@ -31,7 +31,7 @@ Feeds can be set up in the UI, in `configuration.yaml`, or both. Feeds from YAML
 
 1. Go to **Settings** -> **Devices & Services** -> **Integrations**.
 2. Click **Add Integration** and search for **Feedparser**.
-3. Fill in at least `Name` and `Feed URL`.
+3. Fill in `Name` and either `Feed URL` or `Feed URL entity` (see [Feed URLs that change](#feed-urls-that-change)).
 4. Set the refresh interval with the duration field (minimum 1 minute).
 5. Optional include/exclude fields are entered as comma-separated values.
 
@@ -41,6 +41,30 @@ To fix the sensor name or feed URL, open the entry's menu (⋮) and choose **Rec
 
 - The same feed URL can be added more than once (for example, once with all fields and once with only titles), as long as each sensor has a different name.
 - If a feed cannot be reached when Home Assistant starts, the entry is retried automatically in the background. If a later refresh fails, the sensor becomes `unavailable` until the feed responds again.
+
+#### Feed URLs that change
+
+Some feeds publish a new URL every day, such as `.../programme-tv-rss_15-11-2026.xml`. Instead of typing a URL, choose a **Feed URL entity**: an `input_text`, `text` or template `sensor` whose state is the feed URL. The URL is read from that entity on every refresh, and the feed is fetched again as soon as its value changes.
+
+To build a URL with today's date, create a template sensor helper (**Settings** -> **Devices & Services** -> **Helpers** -> **Create helper** -> **Template** -> **Template a sensor**) with a state template like:
+
+```jinja
+https://example.com/epg/programme-tv-rss_{{ now().strftime('%d-%m-%Y') }}.xml
+```
+
+Then pick that sensor as the feed's **Feed URL entity**. To switch feeds from an automation or script instead, use an `input_text` helper and set its value with `input_text.set_value`.
+
+- Home Assistant limits entity states to 255 characters, so longer URLs can't be passed this way. `input_text` helpers default to a maximum of 100 characters; raise their maximum length if needed.
+- While the entity is missing, `unknown`, `unavailable` or holds something that is not an `http`, `https` or `file` URL, the feed can't be refreshed and the sensor becomes `unavailable`.
+
+In YAML, use `feed_url_entity` instead of `feed_url`:
+
+```yaml
+sensor:
+  - platform: feedparser
+    name: TV Tonight
+    feed_url_entity: sensor.todays_tv_feed_url
+```
 
 ### YAML configuration
 
@@ -160,7 +184,8 @@ The integration supports both UI and YAML setup. Most options are the same in bo
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | `platform` (YAML only) | Yes (YAML) | string | - | `feedparser` | Home Assistant platform name used in YAML mode. |
 | `name` | Yes | string | - | `Engineering Feed` | Name shown for the sensor entity. |
-| `feed_url` | Yes | URL string | - | `https://www.nu.nl/rss/Algemeen` | RSS/Atom feed URL to fetch and parse. Supports `http`, `https`, and `file` in dev/testing. |
+| `feed_url` | Yes (unless `feed_url_entity` is set) | URL string | - | `https://www.nu.nl/rss/Algemeen` | RSS/Atom feed URL to fetch and parse. Supports `http`, `https`, and `file` in dev/testing. |
+| `feed_url_entity` | Yes (unless `feed_url` is set) | entity ID | - | `sensor.todays_tv_feed_url` | Entity (`input_text`, `text` or `sensor`) whose state is the feed URL, read on every refresh. See [Feed URLs that change](#feed-urls-that-change). |
 | `date_format` | No | string (`strftime`) | `%a, %b %d %I:%M %p` | `%a, %d %b %Y %H:%M:%S %Z` | Output format for date fields in feed entries. |
 | `local_time` | No | boolean | `false` | `true` | Converts parsed date values from feed timezone to Home Assistant local timezone. |
 | `scan_interval` | No | duration object | `1 hour` | `{ hours: 1, minutes: 30 }` | Polling interval for refreshing feed data. UI input must be at least 1 minute. |

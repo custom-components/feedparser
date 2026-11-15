@@ -19,7 +19,7 @@ from homeassistant.data_entry_flow import FlowResultType
 from homeassistant.helpers import issue_registry as ir
 from homeassistant.util import slugify
 
-from .const import CONF_FEED_URL, CONF_MANAGED_BY_YAML, DOMAIN
+from .const import CONF_FEED_URL, CONF_FEED_URL_ENTITY, CONF_MANAGED_BY_YAML, DOMAIN
 
 if TYPE_CHECKING:
     from collections.abc import Mapping
@@ -66,7 +66,9 @@ async def async_import_yaml_sensor(
     """
     import_data = {key: value for key, value in config.items() if key != CONF_PLATFORM}
     name = str(import_data.get(CONF_NAME, ""))
-    feed_url = str(import_data.get(CONF_FEED_URL, ""))
+    feed_url = str(
+        import_data.get(CONF_FEED_URL) or import_data.get(CONF_FEED_URL_ENTITY) or "",
+    )
 
     result = await hass.config_entries.flow.async_init(
         DOMAIN,

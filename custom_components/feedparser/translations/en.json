@@ -7,6 +7,7 @@
         "data": {
           "name": "Name",
           "feed_url": "Feed URL",
+          "feed_url_entity": "Feed URL entity",
           "date_format": "Date format",
           "local_time": "Convert dates to local time",
           "scan_interval": "Refresh interval",
@@ -21,7 +22,8 @@
         },
         "data_description": {
           "name": "Friendly name for the sensor.",
-          "feed_url": "RSS or Atom feed URL. HTTP, HTTPS, and local file URLs are supported.",
+          "feed_url": "RSS or Atom feed URL. HTTP, HTTPS, and local file URLs are supported. Leave empty to take the URL from an entity instead.",
+          "feed_url_entity": "Use instead of a feed URL: an input_text, text or template sensor whose state is the feed URL. Use a template sensor helper to build a URL that changes, e.g. with today's date. The feed is fetched again whenever its value changes. Entity states are limited to 255 characters.",
           "date_format": "Python strftime format used for feed dates, for example `%a, %d %b %Y %H:%M:%S %Z`.",
           "local_time": "Convert feed timestamps to Home Assistant's configured local time before formatting.",
           "scan_interval": "How often to refresh the feed. The minimum interval is 1 minute.",
@@ -37,14 +39,16 @@
       },
       "reconfigure": {
         "title": "Change feed",
-        "description": "Change the sensor name or the feed URL. The entity ID and history are kept.",
+        "description": "Change the sensor name or where the feed URL comes from. The entity ID and history are kept.",
         "data": {
           "name": "Name",
-          "feed_url": "Feed URL"
+          "feed_url": "Feed URL",
+          "feed_url_entity": "Feed URL entity"
         },
         "data_description": {
           "name": "Friendly name for the sensor.",
-          "feed_url": "RSS or Atom feed URL. HTTP, HTTPS, and local file URLs are supported."
+          "feed_url": "RSS or Atom feed URL. HTTP, HTTPS, and local file URLs are supported. Leave empty to take the URL from an entity instead.",
+          "feed_url_entity": "Use instead of a feed URL: an input_text, text or template sensor whose state is the feed URL. Use a template sensor helper to build a URL that changes, e.g. with today's date. The feed is fetched again whenever its value changes. Entity states are limited to 255 characters."
         }
       }
     },
@@ -55,7 +59,10 @@
       "invalid_feed": "The URL was downloaded but does not look like an RSS or Atom feed.",
       "scan_interval_too_short": "Refresh interval must be at least 1 minute.",
       "invalid_pattern": "Not a valid regular expression.",
-      "invalid_proxy": "Not a valid proxy URL. Use scheme://host:port, e.g. socks5h://192.168.1.10:1080."
+      "invalid_proxy": "Not a valid proxy URL. Use scheme://host:port, e.g. socks5h://192.168.1.10:1080.",
+      "url_or_entity": "Enter a feed URL or choose an entity that holds it, not both.",
+      "entity_no_url": "This entity has no value right now. Set it to the feed URL first.",
+      "entity_invalid_url": "This entity's value is not a valid HTTP, HTTPS or file URL."
     },
     "abort": {
       "already_configured": "This feed is already configured.",

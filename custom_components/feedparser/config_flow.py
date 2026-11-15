@@ -19,7 +19,6 @@ from homeassistant.config_entries import (
 )
 from homeassistant.const import CONF_NAME
 from homeassistant.helpers import selector
-from yarl import URL
 
 from .compat import vol
 from .const import (
@@ -27,6 +26,7 @@ from .const import (
     CONF_EXCLUDE_MATCH,
     CONF_EXCLUSIONS,
     CONF_FEED_URL,
+    CONF_FEED_URL_ENTITY,
     CONF_INCLUSIONS,
     CONF_LOCAL_TIME,
     CONF_MANAGED_BY_YAML,
@@ -47,6 +47,13 @@ from .const import (
 )
 from .fetch import USER_AGENT, fetch_feed, is_valid_proxy
 from .reader import compile_filter
+from .source import (
+    URL_ENTITY_DOMAINS,
+    InvalidFeedUrlError,
+    NoFeedUrlError,
+    feed_url_from_entity,
+    is_supported_url,
+)
 from .yaml_import import (
     REASON_MANAGED_IN_UI,
     REASON_SYNCED,
@@ -151,12 +158,40 @@ def _as_str_list(value: object) -> list[str]:
     return []
 
 
-def _is_supported_url(feed_url: str) -> bool:
-    """Return whether the URL is well-formed with a supported scheme."""
-    try:
-        return URL(feed_url).scheme in ("http", "https", "file")
-    except ValueError:
-        return False
+def _source_from_input(
+    user_input: Mapping[str, object],
+) -> tuple[dict[str, str], dict[str, str]]:
+    """Return the feed source to store, and form errors, from a submission.
+
+    The source is either a typed URL ({feed_url}) or an entity whose state is
+    the URL ({feed_url_entity}); exactly one of the two must be filled in.
+    """
+    feed_url = str(user_input.get(CONF_FEED_URL) or "").strip()
+    entity_id = str(user_input.get(CONF_FEED_URL_ENTITY) or "").strip()
+    if bool(feed_url) == bool(entity_id):
+        return {}, {"base": "url_or_entity"}
+    if entity_id:
+        return {CONF_FEED_URL_ENTITY: entity_id}, {}
+    if not is_supported_url(feed_url):
+        return {}, {CONF_FEED_URL: "invalid_url"}
+    return {CONF_FEED_URL: feed_url}, {}
+
+
+def _source_of(data: Mapping[str, object]) -> dict[str, object]:
+    """Return the feed source fields stored in an entry's data."""
+    return {
+        key: data[key] for key in (CONF_FEED_URL, CONF_FEED_URL_ENTITY) if data.get(key)
+    }
+
+
+def _feed_source_schema() -> dict[Any, Any]:
+    """Return the form fields for a feed URL or a URL entity."""
+    return {
+        vol.Optional(CONF_FEED_URL): str,
+        vol.Optional(CONF_FEED_URL_ENTITY): selector.EntitySelector(
+            selector.EntitySelectorConfig(domain=URL_ENTITY_DOMAINS),
+        ),
+    }
 
 
 def _options_from_input(user_input: Mapping[str, object]) -> dict[str, object]:
@@ -238,7 +273,6 @@ def _user_agent_from_input(user_input: Mapping[str, object]) -> str:
 def _schema_with_defaults(  # noqa: PLR0913 - one keyword per form field
     *,
     name: str = DEFAULT_NAME,
-    feed_url: str = "",
     date_format: str = DEFAULT_DATE_FORMAT,
     local_time: bool = DEFAULT_LOCAL_TIME,
     show_topn: int = DEFAULT_TOPN,
@@ -294,7 +328,7 @@ def _schema_with_defaults(  # noqa: PLR0913 - one keyword per form field
     if include_feed_identity:
         schema = {
             vol.Required(CONF_NAME, default=name): str,
-            vol.Required(CONF_FEED_URL, default=feed_url): str,
+            **_feed_source_schema(),
             **schema,
         }
 
@@ -319,8 +353,8 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
         errors: dict[str, str] = {}
 
         if user_input is not None:
-            feed_url = str(user_input[CONF_FEED_URL]).strip()
             name = str(user_input[CONF_NAME]).strip()
+            source, errors = _source_from_input(user_input)
             options: dict[str, object] = {}
 
             try:
@@ -329,16 +363,14 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
                 errors[CONF_SCAN_INTERVAL] = "scan_interval_too_short"
             else:
                 errors.update(_option_errors(options))
-            if not _is_supported_url(feed_url):
-                errors[CONF_FEED_URL] = "invalid_url"
-            elif self._is_configured(feed_url, name):
+            if source and self._is_configured(source, name):
                 # The same feed may be added more than once (e.g. with different
                 # filters) as long as each sensor has its own name.
                 errors[CONF_NAME] = "already_configured"
 
             if not errors:
-                errors = await self._async_validate_feed(
-                    feed_url,
+                errors = await self._async_validate_source(
+                    source,
                     str(options[CONF_USER_AGENT]) or USER_AGENT,
                     str(options[CONF_PROXY]),
                 )
@@ -347,7 +379,7 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
                     "ConfigFlowResult",
                     self.async_create_entry(
                         title=name,
-                        data={CONF_NAME: name, CONF_FEED_URL: feed_url},
+                        data={CONF_NAME: name, **source},
                         options=options,
                     ),
                 )
@@ -379,9 +411,16 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
         must not stop the import, and the entry setup retries on its own.
         """
         name = str(import_data[CONF_NAME]).strip()
-        feed_url = str(import_data[CONF_FEED_URL]).strip()
+        feed_url = str(import_data.get(CONF_FEED_URL) or "").strip()
+        url_entity = str(import_data.get(CONF_FEED_URL_ENTITY) or "").strip()
+        # the YAML schema guarantees exactly one of the two
+        source = (
+            {CONF_FEED_URL_ENTITY: url_entity}
+            if url_entity
+            else {CONF_FEED_URL: feed_url}
+        )
         unique_id = yaml_unique_id(name)
-        data = {CONF_NAME: name, CONF_FEED_URL: feed_url, CONF_MANAGED_BY_YAML: True}
+        data = {CONF_NAME: name, **source, CONF_MANAGED_BY_YAML: True}
         options = _options_from_import(import_data)
 
         entry = self._yaml_entry(unique_id, feed_url, name)
@@ -405,7 +444,7 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
                 ),
             )
 
-        if self._is_configured(feed_url, name):
+        if self._is_configured(source, name):
             # the same feed and name were added in the UI
             return cast(
                 "ConfigFlowResult",
@@ -436,39 +475,42 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
         errors: dict[str, str] = {}
 
         if user_input is not None:
-            feed_url = str(user_input[CONF_FEED_URL]).strip()
             name = str(user_input[CONF_NAME]).strip()
+            source, errors = _source_from_input(user_input)
 
-            if not _is_supported_url(feed_url):
-                errors[CONF_FEED_URL] = "invalid_url"
-            elif self._is_configured(feed_url, name, exclude_entry_id=entry.entry_id):
+            if source and self._is_configured(
+                source,
+                name,
+                exclude_entry_id=entry.entry_id,
+            ):
                 errors[CONF_NAME] = "already_configured"
 
             if not errors:
-                errors = await self._async_validate_feed(
-                    feed_url,
+                errors = await self._async_validate_source(
+                    source,
                     str(entry.options.get(CONF_USER_AGENT) or "") or USER_AGENT,
                     str(entry.options.get(CONF_PROXY) or ""),
                 )
             if not errors:
                 # The sensor's unique ID is the entry ID, so the entity ID and
-                # history are kept; only its name and source change.
+                # history are kept; only its name and source change. The old
+                # source is dropped, so switching between URL and entity works.
+                data = {
+                    key: value
+                    for key, value in entry.data.items()
+                    if key not in (CONF_FEED_URL, CONF_FEED_URL_ENTITY)
+                }
                 return cast(
                     "ConfigFlowResult",
                     self.async_update_reload_and_abort(
                         entry,
                         title=name,
-                        data_updates={CONF_NAME: name, CONF_FEED_URL: feed_url},
+                        data={**data, CONF_NAME: name, **source},
                     ),
                 )
 
         data_schema = self.add_suggested_values_to_schema(
-            vol.Schema(
-                {
-                    vol.Required(CONF_NAME): str,
-                    vol.Required(CONF_FEED_URL): str,
-                },
-            ),
+            vol.Schema({vol.Required(CONF_NAME): str, **_feed_source_schema()}),
             user_input or entry.data,
         )
         return cast(
@@ -489,14 +531,16 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
         """Return the entry that belongs to a YAML sensor, if there is one.
 
         Entries imported by 1.0.0 have no unique ID; they are matched by feed URL
-        and name, then linked to the YAML again.
+        and name, then linked to the YAML again. (1.0.0 had no URL entities, so a
+        YAML sensor using one only matches by unique ID.)
         """
         for entry in self._async_current_entries(include_ignore=False):
             if entry.unique_id == unique_id:
                 return entry
         for entry in self._async_current_entries(include_ignore=False):
             if (
-                entry.source == SOURCE_IMPORT
+                feed_url
+                and entry.source == SOURCE_IMPORT
                 and entry.unique_id is None
                 and CONF_MANAGED_BY_YAML not in entry.data
                 and entry.data.get(CONF_FEED_URL) == feed_url
@@ -507,17 +551,47 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
 
     def _is_configured(
         self,
-        feed_url: str,
+        source: Mapping[str, object],
         name: str,
         *,
         exclude_entry_id: str | None = None,
     ) -> bool:
-        """Return whether another entry with this feed URL and name exists."""
+        """Return whether another entry with this feed source and name exists."""
         return any(
             entry.entry_id != exclude_entry_id
-            and entry.data.get(CONF_FEED_URL) == feed_url
+            and _source_of(entry.data) == source
             and str(entry.data.get(CONF_NAME, "")).casefold() == name.casefold()
             for entry in self._async_current_entries(include_ignore=False)
+        )
+
+    async def _async_validate_source(
+        self,
+        source: Mapping[str, object],
+        user_agent: str,
+        proxy: str = "",
+    ) -> dict[str, str]:
+        """Fetch the feed a source points to and return form errors.
+
+        For a URL entity, the URL it holds right now is fetched.
+        """
+        entity_id = source.get(CONF_FEED_URL_ENTITY)
+        if not isinstance(entity_id, str):
+            return await self._async_validate_feed(
+                str(source[CONF_FEED_URL]),
+                user_agent,
+                proxy,
+            )
+        try:
+            feed_url = feed_url_from_entity(self.hass, entity_id)
+        except NoFeedUrlError:
+            return {CONF_FEED_URL_ENTITY: "entity_no_url"}
+        except InvalidFeedUrlError:
+            return {CONF_FEED_URL_ENTITY: "entity_invalid_url"}
+        return await self._async_validate_feed(
+            feed_url,
+            user_agent,
+            proxy,
+            CONF_FEED_URL_ENTITY,
         )
 
     async def _async_validate_feed(
@@ -525,6 +599,7 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
         feed_url: str,
         user_agent: str,
         proxy: str = "",
+        field: str = CONF_FEED_URL,
     ) -> dict[str, str]:
         """Fetch the feed and return form errors (empty if it is usable)."""
         try:
@@ -537,7 +612,7 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
         except requests.RequestException:
             return {"base": "cannot_connect"}
         except InvalidFeedError:
-            return {CONF_FEED_URL: "invalid_feed"}
+            return {field: "invalid_feed"}
         return {}
 
     @staticmethod

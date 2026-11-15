@@ -6,7 +6,10 @@ import re
 from typing import TYPE_CHECKING
 
 import homeassistant.helpers.config_validation as cv
-from homeassistant.components.sensor import PLATFORM_SCHEMA, SensorEntity
+from homeassistant.components.sensor import (
+    PLATFORM_SCHEMA as SENSOR_PLATFORM_SCHEMA,
+)
+from homeassistant.components.sensor import SensorEntity
 from homeassistant.const import CONF_NAME
 from homeassistant.helpers.update_coordinator import CoordinatorEntity
 
@@ -16,6 +19,7 @@ from .const import (
     CONF_EXCLUDE_MATCH,
     CONF_EXCLUSIONS,
     CONF_FEED_URL,
+    CONF_FEED_URL_ENTITY,
     CONF_INCLUSIONS,
     CONF_LOCAL_TIME,
     CONF_MATCH,
@@ -33,6 +37,7 @@ from .const import (
 from .coordinator import FeedEntries, FeedparserConfigEntry, FeedparserCoordinator
 from .fetch import USER_AGENT, is_valid_proxy
 from .reader import compile_filter
+from .source import URL_ENTITY_DOMAINS
 from .yaml_import import async_import_yaml_sensor
 
 if TYPE_CHECKING:
@@ -65,10 +70,17 @@ def _valid_proxy(value: str) -> str:
     return value
 
 
-PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
+# A feed's URL is either written out (feed_url) or read from an entity's state
+# on every refresh (feed_url_entity), never both.
+_FEED_SOURCE = "feed_source"
+
+_SENSOR_SCHEMA = SENSOR_PLATFORM_SCHEMA.extend(
     {
         vol.Required(CONF_NAME): cv.string,
-        vol.Required(CONF_FEED_URL): cv.string,
+        vol.Exclusive(CONF_FEED_URL, _FEED_SOURCE): cv.string,
+        vol.Exclusive(CONF_FEED_URL_ENTITY, _FEED_SOURCE): cv.entity_domain(
+            URL_ENTITY_DOMAINS,
+        ),
         vol.Required(CONF_DATE_FORMAT, default=DEFAULT_DATE_FORMAT): cv.string,
         vol.Optional(CONF_LOCAL_TIME, default=DEFAULT_LOCAL_TIME): cv.boolean,
         vol.Optional(CONF_SHOW_TOPN, default=DEFAULT_TOPN): cv.positive_int,
@@ -87,6 +99,11 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
         ),
         vol.Optional(CONF_PROXY, default=""): vol.All(cv.string, _valid_proxy),
     },
+)
+
+PLATFORM_SCHEMA = vol.All(
+    cv.has_at_least_one_key(CONF_FEED_URL, CONF_FEED_URL_ENTITY),
+    _SENSOR_SCHEMA,
 )
 
 
