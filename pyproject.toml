@@ -99,8 +99,12 @@ exclude = [
 ]
 # Same as Black.
 line-length = 88
-# Home Assistant requires Python 3.14.
-target-version = "py314"
+# hacs.json allows Home Assistant 2025.8, which runs on Python 3.13. Keep ruff on
+# py313 so it neither writes nor accepts syntax that only Python 3.14 parses.
+target-version = "py313"
+# The tests need Python 3.14 (pytest-homeassistant-custom-component) and rely on
+# its lazy annotations.
+per-file-target-version = { "tests/**" = "py314" }
 
 [tool.ruff.lint]
 select = [
