@@ -27,6 +27,7 @@ jobs:
         with:
           # Dependabot-triggered runs read secrets from *Dependabot* secrets, so store CLAUDE_CODE_OAUTH_TOKEN there too.
           claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          allowed_bots: "dependabot"
           prompt: |
             REPO: ${{ github.repository }}
             PR NUMBER: ${{ github.event.pull_request.number }}
