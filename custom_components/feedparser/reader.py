@@ -326,7 +326,7 @@ class FeedReader:
             warnings.simplefilter("ignore")
             try:
                 fallback = parser.parse(date)
-            except ValueError, OverflowError:
+            except (ValueError, OverflowError):
                 return None
         return fallback if fallback.tzinfo is not None else None
 

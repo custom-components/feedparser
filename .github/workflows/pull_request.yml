@@ -42,3 +42,20 @@ jobs:
       - name: Analysis (git diff)
         if: failure()
         run: git diff
+
+  python313-syntax:
+    # Home Assistant 2025.8-2026.2 (allowed by hacs.json) runs on Python 3.13,
+    # but the test dependencies need 3.14, so only check that the code compiles.
+    name: Python 3.13 syntax
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v6
+
+      - name: Set Up Python-3.13
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+
+      - name: Compile the integration
+        run: python -m compileall -q custom_components
