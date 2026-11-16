@@ -28,9 +28,9 @@ The Home Assistant pytest plugin blocks DNS, which is why the `online` tests mus
 ## Conventions
 
 - Line length 88 (black and ruff). Ruff has a broad rule set (`ANN`, `D`, `PL`, `TRY`, `SIM`, ...), so new code needs type annotations and docstrings.
-- **Python versions:** `hacs.json` allows Home Assistant 2025.8, which runs on Python 3.13. Source code under `custom_components/` must stay valid on 3.13 (CI compiles it with 3.13). Tests need 3.14. Don't use 3.14-only syntax in the integration.
+- **Python versions:** `pyproject.toml` declares `requires-python = ">=3.14"` because the test dependencies need it, but `hacs.json` allows Home Assistant 2025.8, which runs on Python 3.13. So the integration under `custom_components/` must stay valid on 3.13 (CI compiles it with 3.13) while tests run on 3.14. This mismatch is intentional; don't "fix" it, and don't use 3.14-only syntax in the integration.
 - Keep `mypy` clean. Typing stubs for Home Assistant and `voluptuous` are pinned in `pyproject.toml`; keep `homeassistant-stubs` on the same release as `pytest-homeassistant-custom-component`.
-- Don't block Home Assistant's event loop. Check how `fetch.py` and `coordinator.py` run network calls before adding new ones.
+- Don't block Home Assistant's event loop. Feed fetching uses the synchronous `requests` library (`fetch.py`), which is only ever run through `hass.async_add_executor_job` (see `coordinator.py` and `config_flow.py`), and always with a timeout. Flag any new direct `requests` call in async code, and any request without a timeout.
 - Handle malformed, empty and unreachable feeds without raising out of the coordinator, and keep sensors in a sensible unavailable state.
 
 ## Changing behavior
@@ -42,4 +42,4 @@ The Home Assistant pytest plugin blocks DNS, which is why the `online` tests mus
 ## Pull requests
 
 - Keep PRs focused on one change, and call out follow-up work instead of bundling it.
-- CI must pass: "Code Quality (3.14)" (pre-commit and tests), "Python 3.13 syntax", hassfest and HACS validation.
+- CI must pass. The checks are defined in `.github/workflows/` (`pull_request.yml` for code quality, tests and the Python 3.13 syntax check, plus the hassfest and HACS validation workflows).
