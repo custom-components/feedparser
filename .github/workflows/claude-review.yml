@@ -8,7 +8,7 @@ jobs:
   review:
     # Dependabot PRs are handled by claude-dependabot.yml; fork PRs get no secrets.
     if: >-
-      github.actor != 'dependabot[bot]' &&
+      github.event.pull_request.user.login != 'dependabot[bot]' &&
       github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     permissions:
