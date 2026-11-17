@@ -10,12 +10,13 @@ from unittest.mock import patch
 import pytest
 import requests
 from homeassistant import config_entries
-from homeassistant.const import CONF_NAME
+from homeassistant.const import CONF_NAME, EVENT_STATE_CHANGED
 from homeassistant.data_entry_flow import FlowResultType
 from homeassistant.helpers import issue_registry as ir
 from homeassistant.setup import async_setup_component
 from pytest_homeassistant_custom_component.common import (
     MockConfigEntry,
+    async_capture_events,
     async_fire_time_changed,
 )
 
@@ -263,6 +264,34 @@ async def test_yaml_filter_is_imported(hass: HomeAssistant, tmp_path: Path) -> N
     assert entry.options[CONF_MATCH] == ""
     assert entry.options[CONF_EXCLUDE_MATCH] == "rain|fog"
     assert get_state(hass, "sensor.yaml_feed").state == "1"
+
+
+async def test_unchanged_poll_writes_no_state(
+    hass: HomeAssistant,
+    tmp_path: Path,
+) -> None:
+    """Only polls that change the feed write a state (#185).
+
+    Changed entries still count when their number stays the same.
+    """
+    feed = tmp_path / "feed.xml"
+    url = write_feed(feed, ["one", "two"])
+    entry = await add_entry(hass, "Test Feed", url)
+    coordinator = entry.runtime_data
+    events = async_capture_events(hass, EVENT_STATE_CHANGED)
+
+    for _ in range(2):
+        await coordinator.async_refresh()
+        await hass.async_block_till_done()
+    assert events == []
+
+    write_feed(feed, ["three", "four"])
+    await coordinator.async_refresh()
+    await hass.async_block_till_done()
+    assert len(events) == 1
+    state = get_state(hass)
+    assert state.state == "2"
+    assert [e["title"] for e in state.attributes["entries"]] == ["three", "four"]
 
 
 async def test_options_change_reloads_entry(
