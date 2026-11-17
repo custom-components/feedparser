@@ -8,6 +8,7 @@ integration rendering templates itself.
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
+from urllib.parse import quote
 
 from homeassistant.const import STATE_UNAVAILABLE, STATE_UNKNOWN
 from yarl import URL
@@ -34,6 +35,18 @@ class InvalidFeedUrlError(FeedUrlError):
     """The URL entity's value is not a supported feed URL."""
 
 
+def normalize_feed_url(feed_url: str) -> str:
+    """Return `feed_url` stripped, with an absolute file path made a file:// URL.
+
+    Before 0.2.0 feedparser opened a plain path such as ``/config/www/feed.xml``
+    itself; requests needs the ``file://`` form.
+    """
+    feed_url = feed_url.strip()
+    if feed_url.startswith("/"):
+        return f"file://{quote(feed_url)}"
+    return feed_url
+
+
 def is_supported_url(feed_url: str) -> bool:
     """Return whether the URL is well-formed with a supported scheme."""
     try:
@@ -47,13 +60,13 @@ def feed_url_from_entity(hass: HomeAssistant, entity_id: str) -> str:
 
     Must run in the event loop. Raises ``NoFeedUrlError`` if the entity is
     missing, unknown, unavailable or empty, and ``InvalidFeedUrlError`` if its
-    value is not an http(s) or file URL.
+    value is not an http(s) or file URL (or an absolute file path).
     """
     state = hass.states.get(entity_id)
     if state is None:
         msg = f"{entity_id} does not exist"
         raise NoFeedUrlError(msg)
-    url = state.state.strip()
+    url = normalize_feed_url(state.state)
     if not url or url in (STATE_UNKNOWN, STATE_UNAVAILABLE):
         msg = f"{entity_id} has no URL (state: {state.state!r})"
         raise NoFeedUrlError(msg)

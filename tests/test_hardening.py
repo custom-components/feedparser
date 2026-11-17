@@ -17,6 +17,7 @@ from custom_components.feedparser.config_flow import (
 )
 from custom_components.feedparser.reader import DEFAULT_THUMBNAIL
 from custom_components.feedparser.sensor import FeedParserSensor
+from custom_components.feedparser.source import normalize_feed_url
 
 DATE_FORMAT = "%Y-%m-%dT%H:%M:%S%z"
 
@@ -76,6 +77,31 @@ def test_non_utf8_feed_is_decoded_from_xml_prolog(tmp_path: Path) -> None:
     sensor = _sensor(feed, ["title"])
     sensor.update()
     assert sensor.feed_entries[0]["title"] == "Café crème"
+
+
+@pytest.mark.parametrize(
+    ("raw", "expected"),
+    [
+        ("/config/www/feed.xml", "file:///config/www/feed.xml"),
+        (" /my feeds/a#1.xml ", "file:///my%20feeds/a%231.xml"),
+        ("https://example.com/feed", "https://example.com/feed"),
+        ("file:///config/feed.xml", "file:///config/feed.xml"),
+        # relative paths are not guessed at; they stay invalid
+        ("www/feed.xml", "www/feed.xml"),
+    ],
+)
+def test_normalize_feed_url(raw: str, expected: str) -> None:
+    """Only an absolute path is turned into a file:// URL (#187)."""
+    assert normalize_feed_url(raw) == expected
+
+
+def test_plain_path_with_special_characters_is_read(tmp_path: Path) -> None:
+    """The percent-encoded file:// URL still opens the file."""
+    feed = tmp_path / "my feeds" / "a#1.xml"
+    feed.parent.mkdir()
+    feed.write_text(_rss("<item><title>a</title></item>"), encoding="utf-8")
+    fetched = fetch.fetch_feed(normalize_feed_url(str(feed)))
+    assert b"<title>a</title>" in fetched
 
 
 # --- dates --------------------------------------------------------------------

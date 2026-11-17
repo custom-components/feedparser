@@ -91,6 +91,17 @@ async def test_user_flow_with_url_entity(hass: HomeAssistant, tmp_path: Path) ->
     assert titles(hass) == ["one", "two"]
 
 
+async def test_url_entity_can_hold_a_plain_path(
+    hass: HomeAssistant,
+    tmp_path: Path,
+) -> None:
+    """An entity holding an absolute path reads it as a file:// URL."""
+    write_feed(tmp_path / "a.xml", ["one"])
+    hass.states.async_set(URL_ENTITY, str(tmp_path / "a.xml"))
+    await add_entity_entry(hass)
+    assert titles(hass) == ["one"]
+
+
 async def test_url_change_refreshes_feed(hass: HomeAssistant, tmp_path: Path) -> None:
     """Changing the entity's value fetches the new feed right away."""
     hass.states.async_set(URL_ENTITY, write_feed(tmp_path / "a.xml", ["old"]))
