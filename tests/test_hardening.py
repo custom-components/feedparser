@@ -2,7 +2,10 @@
 
 from __future__ import annotations
 
+import threading
 import warnings
+from collections.abc import Iterator
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from unittest.mock import patch
 
@@ -76,6 +79,65 @@ def test_non_utf8_feed_is_decoded_from_xml_prolog(tmp_path: Path) -> None:
     sensor = _sensor(feed, ["title"])
     sensor.update()
     assert sensor.feed_entries[0]["title"] == "Café crème"
+
+
+RELATIVE_FEED = _rss(
+    "<item><title>a</title><link>/news/1</link>"
+    '<description>&lt;img src="/img/1.jpg"&gt; hi</description></item>'
+    "<item><title>b</title><link>item/2</link></item>",
+).encode()
+
+
+class _FeedHandler(BaseHTTPRequestHandler):
+    """Serve RELATIVE_FEED at /feed/rss.xml, redirected to from /old.xml."""
+
+    def do_GET(self) -> None:
+        if self.path == "/old.xml":
+            self.send_response(301)
+            self.send_header("Location", "/feed/rss.xml")
+            self.end_headers()
+            return
+        self.send_response(200)
+        self.send_header("Content-Type", "application/rss+xml")
+        self.end_headers()
+        self.wfile.write(RELATIVE_FEED)
+
+    def log_message(self, *_: object) -> None:
+        """Keep the test output quiet."""
+
+
+@pytest.fixture
+def feed_server(socket_enabled: None) -> Iterator[str]:  # noqa: ARG001
+    """Serve RELATIVE_FEED over HTTP and yield the server's base URL."""
+    server = ThreadingHTTPServer(("127.0.0.1", 0), _FeedHandler)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        yield f"http://127.0.0.1:{server.server_address[1]}"
+    finally:
+        server.shutdown()
+        server.server_close()
+
+
+def test_relative_urls_are_made_absolute(feed_server: str) -> None:
+    """Relative links and images resolve against the feed's final URL (#183)."""
+    sensor = ReaderHarness(
+        feed=f"{feed_server}/old.xml",
+        name="test",
+        date_format=DATE_FORMAT,
+        local_time=False,
+        show_topn=10,
+        remove_summary_image=False,
+        inclusions=["title", "link", "image", "summary"],
+        exclusions=[],
+    )
+    sensor.update()
+    first, second = sensor.feed_entries
+    assert first["link"] == f"{feed_server}/news/1"
+    assert first["image"] == f"{feed_server}/img/1.jpg"
+    assert first["summary"] == f'<img src="{feed_server}/img/1.jpg" /> hi'
+    # resolved against where the redirect led, not the configured URL
+    assert second["link"] == f"{feed_server}/feed/item/2"
 
 
 # --- dates --------------------------------------------------------------------
