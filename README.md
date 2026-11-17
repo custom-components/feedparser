@@ -148,7 +148,7 @@ To see every field a feed provides, leave `inclusions` empty and look at the sen
 
 ## Output
 
-The sensor's state is the number of entries. The entries themselves are in the `entries` attribute, in the order the feed lists them (usually newest first). With `inclusions: [title, link, published, summary, image]` an entry looks like this:
+The sensor's state is the number of entries: `0` when the feed loads but has no entries (or none match `match`/`exclude_match`), and `unavailable` while the feed can't be fetched or parsed. The entries themselves are in the `entries` attribute, in the order the feed lists them (usually newest first). With `inclusions: [title, link, published, summary, image]` an entry looks like this:
 
 ```yaml
 entries:
