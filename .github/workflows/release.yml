@@ -1,0 +1,36 @@
+name: Release
+
+# Attach feedparser.zip to each GitHub release. HACS only reports download
+# counts for releases that have a zip asset (see "zip_release" in hacs.json).
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: Existing release tag to (re)build the zip for, e.g. 1.4.1
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  zip:
+    name: Build and upload feedparser.zip
+    runs-on: ubuntu-latest
+    env:
+      TAG: ${{ github.event.release.tag_name || inputs.tag }}
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout the release tag
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ env.TAG }}
+
+      - name: Zip the integration
+        run: |
+          cd custom_components/feedparser
+          zip -r ../../feedparser.zip . -x "*/__pycache__/*" "__pycache__/*"
+
+      - name: Upload to the release
+        run: gh release upload "$TAG" feedparser.zip --clobber --repo "$GITHUB_REPOSITORY"
