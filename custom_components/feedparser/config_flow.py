@@ -52,6 +52,7 @@ from .source import (
     NoFeedUrlError,
     feed_url_from_entity,
     is_supported_url,
+    normalize_feed_url,
 )
 from .yaml_import import (
     REASON_MANAGED_IN_UI,
@@ -165,7 +166,7 @@ def _source_from_input(
     The source is either a typed URL ({feed_url}) or an entity whose state is
     the URL ({feed_url_entity}); exactly one of the two must be filled in.
     """
-    feed_url = str(user_input.get(CONF_FEED_URL) or "").strip()
+    feed_url = normalize_feed_url(str(user_input.get(CONF_FEED_URL) or ""))
     entity_id = str(user_input.get(CONF_FEED_URL_ENTITY) or "").strip()
     if bool(feed_url) == bool(entity_id):
         return {}, {"base": "url_or_entity"}
@@ -416,7 +417,7 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
         source = (
             {CONF_FEED_URL_ENTITY: url_entity}
             if url_entity
-            else {CONF_FEED_URL: feed_url}
+            else {CONF_FEED_URL: normalize_feed_url(feed_url)}
         )
         unique_id = yaml_unique_id(name)
         data = {CONF_NAME: name, **source, CONF_MANAGED_BY_YAML: True}

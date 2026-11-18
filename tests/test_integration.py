@@ -573,6 +573,42 @@ async def test_yaml_is_imported(hass: HomeAssistant, tmp_path: Path) -> None:
     assert not [domain for domain, _ in ir.async_get(hass).issues if domain == DOMAIN]
 
 
+async def test_yaml_feed_url_can_be_a_plain_path(
+    hass: HomeAssistant,
+    tmp_path: Path,
+) -> None:
+    """An absolute path, accepted before 0.2.0, is stored as a file:// URL (#187)."""
+    url = write_feed(tmp_path / "feed.xml", ["one"])
+    await setup_yaml(
+        hass,
+        {"name": "Local Feed", "feed_url": str(tmp_path / "feed.xml")},
+    )
+
+    entry = hass.config_entries.async_entries(DOMAIN)[0]
+    assert entry.data[CONF_FEED_URL] == url
+    assert get_state(hass, "sensor.local_feed").state == "1"
+
+
+async def test_user_flow_accepts_plain_path(
+    hass: HomeAssistant,
+    tmp_path: Path,
+) -> None:
+    """The setup form also takes an absolute path and stores it as a URL."""
+    url = write_feed(tmp_path / "feed.xml", ["one"])
+    result = await hass.config_entries.flow.async_init(
+        DOMAIN,
+        context={"source": config_entries.SOURCE_USER},
+    )
+    result = await hass.config_entries.flow.async_configure(
+        result["flow_id"],
+        user_input("Test Feed", f"  {tmp_path / 'feed.xml'} "),
+    )
+    assert result["type"] is FlowResultType.CREATE_ENTRY
+    assert result["data"][CONF_FEED_URL] == url
+    await hass.async_block_till_done()
+    assert get_state(hass).state == "1"
+
+
 async def test_yaml_import_is_idempotent(hass: HomeAssistant, tmp_path: Path) -> None:
     """Importing again on the next start does not duplicate the entry."""
     url = write_feed(tmp_path / "feed.xml", ["one"])

@@ -85,6 +85,7 @@ def fetch_feed(
         session.mount("file://", FileAdapter())
         session.headers.update({"User-Agent": user_agent})
         proxies = {"http": proxy, "https": proxy} if proxy else None
-        response = session.get(url, timeout=REQUEST_TIMEOUT, proxies=proxies)
-        response.raise_for_status()
-        return FetchedFeed(response.content, response.url or url)
+        # closing the response also closes the file a file:// URL opened
+        with session.get(url, timeout=REQUEST_TIMEOUT, proxies=proxies) as response:
+            response.raise_for_status()
+            return FetchedFeed(response.content, response.url or url)

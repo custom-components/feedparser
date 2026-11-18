@@ -55,7 +55,7 @@ https://example.com/epg/programme-tv-rss_{{ now().strftime('%d-%m-%Y') }}.xml
 Then pick that sensor as the feed's **Feed URL entity**. To switch feeds from an automation or script instead, use an `input_text` helper and set its value with `input_text.set_value`.
 
 - Home Assistant limits entity states to 255 characters, so longer URLs can't be passed this way. `input_text` helpers default to a maximum of 100 characters; raise their maximum length if needed.
-- While the entity is missing, `unknown`, `unavailable` or holds something that is not an `http`, `https` or `file` URL, the feed can't be refreshed and the sensor becomes `unavailable`.
+- While the entity is missing, `unknown`, `unavailable` or holds something that is not an `http`, `https` or `file` URL (or an absolute file path), the feed can't be refreshed and the sensor becomes `unavailable`.
 
 In YAML, use `feed_url_entity` instead of `feed_url`:
 
@@ -184,7 +184,7 @@ The integration supports both UI and YAML setup. Most options are the same in bo
 | :-- | :-- | :-- | :-- | :-- | :-- |
 | `platform` (YAML only) | Yes (YAML) | string | - | `feedparser` | Home Assistant platform name used in YAML mode. |
 | `name` | Yes | string | - | `Engineering Feed` | Name shown for the sensor entity. |
-| `feed_url` | Yes (unless `feed_url_entity` is set) | URL string | - | `https://www.nu.nl/rss/Algemeen` | RSS/Atom feed URL to fetch and parse. Supports `http`, `https`, and `file` in dev/testing. |
+| `feed_url` | Yes (unless `feed_url_entity` is set) | URL string | - | `https://www.nu.nl/rss/Algemeen` | RSS/Atom feed URL to fetch and parse. Supports `http`, `https`, and `file` URLs. An absolute path such as `/config/www/feed.xml` is read as `file:///config/www/feed.xml`. |
 | `feed_url_entity` | Yes (unless `feed_url` is set) | entity ID | - | `sensor.todays_tv_feed_url` | Entity (`input_text`, `text` or `sensor`) whose state is the feed URL, read on every refresh. See [Feed URLs that change](#feed-urls-that-change). |
 | `date_format` | No | string (`strftime`) | `%a, %b %d %I:%M %p` | `%a, %d %b %Y %H:%M:%S %Z` | Output format for date fields in feed entries. |
 | `local_time` | No | boolean | `false` | `true` | Converts parsed date values from feed timezone to Home Assistant local timezone. |
