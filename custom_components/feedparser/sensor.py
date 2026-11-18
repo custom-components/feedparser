@@ -133,11 +133,11 @@ async def async_setup_entry(
 class FeedParserSensor(CoordinatorEntity[FeedparserCoordinator], SensorEntity):
     """Number of feed entries, with the entries themselves as an attribute."""
 
-    # force update the entity since the number of feed entries does not necessarily
-    # change, but we still want to update the extra_state_attributes
-    _attr_force_update = True
+    # No force_update: FeedReader.read() returns a new entries list on every poll,
+    # so Home Assistant sees changed entries even when their count stays the same,
+    # and a poll that changes nothing writes no state.
     # The entries attribute regularly exceeds the recorder's 16 KiB attribute limit
-    # and changes on every poll; keep it out of the database.
+    # and changes often; keep it out of the database.
     _unrecorded_attributes = frozenset({"entries"})
     _attr_icon = "mdi:rss"
     _attr_attribution = "Data retrieved using RSS feedparser"
