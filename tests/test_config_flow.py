@@ -16,7 +16,7 @@ from custom_components.feedparser.config_flow import (
     _user_agent_from_input,
 )
 from custom_components.feedparser.const import CONF_SCAN_INTERVAL, CONF_USER_AGENT
-from custom_components.feedparser.fetch import USER_AGENT
+from custom_components.feedparser.fetch import USER_AGENT, FetchedFeed
 
 
 def test_options_flow_reloads_config_entry() -> None:
@@ -89,7 +89,7 @@ def test_validate_feed_url_sends_user_agent(
 
     with patch(
         "custom_components.feedparser.config_flow.fetch_feed",
-        return_value=feed.read_bytes(),
+        return_value=FetchedFeed(feed.read_bytes(), feed.as_uri()),
     ) as fetch:
         FeedparserConfigFlow._validate_feed_url(*args)  # noqa: SLF001
     fetch.assert_called_once_with(feed.as_uri(), expected, "")

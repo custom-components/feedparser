@@ -15,13 +15,13 @@ import time
 import warnings
 from collections.abc import Mapping
 from datetime import UTC, datetime, timezone, tzinfo
-from typing import Protocol, cast
+from typing import Any, Protocol, cast
 
 import feedparser  # type: ignore[import]
 from dateutil import parser, tz
 from homeassistant.util import dt
 
-from .fetch import USER_AGENT, fetch_feed, redact_proxy
+from .fetch import USER_AGENT, FetchedFeed, fetch_feed, redact_proxy
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
@@ -50,6 +50,19 @@ def _without_offset_name(value: datetime) -> tzinfo | None:
     ):
         return zone
     return tz.tzoffset(None, offset)
+
+
+def parse_feed(fetched: FetchedFeed) -> Any:  # noqa: ANN401 - feedparser is untyped
+    """Parse a downloaded feed, resolving relative URLs against where it came from.
+
+    feedparser only knows the document's location when it downloads the feed
+    itself. Given bytes, it needs the URL as ``Content-Location`` to make
+    relative links, images and ``<img src>`` in summaries absolute.
+    """
+    return feedparser.parse(
+        fetched.content,
+        response_headers={"content-location": fetched.url},
+    )
 
 
 # Entry fields searched by the `match` / `exclude_match` filters. RSS
@@ -176,7 +189,7 @@ class FeedReader:
         _LOGGER.debug("Feed %s: Polling feed data from %s", self.name, url)
         parsed_feed = cast(
             "ParsedFeed",
-            feedparser.parse(fetch_feed(url, self._user_agent, self.proxy)),
+            parse_feed(fetch_feed(url, self._user_agent, self.proxy)),
         )
         if not parsed_feed.entries:
             _LOGGER.warning("Feed %s: No data received.", self.name)
