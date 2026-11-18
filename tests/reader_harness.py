@@ -30,9 +30,9 @@ class ReaderHarness:
         self.feed_entries = self.reader.read()
 
     @property
-    def native_value(self: ReaderHarness) -> int | None:
+    def native_value(self: ReaderHarness) -> int:
         """Return the entry count the sensor would show."""
-        return len(self.feed_entries) or None
+        return len(self.feed_entries)
 
     @property
     def local_time(self: ReaderHarness) -> bool:
