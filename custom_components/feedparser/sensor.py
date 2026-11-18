@@ -133,11 +133,11 @@ async def async_setup_entry(
 class FeedParserSensor(CoordinatorEntity[FeedparserCoordinator], SensorEntity):
     """Number of feed entries, with the entries themselves as an attribute."""
 
-    # force update the entity since the number of feed entries does not necessarily
-    # change, but we still want to update the extra_state_attributes
-    _attr_force_update = True
+    # No force_update: FeedReader.read() returns a new entries list on every poll,
+    # so Home Assistant sees changed entries even when their count stays the same,
+    # and a poll that changes nothing writes no state.
     # The entries attribute regularly exceeds the recorder's 16 KiB attribute limit
-    # and changes on every poll; keep it out of the database.
+    # and changes often; keep it out of the database.
     _unrecorded_attributes = frozenset({"entries"})
     _attr_icon = "mdi:rss"
     _attr_attribution = "Data retrieved using RSS feedparser"
@@ -158,8 +158,14 @@ class FeedParserSensor(CoordinatorEntity[FeedparserCoordinator], SensorEntity):
 
     @property
     def native_value(self) -> int | None:
-        """Return the number of entries, or None if the feed has none."""
-        return len(self.feed_entries) or None
+        """Return the number of entries, 0 if the feed has none (or none match).
+
+        None (``unknown``) only while no feed has been loaded yet; a feed that
+        can't be fetched makes the entity ``unavailable`` instead.
+        """
+        if self.coordinator.data is None:
+            return None
+        return len(self.coordinator.data)
 
     @property
     def extra_state_attributes(self) -> dict[str, FeedEntries]:

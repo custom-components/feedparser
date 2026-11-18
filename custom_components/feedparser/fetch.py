@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from typing import NamedTuple
 from urllib.parse import urlsplit
 
 import requests
@@ -18,6 +19,14 @@ REQUEST_TIMEOUT = (10, 30)
 # Proxy URL schemes requests understands. The socks* schemes need PySocks;
 # socks5h / socks4a also resolve the feed's host name through the proxy.
 PROXY_SCHEMES = ("http", "https", "socks4", "socks4a", "socks5", "socks5h")
+
+
+class FetchedFeed(NamedTuple):
+    """A downloaded feed and the URL it was finally served from."""
+
+    content: bytes
+    # after redirects; feedparser resolves the feed's relative links against it
+    url: str
 
 
 def is_valid_proxy(proxy: str) -> bool:
@@ -57,8 +66,12 @@ def redact_text(text: str, proxy: str) -> str:
     return text.replace(proxy, redact_proxy(proxy))
 
 
-def fetch_feed(url: str, user_agent: str = USER_AGENT, proxy: str = "") -> bytes:
-    """Download a feed and return its raw bytes.
+def fetch_feed(
+    url: str,
+    user_agent: str = USER_AGENT,
+    proxy: str = "",
+) -> FetchedFeed:
+    """Download a feed and return its raw bytes and final URL.
 
     Raw bytes (not ``Response.text``) are returned so that feedparser can detect the
     document encoding from the XML prolog instead of relying on requests' guess.
@@ -75,4 +88,4 @@ def fetch_feed(url: str, user_agent: str = USER_AGENT, proxy: str = "") -> bytes
         # closing the response also closes the file a file:// URL opened
         with session.get(url, timeout=REQUEST_TIMEOUT, proxies=proxies) as response:
             response.raise_for_status()
-            return response.content
+            return FetchedFeed(response.content, response.url or url)

@@ -7,7 +7,6 @@ from collections.abc import Mapping
 from datetime import timedelta
 from typing import Any, cast
 
-import feedparser  # type: ignore[import]
 import requests
 from homeassistant.config_entries import (
     SOURCE_IMPORT,
@@ -46,7 +45,7 @@ from .const import (
     ENTRY_VERSION,
 )
 from .fetch import USER_AGENT, fetch_feed, is_valid_proxy
-from .reader import compile_filter
+from .reader import compile_filter, parse_feed
 from .source import (
     URL_ENTITY_DOMAINS,
     InvalidFeedUrlError,
@@ -627,7 +626,7 @@ class FeedparserConfigFlow(ConfigFlow, domain=DOMAIN):
         Uses the same request (User-Agent, proxy, timeouts) as the sensor so a feed
         that passes here also works at runtime.
         """
-        parsed = feedparser.parse(fetch_feed(feed_url, user_agent, proxy))
+        parsed = parse_feed(fetch_feed(feed_url, user_agent, proxy))
         # A real feed exposes a version (rss20, atom10, ...) even when it currently
         # has no entries; an HTML page or random document does not.
         if not parsed.get("version") and not parsed.get("entries"):

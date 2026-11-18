@@ -2,12 +2,18 @@
 
 from __future__ import annotations
 
+import threading
 import warnings
+import zoneinfo
+from collections.abc import Iterator
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from typing import Any
 from unittest.mock import patch
 
 import pytest
 import requests
+from homeassistant.util import dt
 from reader_harness import ReaderHarness
 
 from custom_components.feedparser import fetch
@@ -40,12 +46,14 @@ def _sensor(
     inclusions: list[str | None] | None = None,
     *,
     remove_summary_image: bool = False,
+    date_format: str = DATE_FORMAT,
+    local_time: bool = False,
 ) -> ReaderHarness:
     return ReaderHarness(
         feed=path.absolute().as_uri(),
         name="test",
-        date_format=DATE_FORMAT,
-        local_time=False,
+        date_format=date_format,
+        local_time=local_time,
         show_topn=10,
         remove_summary_image=remove_summary_image,
         inclusions=inclusions or [],
@@ -101,7 +109,66 @@ def test_plain_path_with_special_characters_is_read(tmp_path: Path) -> None:
     feed.parent.mkdir()
     feed.write_text(_rss("<item><title>a</title></item>"), encoding="utf-8")
     fetched = fetch.fetch_feed(normalize_feed_url(str(feed)))
-    assert b"<title>a</title>" in fetched
+    assert b"<title>a</title>" in fetched.content
+
+
+RELATIVE_FEED = _rss(
+    "<item><title>a</title><link>/news/1</link>"
+    '<description>&lt;img src="/img/1.jpg"&gt; hi</description></item>'
+    "<item><title>b</title><link>item/2</link></item>",
+).encode()
+
+
+class _FeedHandler(BaseHTTPRequestHandler):
+    """Serve RELATIVE_FEED at /feed/rss.xml, redirected to from /old.xml."""
+
+    def do_GET(self) -> None:
+        if self.path == "/old.xml":
+            self.send_response(301)
+            self.send_header("Location", "/feed/rss.xml")
+            self.end_headers()
+            return
+        self.send_response(200)
+        self.send_header("Content-Type", "application/rss+xml")
+        self.end_headers()
+        self.wfile.write(RELATIVE_FEED)
+
+    def log_message(self, *_: object) -> None:
+        """Keep the test output quiet."""
+
+
+@pytest.fixture
+def feed_server(socket_enabled: None) -> Iterator[str]:  # noqa: ARG001
+    """Serve RELATIVE_FEED over HTTP and yield the server's base URL."""
+    server = ThreadingHTTPServer(("127.0.0.1", 0), _FeedHandler)
+    thread = threading.Thread(target=server.serve_forever, daemon=True)
+    thread.start()
+    try:
+        yield f"http://127.0.0.1:{server.server_address[1]}"
+    finally:
+        server.shutdown()
+        server.server_close()
+
+
+def test_relative_urls_are_made_absolute(feed_server: str) -> None:
+    """Relative links and images resolve against the feed's final URL (#183)."""
+    sensor = ReaderHarness(
+        feed=f"{feed_server}/old.xml",
+        name="test",
+        date_format=DATE_FORMAT,
+        local_time=False,
+        show_topn=10,
+        remove_summary_image=False,
+        inclusions=["title", "link", "image", "summary"],
+        exclusions=[],
+    )
+    sensor.update()
+    first, second = sensor.feed_entries
+    assert first["link"] == f"{feed_server}/news/1"
+    assert first["image"] == f"{feed_server}/img/1.jpg"
+    assert first["summary"] == f'<img src="{feed_server}/img/1.jpg" /> hi'
+    # resolved against where the redirect led, not the configured URL
+    assert second["link"] == f"{feed_server}/feed/item/2"
 
 
 # --- dates --------------------------------------------------------------------
@@ -116,6 +183,10 @@ def test_plain_path_with_special_characters_is_read(tmp_path: Path) -> None:
         ("2024-02-01T02:00:01+02:00", "2024-02-01T02:00:01+0200"),
         # US timezone abbreviation (#132): dateutil can't resolve it, feedparser can
         ("Tue, 08 Sep 2026 08:00:00 EDT", "2026-09-08T08:00:00-0400"),
+        # no time zone (#186): taken as UTC instead of keeping the raw string
+        ("Mon, 01 Jan 2024 10:00:00", "2024-01-01T10:00:00+0000"),
+        ("01/02/2024 10:00", "2024-01-02T10:00:00+0000"),
+        ("2024-01-01 10:00:00", "2024-01-01T10:00:00+0000"),
     ],
 )
 def test_date_formats(tmp_path: Path, raw: str, expected: str) -> None:
@@ -130,6 +201,61 @@ def test_date_formats(tmp_path: Path, raw: str, expected: str) -> None:
         warnings.simplefilter("error")
         sensor.update()
     assert sensor.feed_entries[0]["published"] == expected
+
+
+def _published(sensor_path: Path, raw: str, **kwargs: Any) -> object:  # noqa: ANN401
+    sensor_path.write_text(
+        _rss(f"<item><title>a</title><pubDate>{raw}</pubDate></item>"),
+        encoding="utf-8",
+    )
+    sensor = _sensor(sensor_path, ["title", "published"], **kwargs)
+    sensor.update()
+    return sensor.feed_entries[0]["published"]
+
+
+@pytest.mark.parametrize(
+    ("raw", "expected"),
+    [
+        # a bare offset has no zone name: %Z prints nothing, as before 1.0 (#184)
+        ("Mon, 01 Jan 2024 10:00:00 +0100", "10:00 "),
+        ("2024-01-01T10:00:00-05:30", "10:00 "),
+        ("Mon, 01 Jan 2024 10:00:00 EDT", "10:00 "),
+        # UTC keeps its name
+        ("Mon, 01 Jan 2024 10:00:00 GMT", "10:00 UTC"),
+        ("2024-01-01T10:00:00Z", "10:00 UTC"),
+        # no zone at all: assumed UTC
+        ("Mon, 01 Jan 2024 10:00:00", "10:00 UTC"),
+    ],
+)
+def test_zone_name_in_date_format(tmp_path: Path, raw: str, expected: str) -> None:
+    """``%Z`` prints a real zone name, never a made-up ``UTC+01:00``."""
+    published = _published(tmp_path / "zone.xml", raw, date_format="%H:%M %Z")
+    assert published == expected
+
+
+@pytest.mark.parametrize(
+    ("raw", "expected"),
+    [
+        ("Mon, 01 Jan 2024 10:00:00 +0100", "10:00 CET"),
+        ("Mon, 01 Jan 2024 10:00:00 EDT", "15:00 CET"),
+        ("Mon, 01 Jan 2024 10:00:00", "11:00 CET"),
+        ("01/02/2024 10:00", "11:00 CET"),
+    ],
+)
+def test_local_time_conversion(tmp_path: Path, raw: str, expected: str) -> None:
+    """With `local_time`, every date, zoned or not, ends up in HA's zone."""
+    original = dt.get_default_time_zone()
+    dt.set_default_time_zone(zoneinfo.ZoneInfo("Europe/Prague"))
+    try:
+        published = _published(
+            tmp_path / "local.xml",
+            raw,
+            date_format="%H:%M %Z",
+            local_time=True,
+        )
+    finally:
+        dt.set_default_time_zone(original)
+    assert published == expected
 
 
 def test_unparseable_date_keeps_raw_value(tmp_path: Path) -> None:

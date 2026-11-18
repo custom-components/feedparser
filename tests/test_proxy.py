@@ -236,15 +236,15 @@ def test_fetch_passes_proxy_for_both_schemes() -> None:
 
 def test_fetch_through_http_proxy(http_proxy: _Server) -> None:
     """A feed this machine cannot resolve is fetched through an HTTP proxy."""
-    content = fetch.fetch_feed(BLOCKED_URL, proxy=_url("http", http_proxy))
-    assert content == FEED
+    fetched = fetch.fetch_feed(BLOCKED_URL, proxy=_url("http", http_proxy))
+    assert fetched.content == FEED
     assert http_proxy.seen == [f"GET {BLOCKED_URL} HTTP/1.1"]
 
 
 def test_fetch_through_socks5h_proxy(socks_proxy: _Server) -> None:
     """socks5h hands the host name to the proxy, so blocked DNS does not matter."""
-    content = fetch.fetch_feed(BLOCKED_URL, proxy=_url("socks5h", socks_proxy))
-    assert content == FEED
+    fetched = fetch.fetch_feed(BLOCKED_URL, proxy=_url("socks5h", socks_proxy))
+    assert fetched.content == FEED
     assert socks_proxy.seen == ["1 blocked.invalid:80"]
 
 
@@ -253,8 +253,8 @@ def test_file_feed_ignores_proxy(tmp_path: Path) -> None:
     feed = tmp_path / "feed.xml"
     feed.write_bytes(FEED)
     # an unusable proxy: the fetch would fail if it were used
-    content = fetch.fetch_feed(feed.as_uri(), proxy="http://127.0.0.1:9")
-    assert content == FEED
+    fetched = fetch.fetch_feed(feed.as_uri(), proxy="http://127.0.0.1:9")
+    assert fetched.content == FEED
 
 
 # --- Home Assistant flows -----------------------------------------------------

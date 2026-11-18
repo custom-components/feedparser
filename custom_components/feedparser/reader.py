@@ -14,14 +14,14 @@ import re
 import time
 import warnings
 from collections.abc import Mapping
-from datetime import UTC, datetime, timezone
-from typing import Protocol, cast
+from datetime import UTC, datetime, timezone, tzinfo
+from typing import Any, Protocol, cast
 
 import feedparser  # type: ignore[import]
-from dateutil import parser
+from dateutil import parser, tz
 from homeassistant.util import dt
 
-from .fetch import USER_AGENT, fetch_feed, redact_proxy
+from .fetch import USER_AGENT, FetchedFeed, fetch_feed, redact_proxy
 
 _LOGGER: logging.Logger = logging.getLogger(__name__)
 
@@ -31,6 +31,38 @@ DEFAULT_THUMBNAIL = "https://www.home-assistant.io/images/favicon-192x192-full.p
 IMAGE_REGEX = r"""(?is)<img\b[^>]*?\bsrc\s*=\s*["']([^"']+)["'][^>]*>"""
 IMAGE_EXTENSIONS = (".jpg", ".jpeg", ".png", ".gif", ".webp", ".avif", ".svg")
 DATE_KEYS = ("published", "updated", "created", "expired")
+
+
+def _without_offset_name(value: datetime) -> tzinfo | None:
+    """Return `value`'s tzinfo, minus any name that is only its UTC offset.
+
+    Feeds mostly give a numeric offset (``+0100``) rather than a zone name. The
+    stdlib names such a zone ``UTC+01:00``, which ``%Z`` in `date_format` would
+    print; keep the offset but drop that made-up name so ``%Z`` prints nothing,
+    as it did before 1.0. UTC itself and real zone names are kept.
+    """
+    zone = value.tzinfo
+    offset = value.utcoffset()
+    if (
+        offset is None
+        or not offset
+        or (not isinstance(zone, timezone) and value.tzname())
+    ):
+        return zone
+    return tz.tzoffset(None, offset)
+
+
+def parse_feed(fetched: FetchedFeed) -> Any:  # noqa: ANN401 - feedparser is untyped
+    """Parse a downloaded feed, resolving relative URLs against where it came from.
+
+    feedparser only knows the document's location when it downloads the feed
+    itself. Given bytes, it needs the URL as ``Content-Location`` to make
+    relative links, images and ``<img src>`` in summaries absolute.
+    """
+    return feedparser.parse(
+        fetched.content,
+        response_headers={"content-location": fetched.url},
+    )
 
 
 # Entry fields searched by the `match` / `exclude_match` filters. RSS
@@ -157,7 +189,7 @@ class FeedReader:
         _LOGGER.debug("Feed %s: Polling feed data from %s", self.name, url)
         parsed_feed = cast(
             "ParsedFeed",
-            feedparser.parse(fetch_feed(url, self._user_agent, self.proxy)),
+            parse_feed(fetch_feed(url, self._user_agent, self.proxy)),
         )
         if not parsed_feed.entries:
             _LOGGER.warning("Feed %s: No data received.", self.name)
@@ -282,12 +314,16 @@ class FeedReader:
         """Parse a feed date into an aware datetime, or None if impossible.
 
         Tried in order, keeping the feed's own UTC offset where possible:
-        RFC 822 (RSS), ISO 8601 / W3CDTF (Atom), feedparser's own normalized UTC
-        ``*_parsed`` value, and finally dateutil as a best effort.
+        RFC 822 (RSS), ISO 8601 / W3CDTF (Atom), dateutil, feedparser's own
+        normalized UTC ``*_parsed`` value, and finally a date without a time zone
+        (from any of the string parsers), which is taken to be UTC.
         """
-        parsed_time = self._parse_date_string(date)
+        parsed_time, naive_time = self._parse_date_string(date)
         if parsed_time is None and isinstance(parsed, time.struct_time):
             parsed_time = datetime.fromtimestamp(calendar.timegm(parsed), tz=UTC)
+        if parsed_time is None and naive_time is not None:
+            # same assumption feedparser makes for ISO dates without a zone
+            parsed_time = naive_time.replace(tzinfo=UTC)
 
         if parsed_time is None:
             _LOGGER.debug(
@@ -297,11 +333,7 @@ class FeedReader:
             )
             return None
 
-        if not parsed_time.tzname():
-            # replace tzinfo with UTC offset if tzinfo does not contain a TZ name
-            parsed_time = parsed_time.replace(
-                tzinfo=timezone(parsed_time.utcoffset()),  # type: ignore[arg-type]
-            )
+        parsed_time = parsed_time.replace(tzinfo=_without_offset_name(parsed_time))
 
         if self.local_time:
             parsed_time = dt.as_local(parsed_time)
@@ -309,26 +341,28 @@ class FeedReader:
         return parsed_time
 
     @staticmethod
-    def _parse_date_string(date: str) -> datetime | None:
-        """Parse a date string with the stdlib, then dateutil. Return aware or None."""
+    def _parse_date_string(date: str) -> tuple[datetime | None, datetime | None]:
+        """Parse a date string with the stdlib, then dateutil.
+
+        Return ``(aware, naive)``: the first result that has a time zone, and
+        otherwise the first one without, so the caller can prefer a better source
+        (feedparser's ``*_parsed``) before assuming a zone for the naive one.
+        """
         candidates = []
         with contextlib.suppress(TypeError, ValueError, IndexError):
             candidates.append(email.utils.parsedate_to_datetime(date))
         with contextlib.suppress(ValueError):
             candidates.append(datetime.fromisoformat(date.strip()))
-        for candidate in candidates:
-            if candidate.tzinfo is not None:
-                return candidate
-
         # dateutil warns (UnknownTimezoneWarning) on abbreviations such as EDT and
-        # returns a naive datetime; a naive result is treated as unparseable.
+        # returns a naive datetime for them.
         with warnings.catch_warnings():
             warnings.simplefilter("ignore")
-            try:
-                fallback = parser.parse(date)
-            except (ValueError, OverflowError):
-                return None
-        return fallback if fallback.tzinfo is not None else None
+            with contextlib.suppress(ValueError, OverflowError):
+                candidates.append(parser.parse(date))
+
+        aware = next((c for c in candidates if c.tzinfo is not None), None)
+        naive = next((c for c in candidates if c.tzinfo is None), None)
+        return aware, naive
 
     def _process_image(self: FeedReader, feed_entry: Mapping[str, object]) -> str:
         """Return the best image URL for an entry, or the default thumbnail.
