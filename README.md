@@ -148,7 +148,7 @@ To see every field a feed provides, leave `inclusions` empty and look at the sen
 
 ## Output
 
-The sensor's state is the number of entries. The entries themselves are in the `entries` attribute, in the order the feed lists them (usually newest first). With `inclusions: [title, link, published, summary, image]` an entry looks like this:
+The sensor's state is the number of entries: `0` when the feed loads but has no entries (or none match `match`/`exclude_match`), and `unavailable` while the feed can't be fetched or parsed. The entries themselves are in the `entries` attribute, in the order the feed lists them (usually newest first). With `inclusions: [title, link, published, summary, image]` an entry looks like this:
 
 ```yaml
 entries:
@@ -210,9 +210,11 @@ The integration supports both UI and YAML setup. Most options are the same in bo
   - UI uses comma-separated text for `inclusions` and `exclusions`.
   - YAML uses proper lists.
   - UI uses a single duration control for `scan_interval`; YAML uses `scan_interval` object keys such as `hours` and `minutes`.
-- **Date parsing**: RSS (RFC 822) and Atom (ISO 8601) dates are both supported, including US timezone abbreviations such as `EDT`. If a date cannot be parsed at all, the original text is kept.
+- **Date parsing**: RSS (RFC 822) and Atom (ISO 8601) dates are both supported, including US timezone abbreviations such as `EDT`. A date without a time zone is taken to be UTC. `%Z` in `date_format` prints a zone name only when there is one (`UTC`, or Home Assistant's zone with `local_time`); for a numeric offset such as `+0100` it prints nothing, so use `%z` to show the offset. If a date cannot be parsed at all, the original text is kept.
 
 Due to how `custom_components` are loaded, it is normal to see a `ModuleNotFoundError` error on first boot after adding this, to resolve it, restart Home-Assistant.
+
+The integration's icon and logo (`custom_components/feedparser/brand/`) are the artwork of the [feedparser](https://github.com/kurtmckee/feedparser) Python library this integration uses, by Kurt McKee, released under the BSD 2-clause license.
 
 ## Development Container
 

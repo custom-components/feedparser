@@ -294,6 +294,28 @@ async def test_unchanged_poll_writes_no_state(
     assert [e["title"] for e in state.attributes["entries"]] == ["three", "four"]
 
 
+async def test_empty_feed_state_is_zero(hass: HomeAssistant, tmp_path: Path) -> None:
+    """A feed that loads but has no entries reports 0, not unknown (#182)."""
+    url = write_feed(tmp_path / "feed.xml", [])
+    await add_entry(hass, "Test Feed", url)
+    state = get_state(hass)
+    assert state.state == "0"
+    assert state.attributes["entries"] == []
+
+
+async def test_no_matching_entries_state_is_zero(
+    hass: HomeAssistant,
+    tmp_path: Path,
+) -> None:
+    """A filter that matches nothing reports 0, not unknown (#182)."""
+    url = write_feed(tmp_path / "feed.xml", ["rain", "fog"])
+    await setup_yaml(
+        hass,
+        {"name": "Yaml Feed", "feed_url": url, "match": "Leicester"},
+    )
+    assert get_state(hass, "sensor.yaml_feed").state == "0"
+
+
 async def test_options_change_reloads_entry(
     hass: HomeAssistant,
     tmp_path: Path,

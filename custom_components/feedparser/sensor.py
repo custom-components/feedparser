@@ -158,8 +158,14 @@ class FeedParserSensor(CoordinatorEntity[FeedparserCoordinator], SensorEntity):
 
     @property
     def native_value(self) -> int | None:
-        """Return the number of entries, or None if the feed has none."""
-        return len(self.feed_entries) or None
+        """Return the number of entries, 0 if the feed has none (or none match).
+
+        None (``unknown``) only while no feed has been loaded yet; a feed that
+        can't be fetched makes the entity ``unavailable`` instead.
+        """
+        if self.coordinator.data is None:
+            return None
+        return len(self.coordinator.data)
 
     @property
     def extra_state_attributes(self) -> dict[str, FeedEntries]:
