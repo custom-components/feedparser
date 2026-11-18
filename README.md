@@ -214,6 +214,8 @@ The integration supports both UI and YAML setup. Most options are the same in bo
 
 Due to how `custom_components` are loaded, it is normal to see a `ModuleNotFoundError` error on first boot after adding this, to resolve it, restart Home-Assistant.
 
+The integration's icon and logo (`custom_components/feedparser/brand/`) are the artwork of the [feedparser](https://github.com/kurtmckee/feedparser) Python library this integration uses, by Kurt McKee, released under the BSD 2-clause license.
+
 ## Development Container
 
 This repository includes a devcontainer inspired by the `custom-components/readme` blueprint.
